@@ -1,20 +1,24 @@
+"use strict";
+
 const express = require("express");
 const morgan = require("morgan");
-const app = express();
-
-//import handlers here
-const { getProfile } = require("./handlers");
 
 const PORT = 8000;
 
-//Endpoints --- Handlers ---
+//import handlers here
+const { getClients } = require("./handlers");
 
-//   .get("/api/getprofile", getProfile)
+express()
+  .use(morgan("tiny"))
+  .use(express.json())
+  .use(express.static("public"))
 
-//Catch
+  //endpoints
 
-//listening on port
+  .get("/getclients", getClients)
 
-app.listen(PORT, () => {
-  console.info("Listening on port 8000");
-});
+  //Catch
+
+  //listening on port
+
+  .listen(PORT, () => console.info(`Listening on port ${PORT}`));
