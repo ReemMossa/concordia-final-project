@@ -6,7 +6,12 @@ const morgan = require("morgan");
 const PORT = 8000;
 
 //import handlers here
-const { getClients } = require("./handlers");
+const {
+  getClients,
+  getClient,
+  addClient,
+  getOneClient,
+} = require("./handlers");
 
 express()
   .use(morgan("tiny"))
@@ -16,6 +21,9 @@ express()
   //endpoints
 
   .get("/getclients", getClients)
+  .get("getclient", getClient)
+  .post("/registration", addClient)
+  .post("/getOneCustomer", getOneClient)
 
   //Catch
 

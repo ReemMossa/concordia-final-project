@@ -10,6 +10,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import SignUp from "./SignUp";
 import SignUpClient from "./SignUpClient";
 import SignUpSeller from "./SignUpSeller";
+import Login from "./Login";
 
 const App = () => {
   const { isLoading } = useAuth0();
@@ -28,6 +29,7 @@ const App = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signupclient" element={<SignUpClient />} />
           <Route path="/signupseller" element={<SignUpSeller />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>
     </>

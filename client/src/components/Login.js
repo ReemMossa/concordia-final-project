@@ -1,74 +1,64 @@
-import React, { useState } from "react";
+import React from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "./UserContext";
 import styled from "styled-components";
 
-const SignUpSeller = () => {
-  const navigate = useNavigate();
-
+const Login = () => {
+  const Navigate = useNavigate();
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const [data, setData] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    address: {
-      street: "",
-      city: "",
-      province: "",
-      country: "",
-    },
-    dogName: "",
     email: "",
     password: "",
   });
+  const [matchedClient, setMatchedClient] = useState();
 
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleAddressChange = (e) => {
-    setFormData({
-      ...formData,
-      address: {
-        ...formData.address,
-        [e.target.name]: e.target.value,
-      },
-    });
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.email]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("/registration", {
+
+    fetch("/getOneClient", {
+      method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      method: "POST",
       body: JSON.stringify(formData),
-    }).then((res) => {
-      if (res.status > 500) {
-        navigate("/");
-      } else {
-        res
-          .json()
-          .then((resData) => {
-            if (resData.status === 201) {
+    })
+      .then((res) => {
+        if (res.status > 500) {
+          Navigate("/");
+        } else {
+          res.json().then((resData) => {
+            if (resData.status !== 200) {
               window.alert(resData.message);
-              navigate("/");
             } else {
-              window.alert(resData.message);
+              setMatchedClient(resData.data);
+              setUserEmail(formData.email);
+              window.localStorage.setItem(
+                "currentUser",
+                JSON.stringify(resData.data)
+              );
+              setCurrentUser(resData.data);
+              Navigate("/");
             }
-          })
-          .catch((err) => window.alert(err));
-      }
-    });
+          });
+        }
+      })
+      .catch((err) => window.alert(err));
   };
+
   return (
     <Wrapper>
-      <H1>Sign Up to sell Barkin' Good Food</H1>
+      <H1>Log In</H1>
       <Form onSubmit={handleSubmit}>
         <FormDiv>
-          <NameDiv>
+          {/* <NameDiv>
             <NameInput
               type="text"
               id="firstName"
@@ -135,14 +125,14 @@ const SignUpSeller = () => {
             value={formData.dogName}
             onChange={handleInputChange}
             required
-          />
+          /> */}
           <Input
             type="email"
             id="email"
             name="email"
             placeholder="Email"
             value={formData.email}
-            onChange={handleInputChange}
+            onChange={handleChange}
             required
           />
 
@@ -152,13 +142,13 @@ const SignUpSeller = () => {
             name="password"
             placeholder="Password"
             value={formData.password}
-            onChange={handleInputChange}
+            onChange={handleChange}
             required
           />
         </FormDiv>
 
         <ButtonContainer>
-          <Button type="submit">Create my account!</Button>
+          <Button type="submit">Log In</Button>
         </ButtonContainer>
       </Form>
     </Wrapper>
@@ -233,4 +223,5 @@ const Button = styled.button`
   border-radius: 20px;
   cursor: pointer;
 `;
-export default SignUpSeller;
+
+export default Login;

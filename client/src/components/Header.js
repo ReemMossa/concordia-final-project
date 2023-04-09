@@ -13,10 +13,11 @@ const Header = () => {
         <Title>
           <StyledLinkTitle to="/"></StyledLinkTitle>
         </Title>
-
         <LoginButtonStyled>
-          <LoginButton />
+          {/* <LoginButton /> */}
+          <Link to="/login">Log In</Link>
         </LoginButtonStyled>
+
         <Button>
           <StyledLinkSignUp to="/signup">Sign up</StyledLinkSignUp>
         </Button>

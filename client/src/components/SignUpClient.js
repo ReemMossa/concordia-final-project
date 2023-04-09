@@ -8,15 +8,14 @@ const SignUpClient = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    email: "",
-    dogName: "",
     address: {
       street: "",
       city: "",
       province: "",
       country: "",
     },
-
+    dogName: "",
+    email: "",
     password: "",
   });
 
@@ -48,7 +47,7 @@ const SignUpClient = () => {
       body: JSON.stringify(formData),
     }).then((res) => {
       if (res.status > 500) {
-        navigate("/errorPage");
+        navigate("/");
       } else {
         res
           .json()
@@ -130,8 +129,8 @@ const SignUpClient = () => {
           />
           <Input
             type="text"
-            id="dogname"
-            name="dogname"
+            id="dogName"
+            name="dogName"
             placeholder="Your furry friend's name"
             value={formData.dogName}
             onChange={handleInputChange}
@@ -157,10 +156,11 @@ const SignUpClient = () => {
             required
           />
         </FormDiv>
+
+        <ButtonContainer>
+          <Button type="submit">Create my account!</Button>
+        </ButtonContainer>
       </Form>
-      <ButtonContainer>
-        <Button type="submit">Create my account!</Button>
-      </ButtonContainer>
     </Wrapper>
   );
 };
@@ -220,10 +220,11 @@ const NameInput = styled.input`
 
 const ButtonContainer = styled.div`
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
 `;
 
 const Button = styled.button`
+  margin-top: 2rem;
   background-color: blue;
   color: white;
   padding: 15px;
