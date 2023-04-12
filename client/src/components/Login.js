@@ -16,7 +16,7 @@ const Login = () => {
   const [matchedClient, setMatchedClient] = useState();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.email]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
@@ -45,7 +45,11 @@ const Login = () => {
                 JSON.stringify(resData.data)
               );
               setCurrentUser(resData.data);
-              Navigate("/");
+              if (currentUser.type === "client") {
+                Navigate("/homepageclient");
+              } else {
+                Navigate("/homepageseller");
+              }
             }
           });
         }
@@ -58,74 +62,6 @@ const Login = () => {
       <H1>Log In</H1>
       <Form onSubmit={handleSubmit}>
         <FormDiv>
-          {/* <NameDiv>
-            <NameInput
-              type="text"
-              id="firstName"
-              name="firstName"
-              placeholder="First name"
-              value={formData.firstName}
-              onChange={handleInputChange}
-              required
-            />
-
-            <NameInput
-              type="text"
-              id="lastName"
-              name="lastName"
-              placeholder="Last name"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              required
-            />
-          </NameDiv>
-
-          <Input
-            type="text"
-            id="street"
-            name="street"
-            placeholder="Street"
-            value={formData.address.street}
-            onChange={handleAddressChange}
-            required
-          />
-          <Input
-            type="text"
-            id="city"
-            name="city"
-            placeholder="City"
-            value={formData.address.city}
-            onChange={handleAddressChange}
-            required
-          />
-
-          <Input
-            type="text"
-            id="province"
-            name="province"
-            placeholder="Province"
-            value={formData.address.province}
-            onChange={handleAddressChange}
-            required
-          />
-          <Input
-            type="text"
-            id="country"
-            name="country"
-            placeholder="Country"
-            value={formData.address.country}
-            onChange={handleAddressChange}
-            required
-          />
-          <Input
-            type="text"
-            id="dogName"
-            name="dogName"
-            placeholder="Your furry friend's name"
-            value={formData.dogName}
-            onChange={handleInputChange}
-            required
-          /> */}
           <Input
             type="email"
             id="email"
@@ -185,27 +121,12 @@ const H1 = styled.h1`
   text-align: center;
 `;
 
-const NameDiv = styled.div`
-  display: flex;
-  justify-content: space-between;
-  input {
-    width: 20rem;
-    margin: 0px 20px;
-  }
-`;
-
 const Input = styled.input`
   margin: 0px 20px;
-  width: 45rem;
+  width: 20rem;
   border-radius: 5px;
   padding: 15px;
   margin-top: 30px;
-`;
-const NameInput = styled.input`
-  border-radius: 5px;
-  padding: 15px;
-  width: 20rem;
-  margin: 0px 20px;
 `;
 
 const ButtonContainer = styled.div`
@@ -218,7 +139,7 @@ const Button = styled.button`
   background-color: blue;
   color: white;
   padding: 15px;
-  width: 20rem;
+  width: 10rem;
   border: none;
   border-radius: 20px;
   cursor: pointer;

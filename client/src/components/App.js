@@ -11,6 +11,9 @@ import SignUp from "./SignUp";
 import SignUpClient from "./SignUpClient";
 import SignUpSeller from "./SignUpSeller";
 import Login from "./Login";
+import HomepageClient from "./HomepageClient";
+import HomepageSeller from "./HomepageSeller";
+import SellerNewItem from "./SellerNewItem";
 
 const App = () => {
   const { isLoading } = useAuth0();
@@ -30,6 +33,9 @@ const App = () => {
           <Route path="/signupclient" element={<SignUpClient />} />
           <Route path="/signupseller" element={<SignUpSeller />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/homepageclient" element={<HomepageClient />} />
+          <Route path="/homepageseller" element={<HomepageSeller />} />
+          <Route path="/sellernewitem" element={<SellerNewItem />} />
         </Routes>
       </BrowserRouter>
     </>

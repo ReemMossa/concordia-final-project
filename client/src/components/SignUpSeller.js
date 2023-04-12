@@ -38,7 +38,7 @@ const SignUpSeller = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("/registration", {
+    fetch("/registrationSeller", {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -52,7 +52,7 @@ const SignUpSeller = () => {
         res
           .json()
           .then((resData) => {
-            if (resData.status === 201) {
+            if (resData.status === 200) {
               window.alert(resData.message);
               navigate("/");
             } else {

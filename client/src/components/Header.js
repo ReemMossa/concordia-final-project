@@ -1,9 +1,18 @@
 import mainLogo from "./mainlogo.png";
 import { Link } from "react-router-dom";
+import { UserContext } from "./UserContext";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import LoginButton from "./LoginButton";
 
 const Header = () => {
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+
+  const handleSignOut = () => {
+    window.localStorage.clear();
+    setCurrentUser(null);
+  };
+
   return (
     <>
       <Div>
@@ -13,14 +22,28 @@ const Header = () => {
         <Title>
           <StyledLinkTitle to="/"></StyledLinkTitle>
         </Title>
-        <LoginButtonStyled>
-          {/* <LoginButton /> */}
-          <Link to="/login">Log In</Link>
-        </LoginButtonStyled>
 
-        <Button>
-          <StyledLinkSignUp to="/signup">Sign up</StyledLinkSignUp>
-        </Button>
+        {currentUser ? (
+          <div>
+            <Welcome> Welcome {currentUser.firstName}!</Welcome>
+            <LoginButtonStyled>
+              <Link to="/" onClick={handleSignOut}>
+                Sign Out
+              </Link>
+            </LoginButtonStyled>
+          </div>
+        ) : (
+          <>
+            <LoginButtonStyled>
+              {/* <LoginButton /> */}
+              <Link to="/login">Log In</Link>
+            </LoginButtonStyled>
+
+            <Button>
+              <StyledLinkSignUp to="/signup">Sign up</StyledLinkSignUp>
+            </Button>
+          </>
+        )}
       </Div>
     </>
   );
@@ -47,6 +70,11 @@ const Title = styled.div`
   width: 10rem;
   margin-top: 1.5rem;
   margin-left: 1.5rem;
+`;
+
+const Welcome = styled.div`
+  display: flex;
+  justify-content: right;
 `;
 
 const LoginButtonStyled = styled.div`
