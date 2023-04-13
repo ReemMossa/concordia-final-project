@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { Image } from "cloudinary-react";
 
 const SellerNewItem = () => {
+  const [imageSelected, setImageSelected] = useState("");
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     adTitle: "",
     description: "",
+    imageUrl: "", // add imageUrl property to the initial state
   });
 
   const handleInputChange = (e) => {
@@ -17,8 +20,28 @@ const SellerNewItem = () => {
     });
   };
 
+  const uploadImage = () => {
+    const formData = new FormData();
+    formData.append("file", imageSelected);
+    formData.append("upload_preset", "lyxwlobx");
+
+    fetch("https://api.cloudinary.com/v1_1/dhn6kqmnu/image/upload", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const imageUrl = data.secure_url;
+        setFormData({ ...formData, imageUrl: imageUrl });
+      })
+      .catch((error) => {
+        console.error("Error uploading image to Cloudinary", error);
+      });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("FORMDATA", formData);
     fetch("/addSellerItem", {
       headers: {
         Accept: "application/json",
@@ -44,6 +67,7 @@ const SellerNewItem = () => {
       }
     });
   };
+
   return (
     <Wrapper>
       <H1>Upload your dish!</H1>
@@ -61,13 +85,20 @@ const SellerNewItem = () => {
 
           <Input
             type="text"
-            id="desription"
-            name="desription"
+            id="description"
+            name="description"
             placeholder="Please write a detailed description of your item"
-            value={formData.desription}
+            value={formData.description}
             onChange={handleInputChange}
             required
           />
+
+          <input
+            type="file"
+            onChange={(e) => setImageSelected(e.target.files[0])}
+          />
+          <button onClick={uploadImage}>Upload Image</button>
+          <Image cloudName="dhn6kqmnu" publicId={formData.imageUrl} />
         </FormDiv>
 
         <ButtonContainer>

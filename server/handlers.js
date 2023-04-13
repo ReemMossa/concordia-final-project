@@ -217,12 +217,13 @@ const addItem = async (req, res) => {
   try {
     await client.connect();
     const db = client.db("finalproject");
-    const { adTitle, description } = req.body;
+    const { adTitle, description, imageUrl } = req.body;
     const _id = uuidv4();
     const item = {
       _id: _id,
       adTitle,
       description,
+      imageUrl,
     };
 
     const result = await db.collection("selleritems").insertOne(item);
@@ -238,6 +239,26 @@ const addItem = async (req, res) => {
   }
 };
 
+const getItems = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+
+  try {
+    await client.connect();
+    const db = client.db("finalproject");
+    const result = await db.collection("selleritems").find().toArray();
+    console.log("result", result);
+    if (result) {
+      return res.status(200).json({ status: 200, data: result });
+    }
+  } catch (error) {
+    return res
+      .status(404)
+      .json({ status: 404, success: false, message: error });
+  } finally {
+    client.close();
+  }
+};
+
 module.exports = {
   getClients,
   getClient,
@@ -245,4 +266,5 @@ module.exports = {
   addSeller,
   getOneClient,
   addItem,
+  getItems,
 };

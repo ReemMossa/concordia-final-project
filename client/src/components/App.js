@@ -5,7 +5,7 @@ import Header from "./Header";
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
 import GlobalStyles from "../GlobalStyles";
-import Profile from "./Profile";
+
 import { useAuth0 } from "@auth0/auth0-react";
 import SignUp from "./SignUp";
 import SignUpClient from "./SignUpClient";
@@ -14,6 +14,7 @@ import Login from "./Login";
 import HomepageClient from "./HomepageClient";
 import HomepageSeller from "./HomepageSeller";
 import SellerNewItem from "./SellerNewItem";
+import Testcloudinary from "./Testcloudinary";
 
 const App = () => {
   const { isLoading } = useAuth0();
@@ -23,7 +24,7 @@ const App = () => {
     <>
       <LogoutButton />
 
-      <Profile />
+      <Testcloudinary />
       <BrowserRouter>
         <GlobalStyles />
         <Header />

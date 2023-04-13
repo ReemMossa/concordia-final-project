@@ -1,22 +1,71 @@
 import React from "react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 
 const HomepageSeller = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
+  const [homepageSeller, setHomepageSeller] = useState([]);
+  const [state, setState] = useState("loading");
+  const navigate = useNavigate();
   console.log("currentuser", currentUser);
+
+  useEffect(() => {
+    if (currentUser.type !== "seller") {
+      navigate("/homepageclient");
+    }
+  }, [currentUser, navigate]);
+
+  useEffect(() => {
+    fetch("/getItems").then((res) => {
+      console.log("res", res);
+      if (res.status > 500) {
+        navigate("/");
+      } else {
+        res
+          .json()
+          .then((resData) => {
+            setHomepageSeller(resData.data);
+            console.log("resdate", resData.data);
+          })
+          .catch((err) => window.alert(err));
+      }
+    });
+
+    setState("idle");
+  }, []);
+
+  if (state === "loading") {
+    return <div>Loading..</div>;
+  }
+  console.log("homepageseller", homepageSeller);
   return (
-    <>
+    <Div>
       <h1>Welcome {currentUser.firstName}</h1>
 
       <Button>
         <StyledLink to="/Sellernewitem">Upload new food</StyledLink>
       </Button>
-    </>
+      <div>
+        {homepageSeller.length > 0 &&
+          homepageSeller.map((item) => {
+            return (
+              <>
+                <div>
+                  {item.adTitle} : {item.description}
+                </div>
+              </>
+            );
+          })}
+      </div>
+    </Div>
   );
 };
+
+const Div = styled.div`
+  margin-left: 2rem;
+`;
 
 const StyledLink = styled(Link)`
   text-decoration: none;
