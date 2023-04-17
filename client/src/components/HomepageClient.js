@@ -45,16 +45,24 @@ const HomepageClient = () => {
     <>
       <h1>Welcome {currentUser.firstName}</h1>
 
-      <Button>
-        <StyledLink to="/Sellernewitem">Upload new food</StyledLink>
-      </Button>
+      <h2>Here are your options:</h2>
+
       <div>
         {homepageSeller.length > 0 &&
           homepageSeller.map((item) => {
             return (
               <>
                 <div>
-                  {item.adTitle} : {item.description}
+                  Dish Name: {item.dishName}
+                  Description: {item.description}
+                  Price: {item.price}
+                  Portion size: {item.size}
+                  <div>Ingredients:</div>
+                  -Protein: {item.ingredients.protein}
+                  -Organs: {item.ingredients.organs}
+                  -Nuts & Seeds: {item.ingredients.nutsAndSeeds}
+                  -Other: {item.ingredients.other}
+                  <Img src={item.imageUrl}></Img>
                 </div>
               </>
             );
@@ -77,6 +85,10 @@ const Button = styled.button`
   color: white;
   float: right;
   margin-right: 9rem;
+`;
+
+const Img = styled.img`
+  width: 150px;
 `;
 
 export default HomepageClient;

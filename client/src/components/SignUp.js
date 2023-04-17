@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import LoginButton from "./LoginButton";
+
 import { Link } from "react-router-dom";
 
 const SignUp = () => {
@@ -41,16 +41,32 @@ const SignUp = () => {
       <ButtonDiv>
         {clientBackgroundColor === "lightblue" ? (
           <Link to="/signupclient">
-            <Button>{buttonText}</Button>
+            <Button
+              disabled={buttonText === "Create Account"}
+              style={{
+                backgroundColor:
+                  buttonText === "Create Account" ? "lightblue" : "",
+              }}
+            >
+              {buttonText}
+            </Button>
           </Link>
         ) : (
           <Link to="/signupseller">
-            <Button>{buttonText}</Button>
+            <Button
+              disabled={buttonText === "Create Account"}
+              style={{
+                backgroundColor:
+                  buttonText === "Create Account" ? "lightblue" : "",
+              }}
+            >
+              {buttonText}
+            </Button>
           </Link>
         )}
       </ButtonDiv>
       <TextDiv>
-        Already have an account? <LoginButton />
+        Already have an account? <Link to="/login">Log In</Link>
       </TextDiv>
     </Wrapper>
   );
@@ -117,6 +133,7 @@ const Button = styled.button`
   font-size: 20px;
   border-radius: 30px;
   margin-top: 2rem;
+  cursor: pointer;
 `;
 
 const TextDiv = styled.div`

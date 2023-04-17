@@ -13,7 +13,9 @@ const {
   addSeller,
   getOneClient,
   addItem,
+  updateItem,
   getItems,
+  addDogInfo,
 } = require("./handlers");
 
 express()
@@ -40,8 +42,14 @@ express()
   //Creates a new item for the seller to add to their items for sale
   .post("/addSellerItem", addItem)
 
-  //Returns all items for sale
+  //update seller item
+  .patch("/updateSellerItem/:_id", updateItem)
+
+  //Returns all items for sale used in homepageClient and homepageSeller
   .get("/getItems", getItems)
+
+  //Returns all items for sale used in homepageClient and homepageSeller
+  .post("/addDogInformation", addDogInfo)
 
   //Catch
 

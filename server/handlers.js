@@ -19,7 +19,7 @@ const getClients = async (req, res) => {
     await client.connect();
     const db = client.db("finalproject");
     const result = await db.collection("users").find().toArray();
-    console.log("db", db);
+
     if (result) {
       return res.status(200).json({ status: 200, data: result });
     }
@@ -106,7 +106,7 @@ const addClient = async (req, res) => {
         data: req.body,
       });
     }
-    console.log("result", result);
+
     return res.status(500).json({
       status: 500,
       success: false,
@@ -213,17 +213,30 @@ const getOneClient = async (req, res) => {
 
 const addItem = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
-
+  const _id = uuidv4();
   try {
     await client.connect();
     const db = client.db("finalproject");
-    const { adTitle, description, imageUrl } = req.body;
-    const _id = uuidv4();
+    const { dishName, description, price, size, imageUrl, ingredients } =
+      req.body;
+
+    const checkedIngredients = {
+      protein: ingredients.protein,
+      organs: ingredients.organs,
+      nutsAndSeeds: ingredients.nutsAndSeeds,
+      other: ingredients.other,
+    };
+
+    const updatedIngredients = { ...ingredients, ...checkedIngredients };
+
     const item = {
-      _id: _id,
-      adTitle,
+      _id,
+      dishName,
       description,
+      price,
+      size,
       imageUrl,
+      ingredients: updatedIngredients,
     };
 
     const result = await db.collection("selleritems").insertOne(item);
@@ -239,6 +252,37 @@ const addItem = async (req, res) => {
   }
 };
 
+// updates a specified seller item
+const updateItem = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const _id = req.body._id;
+
+  try {
+    await client.connect();
+    const db = client.db("finalproject");
+
+    const result = await db.collection("selleritems").findOne({ _id });
+
+    if (!result) {
+      return res.status(404).json({
+        status: 404,
+        data: req.body,
+        message: "Sorry, we can't seem to find this item.",
+      });
+    }
+
+    if (result) {
+      const updateOldItem = await db
+        .collection("selleritems")
+        .updateOne({ _id }, { $set: req.body });
+    }
+
+    client.close();
+  } catch (error) {
+    res.status(500).json({ status: 500, message: error.message });
+  }
+};
+
 const getItems = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
 
@@ -246,7 +290,7 @@ const getItems = async (req, res) => {
     await client.connect();
     const db = client.db("finalproject");
     const result = await db.collection("selleritems").find().toArray();
-    console.log("result", result);
+
     if (result) {
       return res.status(200).json({ status: 200, data: result });
     }
@@ -259,6 +303,43 @@ const getItems = async (req, res) => {
   }
 };
 
+const addDogInfo = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+
+  try {
+    await client.connect();
+    const db = client.db("finalproject");
+    const usersCollection = await db.collection("users");
+    const { _id, dogWeight, dogAge } = req.body;
+    const result = await usersCollection.findOneAndUpdate(
+      { _id },
+      { $set: { dogWeight, dogAge } }
+    );
+    console.log("result", result);
+    if (result) {
+      // On success/no error, send
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        message: "Dog weight and age are added.",
+      });
+    }
+
+    return res.status(404).json({
+      status: 404,
+      success: false,
+      message: "Could not find user with specified _id",
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ status: 500, success: false, message: error });
+  } finally {
+    // close the connection to the database server
+    client.close();
+  }
+};
+
 module.exports = {
   getClients,
   getClient,
@@ -266,5 +347,9 @@ module.exports = {
   addSeller,
   getOneClient,
   addItem,
+  updateItem,
   getItems,
+  addDogInfo,
 };
+
+// ingredients.values().flatten().join(", ")

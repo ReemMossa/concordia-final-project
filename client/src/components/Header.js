@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import LoginButton from "./LoginButton";
 
 const Header = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
@@ -35,7 +34,6 @@ const Header = () => {
         ) : (
           <>
             <LoginButtonStyled>
-              {/* <LoginButton /> */}
               <Link to="/login">Log In</Link>
             </LoginButtonStyled>
 

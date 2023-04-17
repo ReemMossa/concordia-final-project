@@ -9,7 +9,6 @@ const HomepageSeller = () => {
   const [homepageSeller, setHomepageSeller] = useState([]);
   const [state, setState] = useState("loading");
   const navigate = useNavigate();
-  console.log("currentuser", currentUser);
 
   useEffect(() => {
     if (currentUser.type !== "seller") {
@@ -37,12 +36,13 @@ const HomepageSeller = () => {
   }, []);
 
   if (state === "loading") {
-    return <div>Loading..</div>;
+    return <div>Loading...</div>;
   }
   console.log("homepageseller", homepageSeller);
   return (
     <Div>
       <h1>Welcome {currentUser.firstName}</h1>
+      <h2>Here is what you have for sale:</h2>
 
       <Button>
         <StyledLink to="/Sellernewitem">Upload new food</StyledLink>
@@ -53,7 +53,16 @@ const HomepageSeller = () => {
             return (
               <>
                 <div>
-                  {item.adTitle} : {item.description}
+                  Dish Name: {item.dishName}
+                  Description: {item.description}
+                  Price: {item.price}
+                  Portion size: {item.size}
+                  <div>Ingredients:</div>
+                  -Protein: {item.ingredients.protein}
+                  -Organs: {item.ingredients.organs}
+                  -Nuts & Seeds: {item.ingredients.nutsAndSeeds}
+                  -Other: {item.ingredients.other}
+                  <Img src={item.imageUrl}></Img>
                 </div>
               </>
             );
@@ -82,4 +91,7 @@ const Button = styled.button`
   margin-right: 9rem;
 `;
 
+const Img = styled.img`
+  width: 150px;
+`;
 export default HomepageSeller;

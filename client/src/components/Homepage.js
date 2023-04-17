@@ -3,7 +3,6 @@ import food from "./bowlwithfood.jpg";
 import meatAndVeggies from "./meat-and-veggies.webp";
 import goldenretriever from "./golden.webp";
 import styled from "styled-components";
-import LoginButton from "./LoginButton";
 
 const Homepage = () => {
   return (

@@ -45,8 +45,8 @@ const Login = () => {
                 JSON.stringify(resData.data)
               );
               setCurrentUser(resData.data);
-              if (currentUser.type === "client") {
-                Navigate("/homepageclient");
+              if (resData.data.type === "client") {
+                Navigate("/doginformation");
               } else {
                 Navigate("/homepageseller");
               }
