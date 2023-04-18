@@ -16,6 +16,7 @@ const {
   updateItem,
   getItems,
   addDogInfo,
+  getOneDogInfo,
 } = require("./handlers");
 
 express()
@@ -50,6 +51,9 @@ express()
 
   //Returns all items for sale used in homepageClient and homepageSeller
   .post("/addDogInformation", addDogInfo)
+
+  //Returns all dog information. Used in HomepageClient.js
+  .get("/getDogInformation/:_id", getOneDogInfo)
 
   //Catch
 

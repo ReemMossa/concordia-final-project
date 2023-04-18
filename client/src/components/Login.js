@@ -46,7 +46,7 @@ const Login = () => {
               );
               setCurrentUser(resData.data);
               if (resData.data.type === "client") {
-                Navigate("/doginformation");
+                Navigate("/homepageclient");
               } else {
                 Navigate("/homepageseller");
               }

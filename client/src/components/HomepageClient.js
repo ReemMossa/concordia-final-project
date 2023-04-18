@@ -1,15 +1,17 @@
 import React from "react";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
+
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 
 const HomepageClient = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
-  const [homepageSeller, setHomepageSeller] = useState([]);
+  const [homepageClient, setHomepageClient] = useState([]);
+  const [dogInformation, setDogInformation] = useState([]);
   const [state, setState] = useState("loading");
+
   const navigate = useNavigate();
-  console.log("currentuser", currentUser);
 
   useEffect(() => {
     if (currentUser.type !== "client") {
@@ -19,15 +21,32 @@ const HomepageClient = () => {
 
   useEffect(() => {
     fetch("/getItems").then((res) => {
-      console.log("res", res);
       if (res.status > 500) {
         navigate("/");
       } else {
         res
           .json()
           .then((resData) => {
-            setHomepageSeller(resData.data);
+            setHomepageClient(resData.data);
             console.log("resdate", resData.data);
+          })
+          .catch((err) => window.alert(err));
+      }
+    });
+
+    setState("idle");
+  }, []);
+
+  useEffect(() => {
+    fetch(`/getDogInformation/${currentUser._id}`).then((res) => {
+      console.log("id", currentUser._id);
+      if (res.status > 500) {
+        navigate("/");
+      } else {
+        res
+          .json()
+          .then((resData) => {
+            setDogInformation(resData.data);
           })
           .catch((err) => window.alert(err));
       }
@@ -39,17 +58,35 @@ const HomepageClient = () => {
   if (state === "loading") {
     return <div>Loading..</div>;
   }
-  console.log("homepageseller", homepageSeller);
 
   return (
     <>
       <h1>Welcome {currentUser.firstName}</h1>
+      {!dogInformation._id ? (
+        <div>
+          Do you need help? Click <a href="/doginformation">here</a> to
+          personalize your experience.
+        </div>
+      ) : (
+        <>
+          <div>
+            You can always modify your preferences{" "}
+            <a href="/doginformation">here</a>
+          </div>
+          <div>
+            {currentUser.dogName}'s age: {dogInformation.dogAge} old
+          </div>
+          <div>
+            {currentUser.dogName}'s weight: {dogInformation.dogWeight} lbs
+          </div>
+        </>
+      )}
 
-      <h2>Here are your options:</h2>
+      <h2>All available meals:</h2>
 
       <div>
-        {homepageSeller.length > 0 &&
-          homepageSeller.map((item) => {
+        {homepageClient.length > 0 &&
+          homepageClient.map((item) => {
             return (
               <>
                 <div>

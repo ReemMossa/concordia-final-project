@@ -305,38 +305,57 @@ const getItems = async (req, res) => {
 
 const addDogInfo = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
-
+  const _id = uuidv4();
   try {
     await client.connect();
     const db = client.db("finalproject");
-    const usersCollection = await db.collection("users");
-    const { _id, dogWeight, dogAge } = req.body;
-    const result = await usersCollection.findOneAndUpdate(
-      { _id },
-      { $set: { dogWeight, dogAge } }
-    );
-    console.log("result", result);
-    if (result) {
-      // On success/no error, send
-      return res.status(200).json({
-        status: 200,
-        success: true,
-        message: "Dog weight and age are added.",
-      });
-    }
+    const { _id, dogWeight, dogAge, ingredients } = req.body;
 
-    return res.status(404).json({
-      status: 404,
-      success: false,
-      message: "Could not find user with specified _id",
+    const checkedIngredients = {
+      protein: ingredients.protein,
+      organs: ingredients.organs,
+      nutsAndSeeds: ingredients.nutsAndSeeds,
+      other: ingredients.other,
+    };
+
+    const updatedIngredients = { ...ingredients, ...checkedIngredients };
+
+    const item = {
+      _id,
+      dogWeight,
+      dogAge,
+      ingredients: updatedIngredients,
+    };
+
+    const result = await db.collection("doginfo").insertOne(item);
+    res.status(200).json({
+      status: 200,
+      data: item,
+      message: "Info successfully added to your page",
     });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ status: 500, success: false, message: error });
+    res.status(500).json({ status: 500, message: error.message });
   } finally {
-    // close the connection to the database server
     client.close();
+  }
+};
+
+const getOneDogInfo = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const { _id } = req.params;
+  try {
+    await client.connect();
+    const db = client.db("finalproject");
+    const result = await db.collection("doginfo").findOne({ _id });
+    result
+      ? res.status(200).json({ status: 200, data: result })
+      : res
+          .status(404)
+          .json({ status: 404, message: "Dog information not found" });
+    console.log("result", result);
+    client.close();
+  } catch (error) {
+    res.status(500).json({ status: 500, message: error.message });
   }
 };
 
@@ -350,6 +369,7 @@ module.exports = {
   updateItem,
   getItems,
   addDogInfo,
+  getOneDogInfo,
 };
 
 // ingredients.values().flatten().join(", ")
