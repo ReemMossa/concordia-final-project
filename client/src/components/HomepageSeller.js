@@ -45,7 +45,10 @@ const HomepageSeller = () => {
       <h2>Here is what you have for sale:</h2>
 
       <Button>
-        <StyledLink to="/Sellernewitem">Upload new food</StyledLink>
+        <StyledLink to="/sellernewitem">Upload new food</StyledLink>
+      </Button>
+      <Button>
+        <StyledLink to="/editselleritem">Edit exisiting food</StyledLink>
       </Button>
       <div>
         {homepageSeller.length > 0 &&

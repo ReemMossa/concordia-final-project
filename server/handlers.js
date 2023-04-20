@@ -253,9 +253,9 @@ const addItem = async (req, res) => {
 };
 
 // updates a specified seller item
-const updateItem = async (req, res) => {
+const editItem = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
-  const _id = req.body._id;
+  const { _id } = req.body;
 
   try {
     await client.connect();
@@ -275,6 +275,11 @@ const updateItem = async (req, res) => {
       const updateOldItem = await db
         .collection("selleritems")
         .updateOne({ _id }, { $set: req.body });
+      res.status(200).json({
+        status: 200,
+        data: updateOldItem,
+        message: "Item successfully modified",
+      });
     }
 
     client.close();
@@ -366,7 +371,7 @@ module.exports = {
   addSeller,
   getOneClient,
   addItem,
-  updateItem,
+  editItem,
   getItems,
   addDogInfo,
   getOneDogInfo,

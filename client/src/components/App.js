@@ -13,6 +13,7 @@ import HomepageClient from "./HomepageClient";
 import HomepageSeller from "./HomepageSeller";
 import SellerNewItem from "./SellerNewItem";
 import DogInformation from "./DogInformation";
+import EditSellerItem from "./EditSellerItem";
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
           <Route path="/homepageseller" element={<HomepageSeller />} />
           <Route path="/sellernewitem" element={<SellerNewItem />} />
           <Route path="/doginformation" element={<DogInformation />} />
+          <Route path="/editselleritem" element={<EditSellerItem />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -13,7 +13,7 @@ const {
   addSeller,
   getOneClient,
   addItem,
-  updateItem,
+  editItem,
   getItems,
   addDogInfo,
   getOneDogInfo,
@@ -44,7 +44,7 @@ express()
   .post("/addSellerItem", addItem)
 
   //update seller item
-  .patch("/updateSellerItem/:_id", updateItem)
+  .put("/editSellerItem/:_id", editItem)
 
   //Returns all items for sale used in homepageClient and homepageSeller
   .get("/getItems", getItems)
@@ -54,6 +54,8 @@ express()
 
   //Returns all dog information. Used in HomepageClient.js
   .get("/getDogInformation/:_id", getOneDogInfo)
+
+  // .patch("/updateDogInformation", updateDogInfo)
 
   //Catch
 
