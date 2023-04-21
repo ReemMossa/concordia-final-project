@@ -446,41 +446,41 @@ const SellerNewItem = () => {
             <input
               type="radio"
               name="size"
-              value="8-16cups"
-              checked={formData.size.includes("8-16cups")}
+              value="9-16cups"
+              checked={formData.size.includes("9-16cups")}
               onChange={checkboxSizeOnChange}
             />
-            8-16 cups
+            9-16 cups
           </label>
           <label>
             <input
               type="radio"
               name="size"
-              value="16-22cups"
-              checked={formData.size.includes("16-22cups")}
+              value="17-22cups"
+              checked={formData.size.includes("17-22cups")}
               onChange={checkboxSizeOnChange}
             />
-            16-22 cups
+            17-22 cups
           </label>
           <label>
             <input
               type="radio"
               name="size"
-              value="22-26cups"
-              checked={formData.size.includes("22-26cups")}
+              value="23-26cups"
+              checked={formData.size.includes("23-26cups")}
               onChange={checkboxSizeOnChange}
             />
-            22-26 cups
+            23-26 cups
           </label>
           <label>
             <input
               type="radio"
               name="size"
               value="26-30cups"
-              checked={formData.size.includes("26-30cups")}
+              checked={formData.size.includes("27-30cups")}
               onChange={checkboxSizeOnChange}
             />
-            26-30 cups
+            27-30 cups
           </label>
           Price:
           <Input
