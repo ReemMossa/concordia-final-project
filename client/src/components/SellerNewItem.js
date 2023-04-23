@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { Image } from "cloudinary-react";
+import { UserContext } from "./UserContext";
 
 const SellerNewItem = () => {
+  const { currentUser, setCurrentUser } = useContext(UserContext);
   const [imageSelected, setImageSelected] = useState("");
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
+    userId: currentUser._id,
     dishName: "",
     description: "",
     ingredients: {
@@ -476,7 +479,7 @@ const SellerNewItem = () => {
             <input
               type="radio"
               name="size"
-              value="26-30cups"
+              value="27-30cups"
               checked={formData.size.includes("27-30cups")}
               onChange={checkboxSizeOnChange}
             />

@@ -17,8 +17,8 @@ const HomepageSeller = () => {
   }, [currentUser, navigate]);
 
   useEffect(() => {
-    fetch("/getItems").then((res) => {
-      console.log("res", res);
+    fetch(`/getOneItem/${currentUser._id}`).then((res) => {
+      console.log("res", currentUser._id);
       if (res.status > 500) {
         navigate("/");
       } else {
@@ -41,30 +41,25 @@ const HomepageSeller = () => {
   console.log("homepageseller", homepageSeller);
   return (
     <Div>
-      <h1>Welcome {currentUser.firstName}</h1>
-      <h2>Here is what you have for sale:</h2>
-
       <Button>
         <StyledLink to="/sellernewitem">Upload new food</StyledLink>
       </Button>
       <Button>
         <StyledLink to="/editselleritem">Edit exisiting food</StyledLink>
       </Button>
+      <h1>Welcome {currentUser.firstName}</h1>
+      <h2>Here is what you have for sale:</h2>
+
       <div>
-        {homepageSeller.length > 0 &&
+        {homepageSeller &&
+          homepageSeller.length > 0 &&
           homepageSeller.map((item) => {
+            console.log("item", item);
             return (
               <>
-                <div>
+                <div key={item._id}>
                   Dish Name: {item.dishName}
-                  Description: {item.description}
                   Price: {item.price}
-                  Portion size: {item.size}
-                  <div>Ingredients:</div>
-                  -Protein: {item.ingredients.protein}
-                  -Organs: {item.ingredients.organs}
-                  -Nuts & Seeds: {item.ingredients.nutsAndSeeds}
-                  -Other: {item.ingredients.other}
                   <Img src={item.imageUrl}></Img>
                 </div>
               </>

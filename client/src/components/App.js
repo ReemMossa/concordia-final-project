@@ -14,6 +14,7 @@ import HomepageSeller from "./HomepageSeller";
 import SellerNewItem from "./SellerNewItem";
 import DogInformation from "./DogInformation";
 import EditSellerItem from "./EditSellerItem";
+import EditDogInformation from "./EditDogInformation";
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/sellernewitem" element={<SellerNewItem />} />
           <Route path="/doginformation" element={<DogInformation />} />
           <Route path="/editselleritem" element={<EditSellerItem />} />
+          <Route path="editdoginformation" element={<EditDogInformation />} />
         </Routes>
       </BrowserRouter>
     </>

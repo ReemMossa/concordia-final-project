@@ -4,69 +4,49 @@ import { UserContext } from "./UserContext";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 
-const DogInformation = () => {
+const EditDogInformation = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
-  const [state, setState] = useState("loading");
-  const [doginformation, setDogInformation] = useState("");
-  const navigate = useNavigate();
+  const [dogInfo, setDogInfo] = useState([]);
+  const [selectedDog, setSelectedDog] = useState(null);
+  const [formData, setFormData] = useState({});
 
-  const [formData, setFormData] = useState({
-    dogName: "",
-    dogWeight: "",
-    dogAge: "",
-    _id: currentUser._id,
-    ingredients: {
-      protein: [],
-      organs: [],
-      nutsAndSeeds: [],
-      other: [],
-    },
-  });
-  const handleInputChange = (e) => {
-    if (e.target.type === "checkbox") {
-      setFormData({
-        ...formData,
-        ingredients: {
-          ...formData.ingredients,
-          [e.target.name]: e.target.checked ? true : false,
-        },
+  useEffect(() => {
+    fetch("/getDogInformation")
+      .then((res) => res.json())
+      .then((resData) => {
+        setDogInfo(resData.data);
+        console.log("resdata", resData.data);
       });
-    } else {
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
-      });
-    }
+  }, []);
+
+  const handleChange = (e) => {
+    const dogName = e.target.value;
+    const dog = dogInfo.find((dog) => dog.dogName === dogName);
+    console.log("doginfo", dog);
+    setSelectedDog(dog);
+    setFormData({ ...dog });
   };
 
-  const handleSubmit = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log("FORMDATA", formData);
-
-    fetch("/addDogInformation", {
+    fetch(`/editDogInformation/${selectedDog._id}`, {
+      method: "PUT",
       headers: {
-        Accept: "application/json",
         "Content-Type": "application/json",
       },
-      method: "POST",
       body: JSON.stringify(formData),
-    }).then((res) => {
-      if (res.status > 500) {
-        navigate("/");
-      } else {
-        res
-          .json()
-          .then((resData) => {
-            if (resData.status === 200) {
-              window.alert(resData.message);
-              navigate("/homepageClient");
-            } else {
-              window.alert(resData.message);
-            }
-          })
-          .catch((err) => window.alert(err));
-      }
-    });
+    })
+      .then((res) => res.json())
+      .then((resData) => {
+        const updatedDogInfo = dogInfo.map((dog) =>
+          dog._id === selectedDog._id ? resData.data : dog
+        );
+        setSelectedDog(updatedDogInfo);
+      });
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const checkboxProteinOnChange = (e) => {
@@ -175,42 +155,28 @@ const DogInformation = () => {
     });
   };
 
-  useEffect(() => {
-    fetch("/getItems").then((res) => {
-      console.log("res", res);
-      if (res.status > 500) {
-        navigate("/");
-      } else {
-        res
-          .json()
-          .then((resData) => {
-            setDogInformation(resData.data);
-          })
-          .catch((err) => window.alert(err));
-      }
-    });
-
-    setState("idle");
-  }, []);
-
   return (
     <Wrapper>
+      <div>Please pick the dog that you want to edit:</div>
       <div>
-        Hey there {currentUser.firstName}! We want to know all about you and{" "}
-        {currentUser.dogName} so we can help you choose the right food!
+        <label>
+          <select value={selectedDog?.dogName} onChange={handleChange}>
+            <option value="">Select a dog to modify...</option>
+            {dogInfo.map((dog) => (
+              <option key={dog._id} value={dog.dogName}>
+                {dog.dogName}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
+      {selectedDog && (
+        <div>
+          <h2>{selectedDog.dogName}</h2>
 
-      <Form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          id="dogName"
-          name="dogName"
-          placeholder="Dog name"
-          value={formData.dogName}
-          onChange={handleInputChange}
-          required
-        />
-        <input
+          <Form onSubmit={handleFormSubmit}>
+            <FormDiv>
+              {/* <input
           type="number"
           id="dogWeight"
           name="dogWeight"
@@ -233,23 +199,23 @@ const DogInformation = () => {
           <option value="5-7months">5-7 months old</option>
           <option value="8-12months">8-12 months old</option>
           <option value="adult">12+ months (adult)</option>
-        </select>
-        <p>
-          Please select the ingredients that you are looking for in{" "}
-          {currentUser.dogName}'s diet
-        </p>
-        Protein:
-        <label>
-          <input
-            type="checkbox"
-            name="protein"
-            value="Chicken"
-            checked={formData.ingredients.protein.includes("Chicken")}
-            onChange={checkboxProteinOnChange}
-          />
-          Chicken
-        </label>
-        <label>
+        </select> */}
+              <p>
+                Please select the ingredients that you are looking for in{" "}
+                {currentUser.dogName}'s diet
+              </p>
+              Protein:
+              <label>
+                <input
+                  type="checkbox"
+                  name="protein"
+                  value="Chicken"
+                  checked={formData.ingredients?.protein?.includes("Chicken")}
+                  onChange={checkboxProteinOnChange}
+                />
+                Chicken
+              </label>
+              {/* <label>
           <input
             type="checkbox"
             name="protein"
@@ -431,11 +397,14 @@ const DogInformation = () => {
             onChange={checkboxOtherOnChange}
           />
           Vegetables
-        </label>
-        <ButtonContainer>
-          <Button type="submit">Submit</Button>
-        </ButtonContainer>
-      </Form>
+        </label> */}
+            </FormDiv>
+            <button type="submit" onChange={handleFormSubmit}>
+              Submit
+            </button>
+          </Form>
+        </div>
+      )}
     </Wrapper>
   );
 };
@@ -504,4 +473,4 @@ const ButtonImage = styled.button`
   cursor: pointer;
 `;
 
-export default DogInformation;
+export default EditDogInformation;

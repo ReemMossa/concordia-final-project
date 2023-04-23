@@ -4,12 +4,13 @@ import { UserContext } from "./UserContext";
 import styled from "styled-components";
 
 const EditSellerItem = () => {
+  const { currentUser, setCurrentUser } = useContext(UserContext);
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    fetch("/getItems")
+    fetch(`/getOneItem/${currentUser._id}`)
       .then((res) => res.json())
       .then((resData) => {
         setItems(resData.data);

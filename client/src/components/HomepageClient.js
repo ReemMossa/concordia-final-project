@@ -38,22 +38,23 @@ const HomepageClient = () => {
   }, []);
 
   useEffect(() => {
-    fetch(`/getDogInformation/${currentUser._id}`).then((res) => {
-      console.log("id", currentUser._id);
-      if (res.status > 500) {
-        navigate("/");
-      } else {
-        res
-          .json()
-          .then((resData) => {
-            setDogInformation(resData.data);
-          })
-          .catch((err) => window.alert(err));
-      }
-    });
-
+    if (currentUser && currentUser._id) {
+      fetch(`/getDogInformation/${currentUser._id}`).then((res) => {
+        console.log("id", currentUser);
+        if (res.status > 500) {
+          navigate("/");
+        } else {
+          res
+            .json()
+            .then((resData) => {
+              setDogInformation(resData.data);
+            })
+            .catch((err) => window.alert(err));
+        }
+      });
+    }
     setState("idle");
-  }, []);
+  }, [currentUser, navigate]);
 
   if (state === "loading") {
     return <div>Loading..</div>;
@@ -61,29 +62,28 @@ const HomepageClient = () => {
 
   return (
     <>
-      <h1>Welcome {currentUser.firstName}</h1>
-      {!dogInformation._id ? (
+      <>
+        <h1>Welcome {currentUser.firstName}</h1>
         <div>
           Do you need help? Click <a href="/doginformation">here</a> to
           personalize your experience.
         </div>
-      ) : (
-        <>
-          <div>
-            You can always modify your preferences{" "}
-            <a href="/doginformation">here</a>
-          </div>
-          <div>
-            {currentUser.dogName}'s age: {dogInformation.dogAge} old
-          </div>
-          <div>
-            {currentUser.dogName}'s weight: {dogInformation.dogWeight} lbs
-          </div>
-        </>
-      )}
+      </>
+      <>
+        <h1>Hello {currentUser.firstName}</h1>
+        <div>
+          You can always modify your preferences{" "}
+          <a href="/editdoginformation">here</a>
+        </div>
+        <div>
+          {currentUser.dogName}'s age: {dogInformation.dogAge} old
+        </div>
+        <div>
+          {currentUser.dogName}'s weight: {dogInformation.dogWeight} lbs
+        </div>
+      </>
 
       <h2>All available meals:</h2>
-
       <div>
         {homepageClient.length > 0 &&
           homepageClient.map((item) => {

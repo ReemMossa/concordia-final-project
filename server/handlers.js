@@ -213,12 +213,19 @@ const getOneClient = async (req, res) => {
 
 const addItem = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
-  const _id = uuidv4();
+
   try {
     await client.connect();
     const db = client.db("finalproject");
-    const { dishName, description, price, size, imageUrl, ingredients } =
-      req.body;
+    const {
+      userId,
+      dishName,
+      description,
+      price,
+      size,
+      imageUrl,
+      ingredients,
+    } = req.body;
 
     const checkedIngredients = {
       protein: ingredients.protein,
@@ -230,7 +237,8 @@ const addItem = async (req, res) => {
     const updatedIngredients = { ...ingredients, ...checkedIngredients };
 
     const item = {
-      _id,
+      _id: uuidv4(),
+      userId,
       dishName,
       description,
       price,
@@ -240,6 +248,7 @@ const addItem = async (req, res) => {
     };
 
     const result = await db.collection("selleritems").insertOne(item);
+
     res.status(200).json({
       status: 200,
       data: item,
@@ -308,6 +317,29 @@ const getItems = async (req, res) => {
   }
 };
 
+const getOneItem = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const { userId } = req.params;
+  try {
+    await client.connect();
+    const db = client.db("finalproject");
+    const result = await db
+      .collection("selleritems")
+      .find({ userId })
+      .toArray();
+    result.length > 0
+      ? res.status(200).json({ status: 200, data: result })
+      : res
+          .status(404)
+          .json({ status: 404, message: "Seller items not found" });
+    console.log("result", result);
+  } catch (error) {
+    res.status(500).json({ status: 500, message: error.message });
+  } finally {
+    client.close();
+  }
+};
+
 const addDogInfo = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   const _id = uuidv4();
@@ -364,6 +396,62 @@ const getOneDogInfo = async (req, res) => {
   }
 };
 
+const getDogInfo = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+
+  try {
+    await client.connect();
+    const db = client.db("finalproject");
+    const result = await db.collection("doginfo").find().toArray();
+
+    if (result) {
+      return res.status(200).json({ status: 200, data: result });
+    }
+  } catch (error) {
+    return res
+      .status(404)
+      .json({ status: 404, success: false, message: error });
+  } finally {
+    client.close();
+  }
+};
+
+// updates a specified dog info
+const editDogInfo = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const { _id } = req.body;
+
+  try {
+    await client.connect();
+    const db = client.db("finalproject");
+
+    const result = await db.collection("doginfo").findOne({ _id });
+
+    if (!result) {
+      return res.status(404).json({
+        status: 404,
+        data: req.body,
+        message: "Sorry, we can't seem to find this item.",
+      });
+    }
+
+    if (result) {
+      const updateOldItem = await db
+        .collection("doginfo")
+        .updateOne({ _id }, { $set: req.body });
+      res.status(200).json({
+        status: 200,
+        data: updateOldItem,
+        message: "Item successfully modified",
+      });
+    }
+
+    client.close();
+  } catch (error) {
+    res.status(500).json({ status: 500, message: error.message });
+  }
+};
+
 module.exports = {
   getClients,
   getClient,
@@ -373,8 +461,11 @@ module.exports = {
   addItem,
   editItem,
   getItems,
+  getOneItem,
   addDogInfo,
   getOneDogInfo,
+  getDogInfo,
+  editDogInfo,
 };
 
 // ingredients.values().flatten().join(", ")
