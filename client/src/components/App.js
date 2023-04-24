@@ -15,6 +15,8 @@ import SellerNewItem from "./SellerNewItem";
 import DogInformation from "./DogInformation";
 import EditSellerItem from "./EditSellerItem";
 import EditDogInformation from "./EditDogInformation";
+import Profile from "./Profile";
+import EditProfile from "./EditProfile";
 
 const App = () => {
   return (
@@ -33,7 +35,9 @@ const App = () => {
           <Route path="/sellernewitem" element={<SellerNewItem />} />
           <Route path="/doginformation" element={<DogInformation />} />
           <Route path="/editselleritem" element={<EditSellerItem />} />
-          <Route path="editdoginformation" element={<EditDogInformation />} />
+          <Route path="/editdoginformation" element={<EditDogInformation />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/editprofile" elemetn={<EditProfile />} />
         </Routes>
       </BrowserRouter>
     </>

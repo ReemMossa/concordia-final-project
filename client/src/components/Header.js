@@ -1,11 +1,14 @@
 import mainLogo from "./mainlogo.png";
-import { Link } from "react-router-dom";
+
 import { UserContext } from "./UserContext";
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+import { useLocation, Link } from "react-router-dom";
 
 const Header = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
+  const location = useLocation();
+  const path = location.pathname;
 
   const handleSignOut = () => {
     window.localStorage.clear();
@@ -23,14 +26,31 @@ const Header = () => {
         </Title>
 
         {currentUser ? (
-          <div>
+          <Div>
             <Welcome> Welcome {currentUser.firstName}!</Welcome>
             <LoginButtonStyled>
               <Link to="/" onClick={handleSignOut}>
                 Sign Out
               </Link>
             </LoginButtonStyled>
-          </div>
+
+            {currentUser.type === "seller" && path.includes("homepage") ? (
+              <Button disabled>Dashboard</Button>
+            ) : !path.includes("homepage") ? (
+              currentUser.type === "client" ? (
+                <Button>
+                  <Link to="/homepageclient">Dashboard</Link>
+                </Button>
+              ) : (
+                <Button>
+                  <Link to="/homepageseller">Dashboard</Link>
+                </Button>
+              )
+            ) : (
+              <Button>Dashboard</Button>
+            )}
+            <Link to="/profile">My profile</Link>
+          </Div>
         ) : (
           <>
             <LoginButtonStyled>

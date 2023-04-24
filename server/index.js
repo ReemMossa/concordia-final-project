@@ -8,12 +8,14 @@ const PORT = 8000;
 //import handlers here
 const {
   getClients,
-  getClient,
-  addClient,
+  getUser,
+  updateUser,
+  addUser,
   addSeller,
   getOneClient,
   addItem,
   editItem,
+  deleteItem,
   getItems,
   getOneItem,
   addDogInfo,
@@ -31,8 +33,8 @@ express()
 
   .get("/getclients", getClients)
 
-  // Adds a new client when they register (Used in SignUpClient.js)
-  .post("/registrationClient", addClient)
+  // Adds a new user when they register (Used in SignUpClient.js)
+  .post("/registrationClient", addUser)
 
   // Adds a new seller when they register (Used in SignUpSeller.js)
   .post("/registrationSeller", addSeller)
@@ -41,13 +43,19 @@ express()
   .post("/getOneClient", getOneClient)
 
   // Returns a single registered client by using their email (Used in UserContext.js)
-  .get("/getclient/:email", getClient)
+  .get("/getUser/:email", getUser)
+
+  // Updates user info
+  .put("/updateUser/:_id", updateUser)
 
   //Creates a new item for the seller to add to their items for sale
   .post("/addSellerItem", addItem)
 
   //update seller item
   .put("/editSellerItem/:_id", editItem)
+
+  //delete seller item
+  .delete("/deleteSellerItem/:_id", deleteItem)
 
   //Returns all items for sale used in homepageClient and homepageSeller
   .get("/getItems", getItems)

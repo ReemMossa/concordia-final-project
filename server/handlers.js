@@ -32,19 +32,15 @@ const getClients = async (req, res) => {
   }
 };
 
-const getClient = async (req, res) => {
-  // creates a new client
+const getUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
 
-  // connect to the client
   await client.connect();
 
   const { email } = req.params;
 
-  // connect to the database
   const db = await client.db("finalproject");
 
-  // access a collection called "customers"
   const clientsCollection = db.collection("users");
 
   try {
@@ -60,12 +56,44 @@ const getClient = async (req, res) => {
       .status(404)
       .json({ status: 404, success: false, message: error });
   } finally {
-    // close the connection to the database server
     client.close();
   }
 };
 
-const addClient = async (req, res) => {
+const updateUser = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const { _id } = req.params;
+
+  try {
+    await client.connect();
+    const db = client.db("finalproject");
+    const result = await db.collection("users").findOne({ _id });
+    if (!result) {
+      return res.status(404).json({
+        status: 404,
+        data: req.body,
+        message: "Sorry, we can't seem to find this user.",
+      });
+    }
+
+    if (result) {
+      const updateUser = await db
+        .collection("users")
+        .updateOne({ _id }, { $set: req.body });
+      res.status(200).json({
+        status: 200,
+        data: updateUser,
+        message: "User successfully modified",
+      });
+    }
+
+    client.close();
+  } catch (error) {
+    res.status(500).json({ status: 500, message: error.message });
+  }
+};
+
+const addUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
 
   try {
@@ -297,6 +325,42 @@ const editItem = async (req, res) => {
   }
 };
 
+// deletes a specified item
+const deleteItem = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const { _id } = req.params;
+  console.log("id", _id);
+  try {
+    await client.connect();
+    const db = client.db("finalproject");
+
+    const findOldItem = await db
+      .collection("selleritems")
+      .findOneAndDelete({ _id });
+
+    console.log("findolditem", findOldItem);
+
+    if (findOldItem.value === null) {
+      res.status(404).json({
+        status: 404,
+        message: "This item was already deleted. Unable to delete this item.",
+      });
+      return;
+    }
+
+    client.close();
+    res.status(200).json({
+      status: 200,
+      message: "Item successfully deleted",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: error.message,
+    });
+  }
+};
+
 const getItems = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
 
@@ -454,12 +518,14 @@ const editDogInfo = async (req, res) => {
 
 module.exports = {
   getClients,
-  getClient,
-  addClient,
+  getUser,
+  updateUser,
+  addUser,
   addSeller,
   getOneClient,
   addItem,
   editItem,
+  deleteItem,
   getItems,
   getOneItem,
   addDogInfo,

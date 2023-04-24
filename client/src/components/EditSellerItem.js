@@ -11,9 +11,18 @@ const EditSellerItem = () => {
 
   useEffect(() => {
     fetch(`/getOneItem/${currentUser._id}`)
+      .then((resData) => {
+        if (resData.status !== 200) {
+          return resData.message;
+        }
+      })
       .then((res) => res.json())
       .then((resData) => {
         setItems(resData.data);
+      })
+      .catch((error) => {
+        console.log("catdh error", error);
+        setItems([]);
       });
   }, []);
 
@@ -35,10 +44,38 @@ const EditSellerItem = () => {
     })
       .then((res) => res.json())
       .then((resData) => {
-        const updatedItems = items.map((item) =>
-          item._id === selectedItem._id ? resData.data : item
+        console.log("resdata", resData);
+        if (items > 0) {
+          const updatedItems = items.map((item) =>
+            item._id === selectedItem._id ? resData.data : item
+          );
+          setItems(updatedItems);
+        }
+      });
+  };
+
+  const handleFormDelete = (e) => {
+    e.preventDefault();
+    fetch(`/deleteSellerItem/${selectedItem._id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          console.log("res", res);
+          throw new Error("Failed to delete the seller item");
+        }
+        const updatedItems = items.filter(
+          (item) => item._id !== selectedItem._id
         );
         setItems(updatedItems);
+        return res.json();
+      })
+      .then((data) => {})
+      .catch((error) => {
+        console.error(error);
       });
   };
 
@@ -160,6 +197,7 @@ const EditSellerItem = () => {
           <label>
             <select value={selectedItem?.dishName} onChange={handleChange}>
               <option value="">Select an item to modify...</option>
+              {console.log("items", items)}
               {items.map((item) => (
                 <option key={item._id} value={item.dishName}>
                   {item.dishName}
@@ -450,8 +488,15 @@ const EditSellerItem = () => {
                   />
                 </label>
               </FormDiv>
-              <button type="submit" onChange={handleFormSubmit}>
-                Submit
+              <button type="submit">Submit</button>
+
+              <button
+                type="button"
+                onClick={handleFormDelete}
+                link
+                to="/homepageseller"
+              >
+                Delete item
               </button>
             </Form>
           </div>
