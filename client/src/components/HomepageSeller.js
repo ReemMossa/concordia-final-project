@@ -1,5 +1,4 @@
-import React from "react";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
@@ -18,7 +17,6 @@ const HomepageSeller = () => {
 
   useEffect(() => {
     fetch(`/getOneItem/${currentUser._id}`).then((res) => {
-      console.log("res", currentUser._id);
       if (res.status > 500) {
         navigate("/");
       } else {
@@ -26,7 +24,6 @@ const HomepageSeller = () => {
           .json()
           .then((resData) => {
             setHomepageSeller(resData.data);
-            console.log("resdate", resData.data);
           })
           .catch((err) => window.alert(err));
       }
@@ -47,18 +44,18 @@ const HomepageSeller = () => {
       <Button>
         <StyledLink to="/editselleritem">Edit exisiting food</StyledLink>
       </Button>
-      <h1>Welcome {currentUser.firstName}</h1>
+      <h1>Welcome {currentUser.dogName}</h1>
       <h2>Here is what you have for sale:</h2>
 
       <div>
         {homepageSeller &&
           homepageSeller.length > 0 &&
           homepageSeller.map((item) => {
-            console.log("item", item);
             return (
               <>
                 <div key={item._id}>
-                  Dish Name: {item.dishName}
+                  Dish Name:
+                  <Link to={`/items/${item._id}`}>{item.dishName}</Link>
                   Price: {item.price}
                   <Img src={item.imageUrl}></Img>
                 </div>

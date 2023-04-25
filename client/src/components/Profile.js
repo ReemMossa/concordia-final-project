@@ -2,34 +2,46 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import styled from "styled-components";
+// import bcrypt from "bcrypt";
 
 const Profile = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
+  const [status, setStatus] = useState("loading");
   const [editMode, setEditMode] = useState(false);
-  const [firstName, setFirstName] = useState(currentUser.firstName);
-  const [lastName, setLastName] = useState(currentUser.lastName);
-  const [dogName, setDogName] = useState(currentUser.dogName);
-  const [address, setAddress] = useState(currentUser.address);
-  const [email, setEmail] = useState(currentUser.email);
-  const [password, setPassword] = useState(currentUser.password);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [dogName, setDogName] = useState("");
+  const [address, setAddress] = useState({
+    street: "",
+    city: "",
+    province: "",
+    country: "",
+  });
+  const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
 
-  //   const handleSaveChanges = () => {
-  //     e.preventDefault();
-  //     fetch(`/getUser/${currentUser._id}`)
-  //     .then((resData) => {
-  //       if (resData.status !== 200) {
-  //         return resData.message;
-  //       }
-  //     })
-  //     .then((res) => res.json())
-  //     .then((resData) => {
-  //       setItems(resData.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log("catdh error", error);
-  //       setItems([]);
-  //     });
-  // }, []);
+  useEffect(() => {
+    if (currentUser) {
+      setStatus("loading");
+      fetch(`/getUser/${currentUser.email}`)
+        .then((res) => res.json())
+        .then((data) => {
+          const { firstName, lastName, dogName, address, email, password } =
+            data.data;
+          setFirstName(firstName);
+          setLastName(lastName);
+          setDogName(dogName);
+          setAddress(address);
+          setEmail(email);
+          setNewPassword(password);
+          setStatus("idle");
+        })
+        .catch((error) => {
+          console.error(error);
+          setStatus("error");
+        });
+    }
+  }, [currentUser]);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -44,7 +56,7 @@ const Profile = () => {
         dogName,
         address,
         email,
-        password,
+        newPassword,
       }),
     })
       .then((res) => res.json())
@@ -54,137 +66,155 @@ const Profile = () => {
       });
   };
 
-  if (currentUser && currentUser.type === "client") {
+  //   const handleSave = () => {
+  //     const hashedPassword = bcrypt.hash(newPassword, 10);
+  //     setEditMode(false);
+  //   };
+
+  if (currentUser) {
     return (
       <>
-        <form onSubmit={handleFormSubmit}>
-          <div>
-            Name:{" "}
-            {editMode ? (
-              <>
+        {status === "loading" && <p>Loading...</p>}
+        {status === "error" && <p>Error loading profile data</p>}
+        {status === "idle" && (
+          <form onSubmit={handleFormSubmit}>
+            <div>
+              Name:{" "}
+              {editMode ? (
+                <>
+                  <input
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
+                </>
+              ) : (
+                <>
+                  {firstName} {lastName}
+                </>
+              )}
+            </div>
+            <div>
+              Dog name:{" "}
+              {editMode ? (
+                <>
+                  <input
+                    type="text"
+                    value={dogName}
+                    onChange={(e) => setDogName(e.target.value)}
+                  />
+                </>
+              ) : (
+                <>{dogName}</>
+              )}
+            </div>
+            <div>Address:</div>
+            <div>
+              Street:{" "}
+              {editMode ? (
                 <input
                   type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  value={address.street}
+                  onChange={(e) =>
+                    setAddress({ ...address, street: e.target.value })
+                  }
                 />
-                <input
-                  type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                />
-              </>
-            ) : (
-              <>
-                {currentUser.firstName} {currentUser.lastName}
-              </>
-            )}
-          </div>
-          <div>
-            Dog name:{" "}
-            {editMode ? (
-              <>
-                <input
-                  type="text"
-                  value={dogName}
-                  onChange={(e) => setDogName(e.target.value)}
-                />
-              </>
-            ) : (
-              <>{currentUser.dogName}</>
-            )}
-          </div>
-          <div>Address:</div>
-          <div>
-            Street:{" "}
-            {editMode ? (
-              <input
-                type="text"
-                value={address.street}
-                onChange={(e) =>
-                  setAddress({ ...address, street: e.target.value })
-                }
-              />
-            ) : (
-              <>{currentUser.address.street}</>
-            )}
-          </div>
-          <div>
-            City:{" "}
-            {editMode ? (
-              <input
-                type="text"
-                value={address.city}
-                onChange={(e) =>
-                  setAddress({ ...address, city: e.target.value })
-                }
-              />
-            ) : (
-              <>{currentUser.address.city}</>
-            )}
-          </div>
-          <div>
-            Province:{" "}
-            {editMode ? (
-              <input
-                type="text"
-                value={address.province}
-                onChange={(e) =>
-                  setAddress({ ...address, province: e.target.value })
-                }
-              />
-            ) : (
-              <>{currentUser.address.province}</>
-            )}
-          </div>
-          <div>
-            Country:{" "}
-            {editMode ? (
-              <input
-                type="text"
-                value={address.country}
-                onChange={(e) =>
-                  setAddress({ ...address, country: e.target.value })
-                }
-              />
-            ) : (
-              <>{currentUser.address.country}</>
-            )}
-          </div>
-          <div>
-            Email:{" "}
-            {editMode ? (
-              <input
-                type="text"
-                value={email}
-                onChange={(e) => setEmail({ ...email, email: e.target.value })}
-              />
-            ) : (
-              <>{currentUser.email}</>
-            )}
-          </div>
+              ) : (
+                <>{address.street}</>
+              )}
+            </div>
 
-          <div>
-            Password:{" "}
-            {editMode ? (
-              <input
-                type="password"
-                value={currentUser.password}
-                onChange={(e) =>
-                  setCurrentUser({ ...currentUser, password: e.target.value })
-                }
-              />
-            ) : (
-              "********"
-            )}
-          </div>
-        </form>
+            <div>
+              City:{" "}
+              {editMode ? (
+                <input
+                  type="text"
+                  value={address.city}
+                  onChange={(e) =>
+                    setAddress({ ...address, city: e.target.value })
+                  }
+                />
+              ) : (
+                <>{address.city}</>
+              )}
+            </div>
+            <div>
+              Province:{" "}
+              {editMode ? (
+                <input
+                  type="text"
+                  value={address.province}
+                  onChange={(e) =>
+                    setAddress({ ...address, province: e.target.value })
+                  }
+                />
+              ) : (
+                <>{address.province}</>
+              )}
+            </div>
+            <div>
+              Country:{" "}
+              {editMode ? (
+                <input
+                  type="text"
+                  value={address.country}
+                  onChange={(e) =>
+                    setAddress({ ...address, country: e.target.value })
+                  }
+                />
+              ) : (
+                <>{address.country}</>
+              )}
+            </div>
+            <div>
+              Email:{" "}
+              {editMode ? (
+                <input
+                  type="text"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              ) : (
+                <>{email}</>
+              )}
+            </div>
 
-        {editMode ? (
-          <button type="button" onClick={handleFormSubmit}>
-            Save Changes
-          </button>
-        ) : (
-          <button onClick={() => setEditMode(true)}>Edit Profile</button>
+            <div>
+              Password:{" "}
+              {editMode ? (
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+              ) : (
+                "****"
+              )}
+            </div>
+
+            {editMode ? (
+              <div>
+                <button
+                  type="button"
+                  onClick={handleFormSubmit}
+                  // onClick={() => {
+                  //   handleFormSubmit();
+                  //   handleSave();
+                  // }}
+                >
+                  Save Changes
+                </button>
+                <button onClick={() => setEditMode(false)}>Cancel</button>
+              </div>
+            ) : (
+              <button onClick={() => setEditMode(true)}>Edit Profile</button>
+            )}
+          </form>
         )}
       </>
     );

@@ -18,6 +18,7 @@ const {
   deleteItem,
   getItems,
   getOneItem,
+  getOneItemOnly,
   addDogInfo,
   getOneDogInfo,
   getDogInfo,
@@ -42,7 +43,7 @@ express()
   // Returns the client who is trying to login (Used in Login.js)
   .post("/getOneClient", getOneClient)
 
-  // Returns a single registered client by using their email (Used in UserContext.js)
+  // Returns a single registered user by using their email (Used in UserContext.js)
   .get("/getUser/:email", getUser)
 
   // Updates user info
@@ -60,8 +61,11 @@ express()
   //Returns all items for sale used in homepageClient and homepageSeller
   .get("/getItems", getItems)
 
-  //Returns specific items
+  //Returns  items of 1 specific user
   .get("/getOneItem/:userId", getOneItem)
+
+  //Returns 1 specific item
+  .get("/getOneItemOnly/:_id", getOneItemOnly)
 
   //Created a dog info page
   .post("/addDogInformation", addDogInfo)

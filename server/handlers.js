@@ -404,6 +404,24 @@ const getOneItem = async (req, res) => {
   }
 };
 
+const getOneItemOnly = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const { _id } = req.params;
+  try {
+    await client.connect();
+    const db = client.db("finalproject");
+    const result = await db.collection("selleritems").find({ _id }).toArray();
+    result.length > 0
+      ? res.status(200).json({ status: 200, data: result })
+      : res.status(404).json({ status: 404, message: "Item not found" });
+    console.log("result", result);
+  } catch (error) {
+    res.status(500).json({ status: 500, message: error.message });
+  } finally {
+    client.close();
+  }
+};
+
 const addDogInfo = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   const _id = uuidv4();
@@ -528,6 +546,7 @@ module.exports = {
   deleteItem,
   getItems,
   getOneItem,
+  getOneItemOnly,
   addDogInfo,
   getOneDogInfo,
   getDogInfo,

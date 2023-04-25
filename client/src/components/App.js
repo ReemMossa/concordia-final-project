@@ -16,7 +16,7 @@ import DogInformation from "./DogInformation";
 import EditSellerItem from "./EditSellerItem";
 import EditDogInformation from "./EditDogInformation";
 import Profile from "./Profile";
-import EditProfile from "./EditProfile";
+import DetailedFood from "./DetailedFood";
 
 const App = () => {
   return (
@@ -37,7 +37,7 @@ const App = () => {
           <Route path="/editselleritem" element={<EditSellerItem />} />
           <Route path="/editdoginformation" element={<EditDogInformation />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/editprofile" elemetn={<EditProfile />} />
+          <Route path="/items/:itemId" element={<DetailedFood />} />
         </Routes>
       </BrowserRouter>
     </>

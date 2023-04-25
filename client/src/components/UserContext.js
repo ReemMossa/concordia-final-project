@@ -13,7 +13,7 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     if (currentUser) {
       console.log("currentuser", currentUser);
-      fetch(`/getclient/${currentUser.email}`)
+      fetch(`/getUser/${currentUser.email}`)
         .then((res) => {
           return res.json();
         })

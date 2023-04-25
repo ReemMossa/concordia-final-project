@@ -10,7 +10,6 @@ const HomepageClient = () => {
   const [homepageClient, setHomepageClient] = useState([]);
   const [dogInformation, setDogInformation] = useState([]);
   const [state, setState] = useState("loading");
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -60,45 +59,41 @@ const HomepageClient = () => {
     return <div>Loading..</div>;
   }
 
+  console.log("currentUser", currentUser);
   return (
     <>
-      <>
+      {/* <>
         <h1>Welcome {currentUser.firstName}</h1>
         <div>
           Do you need help? Click <a href="/doginformation">here</a> to
           personalize your experience.
         </div>
-      </>
-      <>
-        <h1>Hello {currentUser.firstName}</h1>
-        <div>
-          You can always modify your preferences{" "}
-          <a href="/editdoginformation">here</a>
-        </div>
-        <div>
-          {currentUser.dogName}'s age: {dogInformation.dogAge} old
-        </div>
-        <div>
-          {currentUser.dogName}'s weight: {dogInformation.dogWeight} lbs
-        </div>
-      </>
+      </> */}
+
+      <h1>Hello {currentUser.firstName}</h1>
+      {/* <div>
+        You can always modify your preferences{" "}
+        <a href="/editdoginformation">here</a>
+      </div> */}
+      <div>
+        {currentUser.dogName}'s age: {dogInformation.dogAge} old
+      </div>
+      <div>
+        {currentUser.dogName}'s weight: {dogInformation.dogWeight} lbs
+      </div>
 
       <h2>All available meals:</h2>
+      <p>Please click on the item to purchase</p>
       <div>
         {homepageClient.length > 0 &&
           homepageClient.map((item) => {
             return (
               <>
                 <div>
-                  Dish Name: {item.dishName}
+                  Dish Name:{" "}
+                  <Link to={`/items/${item._id}`}>{item.dishName}</Link>
                   Description: {item.description}
                   Price: {item.price}
-                  Portion size: {item.size}
-                  <div>Ingredients:</div>
-                  -Protein: {item.ingredients.protein}
-                  -Organs: {item.ingredients.organs}
-                  -Nuts & Seeds: {item.ingredients.nutsAndSeeds}
-                  -Other: {item.ingredients.other}
                   <Img src={item.imageUrl}></Img>
                 </div>
               </>
