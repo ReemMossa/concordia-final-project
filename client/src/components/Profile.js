@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import styled from "styled-components";
-// import bcrypt from "bcrypt";
 
 const Profile = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
@@ -26,22 +25,29 @@ const Profile = () => {
       fetch(`/getUser/${currentUser.email}`)
         .then((res) => res.json())
         .then((data) => {
-          const { firstName, lastName, dogName, address, email, password } =
-            data.data;
+          const { firstName, lastName, dogName, address, email } = data.data;
           setFirstName(firstName);
           setLastName(lastName);
           setDogName(dogName);
           setAddress(address);
           setEmail(email);
-          setNewPassword(password);
+
           setStatus("idle");
+          setCurrentUser({
+            _id: currentUser._id,
+            firstName,
+            lastName,
+            dogName,
+            address,
+            email,
+          });
         })
         .catch((error) => {
           console.error(error);
           setStatus("error");
         });
     }
-  }, [currentUser]);
+  }, []);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -56,7 +62,7 @@ const Profile = () => {
         dogName,
         address,
         email,
-        newPassword,
+        password: newPassword,
       }),
     })
       .then((res) => res.json())
@@ -65,11 +71,6 @@ const Profile = () => {
         setEditMode(false);
       });
   };
-
-  //   const handleSave = () => {
-  //     const hashedPassword = bcrypt.hash(newPassword, 10);
-  //     setEditMode(false);
-  //   };
 
   if (currentUser) {
     return (
@@ -86,11 +87,13 @@ const Profile = () => {
                     type="text"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
+                    required
                   />
                   <input
                     type="text"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
+                    required
                   />
                 </>
               ) : (
@@ -107,6 +110,7 @@ const Profile = () => {
                     type="text"
                     value={dogName}
                     onChange={(e) => setDogName(e.target.value)}
+                    required
                   />
                 </>
               ) : (
@@ -123,6 +127,7 @@ const Profile = () => {
                   onChange={(e) =>
                     setAddress({ ...address, street: e.target.value })
                   }
+                  required
                 />
               ) : (
                 <>{address.street}</>
@@ -138,6 +143,7 @@ const Profile = () => {
                   onChange={(e) =>
                     setAddress({ ...address, city: e.target.value })
                   }
+                  required
                 />
               ) : (
                 <>{address.city}</>
@@ -152,6 +158,7 @@ const Profile = () => {
                   onChange={(e) =>
                     setAddress({ ...address, province: e.target.value })
                   }
+                  required
                 />
               ) : (
                 <>{address.province}</>
@@ -166,6 +173,7 @@ const Profile = () => {
                   onChange={(e) =>
                     setAddress({ ...address, country: e.target.value })
                   }
+                  required
                 />
               ) : (
                 <>{address.country}</>
@@ -178,6 +186,7 @@ const Profile = () => {
                   type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
               ) : (
                 <>{email}</>
@@ -191,6 +200,7 @@ const Profile = () => {
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
+                  required
                 />
               ) : (
                 "****"
@@ -199,14 +209,7 @@ const Profile = () => {
 
             {editMode ? (
               <div>
-                <button
-                  type="button"
-                  onClick={handleFormSubmit}
-                  // onClick={() => {
-                  //   handleFormSubmit();
-                  //   handleSave();
-                  // }}
-                >
+                <button type="button" onClick={handleFormSubmit}>
                   Save Changes
                 </button>
                 <button onClick={() => setEditMode(false)}>Cancel</button>

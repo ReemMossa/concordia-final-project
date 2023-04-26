@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 const DetailedFood = () => {
   const { itemId } = useParams();
   const [item, setItem] = useState(null);
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
     fetch(`/getOneItemOnly/${itemId}`)
@@ -20,6 +21,27 @@ const DetailedFood = () => {
         console.log(error);
       });
   }, [itemId]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const updatedFormData = {
+      ...formData,
+      status: "pending",
+    };
+
+    fetch(`/editSellerItem/${itemId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedFormData),
+    })
+      .then((res) => res.json())
+      .then((resData) => {
+        console.log("resdata", resData);
+      });
+  };
 
   return (
     <>
@@ -38,7 +60,7 @@ const DetailedFood = () => {
           <div>
             <Img src={item[0].imageUrl}></Img>
           </div>
-          <button>Buy Now</button>
+          <button onClick={handleSubmit}>Buy Now</button>
         </div>
       )}
     </>

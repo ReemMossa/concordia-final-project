@@ -10,24 +10,6 @@ export const UserProvider = ({ children }) => {
   });
   const [status, setStatus] = useState("loading");
 
-  useEffect(() => {
-    if (currentUser) {
-      console.log("currentuser", currentUser);
-      fetch(`/getUser/${currentUser.email}`)
-        .then((res) => {
-          return res.json();
-        })
-        .then((parsedData) => {
-          setCurrentUser(parsedData.data);
-          setStatus("idle");
-        })
-
-        .catch((error) => {
-          setStatus("error");
-        });
-    }
-  }, []);
-
   return (
     <>
       <UserContext.Provider value={{ currentUser, status, setCurrentUser }}>

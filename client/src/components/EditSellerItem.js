@@ -9,19 +9,31 @@ const EditSellerItem = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [formData, setFormData] = useState({});
 
+  console.log("currentuser", currentUser);
+
   useEffect(() => {
     fetch(`/getOneItem/${currentUser._id}`)
       .then((resData) => {
+        console.log("resData", resData.status);
         if (resData.status !== 200) {
+          console.log("resData", resData);
           return resData.message;
         }
+        return resData.json(); // parse the response body as JSON
       })
-      .then((res) => res.json())
       .then((resData) => {
-        setItems(resData.data);
+        if (!resData.data) {
+          // check if data is present
+          throw new Error("Data not found");
+        }
+
+        const filteredItems = resData.data.filter(
+          (item) => item.status !== "pending"
+        );
+        setItems(filteredItems);
       })
       .catch((error) => {
-        console.log("catdh error", error);
+        console.log("catch error", error);
         setItems([]);
       });
   }, []);

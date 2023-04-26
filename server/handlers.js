@@ -63,6 +63,19 @@ const getUser = async (req, res) => {
 const updateUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   const { _id } = req.params;
+  const { firstName, lastName, address, dogName, email, password } = req.body;
+
+  //encrypt password
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const requestBody = {
+    firstName,
+    lastName,
+    address,
+    dogName,
+    email,
+    password: hashedPassword,
+  };
 
   try {
     await client.connect();
@@ -79,7 +92,7 @@ const updateUser = async (req, res) => {
     if (result) {
       const updateUser = await db
         .collection("users")
-        .updateOne({ _id }, { $set: req.body });
+        .updateOne({ _id }, { $set: requestBody });
       res.status(200).json({
         status: 200,
         data: updateUser,
@@ -224,6 +237,7 @@ const getOneClient = async (req, res) => {
       message: "Oops! Incorrect username or password.",
     });
   } else {
+    //const match = true;
     const match = await bcrypt.compare(password, result.password);
     if (match) {
       return res.status(200).json({
@@ -292,12 +306,12 @@ const addItem = async (req, res) => {
 // updates a specified seller item
 const editItem = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
-  const { _id } = req.body;
+  const { _id } = req.params;
+  const updatedItem = { ...req.body, status: "pending" };
 
   try {
     await client.connect();
     const db = client.db("finalproject");
-
     const result = await db.collection("selleritems").findOne({ _id });
 
     if (!result) {
@@ -311,7 +325,7 @@ const editItem = async (req, res) => {
     if (result) {
       const updateOldItem = await db
         .collection("selleritems")
-        .updateOne({ _id }, { $set: req.body });
+        .updateOne({ _id }, { $set: updatedItem });
       res.status(200).json({
         status: 200,
         data: updateOldItem,

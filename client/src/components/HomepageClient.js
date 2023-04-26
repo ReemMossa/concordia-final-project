@@ -36,24 +36,24 @@ const HomepageClient = () => {
     setState("idle");
   }, []);
 
-  useEffect(() => {
-    if (currentUser && currentUser._id) {
-      fetch(`/getDogInformation/${currentUser._id}`).then((res) => {
-        console.log("id", currentUser);
-        if (res.status > 500) {
-          navigate("/");
-        } else {
-          res
-            .json()
-            .then((resData) => {
-              setDogInformation(resData.data);
-            })
-            .catch((err) => window.alert(err));
-        }
-      });
-    }
-    setState("idle");
-  }, [currentUser, navigate]);
+  // useEffect(() => {
+  //   if (currentUser && currentUser._id) {
+  //     fetch(`/getDogInformation/${currentUser._id}`).then((res) => {
+  //       console.log("id", currentUser);
+  //       if (res.status > 500) {
+  //         navigate("/");
+  //       } else {
+  //         res
+  //           .json()
+  //           .then((resData) => {
+  //             setDogInformation(resData.data);
+  //           })
+  //           .catch((err) => window.alert(err));
+  //       }
+  //     });
+  //   }
+  //   setState("idle");
+  // }, [currentUser, navigate]);
 
   if (state === "loading") {
     return <div>Loading..</div>;
@@ -71,10 +71,7 @@ const HomepageClient = () => {
       </> */}
 
       <h1>Hello {currentUser.firstName}</h1>
-      {/* <div>
-        You can always modify your preferences{" "}
-        <a href="/editdoginformation">here</a>
-      </div> */}
+
       <div>
         {currentUser.dogName}'s age: {dogInformation.dogAge} old
       </div>
