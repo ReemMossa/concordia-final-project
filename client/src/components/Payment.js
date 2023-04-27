@@ -14,7 +14,7 @@ const Payment = () => {
   }
 
   return (
-    <div className="wrapper">
+    <div>
       <PaymentDetails />
     </div>
   );

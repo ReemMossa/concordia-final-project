@@ -5,9 +5,11 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 
 const DetailedFood = () => {
+  const { currentUser, setCurrentUser } = useContext(UserContext);
   const { itemId } = useParams();
   const [item, setItem] = useState(null);
   const [formData, setFormData] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`/getOneItemOnly/${itemId}`)
@@ -40,6 +42,7 @@ const DetailedFood = () => {
       .then((res) => res.json())
       .then((resData) => {
         console.log("resdata", resData);
+        navigate("/payment");
       });
   };
 
@@ -60,7 +63,9 @@ const DetailedFood = () => {
           <div>
             <Img src={item[0].imageUrl}></Img>
           </div>
-          <button onClick={handleSubmit}>Buy Now</button>
+          {currentUser.type === "client" && (
+            <button onClick={handleSubmit}>Buy Now</button>
+          )}
         </div>
       )}
     </>

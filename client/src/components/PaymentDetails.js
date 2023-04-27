@@ -12,8 +12,10 @@ const PaymentDetails = () => {
   };
 
   const { currentUser } = useContext(UserContext);
-
-  const [phone, setPhone] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [shippingAddress, setShippingAddress] = useState(address);
   const [cardNumber, setCardNumber] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
@@ -24,11 +26,12 @@ const PaymentDetails = () => {
     e.preventDefault();
 
     const data = {
-      currentUserId: currentUser._id,
-      cardName: currentUser.firstName + " " + currentUser.lastName,
-      email: currentUser.email,
-      phoneNumber: phone,
-      shippingAddress: shippingAddress,
+      userId: currentUser._id,
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      shippingAddress,
     };
 
     // Make a POST request to the backend API endpoint to save the cart information to the database
@@ -42,14 +45,13 @@ const PaymentDetails = () => {
       body: JSON.stringify(data),
     }).then((res) => {
       if (res.status > 500) {
-        navigate("/errorPage");
+        navigate("/");
       } else {
         res
           .json()
           .then((resData) => {
             if (resData.status === 201) {
               window.alert(resData.message);
-              navigate(`/orders/${resData.orderId}`);
             } else {
               window.alert(resData.message);
             }
@@ -65,42 +67,49 @@ const PaymentDetails = () => {
   }
 
   return (
-    <div className="wrapper">
-      <h1 className="pageTitle">Payment Details </h1>
-      <div className="paymentformAndCartSummaryContainer">
-        <form className="form paymentForm" onSubmit={handleBuy}>
+    <div>
+      <h1>Payment Details </h1>
+      <div>
+        <form onSubmit={handleBuy}>
           <div>
             {" "}
             <h2>Your information</h2>
           </div>
 
-          <div className="paymentFormLabels">
+          <div>
             <div>
               <label>Name on Card:</label>
 
               <input
-                type="name"
-                title="Name on Credit Card"
-                placeholder="Name"
-                name="name"
+                type="text"
+                title="firstName"
+                placeholder="First Name"
+                name="firstName"
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+              <input
+                type="lastName"
+                title="lastName"
+                placeholder="Last Name"
+                name="lastName"
+                onChange={(e) => setLastName(e.target.value)}
               />
             </div>
             <div>
               <label>Email Address:</label>
               <input
                 type="email"
-                placeholder="Email"
-                value={currentUser.email}
+                placeholder="Email Address"
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
             <div>
               <label>Phone Number:</label>
               <input
-                type="number"
-                placeholder="Phone"
-                value={currentUser.phone}
-                onChange={(e) => setPhone(e.target.value)}
+                type="text"
+                placeholder="Phone Number"
+                onChange={(e) => setPhoneNumber(e.target.value)}
               />
             </div>
           </div>
@@ -109,12 +118,11 @@ const PaymentDetails = () => {
             {" "}
             <h2>Shipping Address</h2>
           </div>
-          <div className="paymentFormLabels">
+          <div>
             <div>
-              <label>Street Address:</label>
+              <label>Street:</label>
               <input
                 type="text"
-                value={currentUser.address.street}
                 onChange={(e) =>
                   setShippingAddress({
                     ...shippingAddress,
@@ -128,7 +136,6 @@ const PaymentDetails = () => {
               <label>City:</label>
               <input
                 type="text"
-                value={currentUser.address.city}
                 onChange={(e) =>
                   setShippingAddress({
                     ...shippingAddress,
@@ -142,7 +149,6 @@ const PaymentDetails = () => {
               <label>Province:</label>
               <input
                 type="text"
-                value={currentUser.address.province}
                 onChange={(e) =>
                   setShippingAddress({
                     ...shippingAddress,
@@ -156,7 +162,6 @@ const PaymentDetails = () => {
               <label>Country:</label>
               <input
                 type="text"
-                value={currentUser.address.country}
                 onChange={(e) =>
                   setShippingAddress({
                     ...shippingAddress,
@@ -170,7 +175,6 @@ const PaymentDetails = () => {
               <label>Postal Code:</label>
               <input
                 type="text"
-                value={currentUser.address.postcode}
                 onChange={(e) =>
                   setShippingAddress({
                     ...shippingAddress,
@@ -185,15 +189,14 @@ const PaymentDetails = () => {
             {" "}
             <h2>Credit Card Information</h2>
           </div>
-          <div className="paymentFormLabels">
+          <div>
             <div>
               <label>Card Number:</label>
               <input
-                type="card"
+                type="number"
                 title="Credit Card Number"
                 placeholder="____-____-____-____"
                 name="card"
-                value={cardNumber}
                 onChange={(e) => setCardNumber(e.target.value)}
               />
             </div>
@@ -201,11 +204,10 @@ const PaymentDetails = () => {
             <div>
               <label>Expiration Date:</label>
               <input
-                type="expiration"
+                type="number"
                 title="Expiration Date"
-                placeholder="YYYY-MM"
+                placeholder="MM-YY"
                 name="expiration"
-                value={expirationDate}
                 onChange={(e) => setExpirationDate(e.target.value)}
               />
             </div>
@@ -213,11 +215,10 @@ const PaymentDetails = () => {
             <div>
               <label>CVV: </label>
               <input
-                type="ccv"
-                title="CCV"
-                placeholder="CCV"
-                name="ccv"
-                value={cvv}
+                type="number"
+                title="CVV"
+                placeholder="CVV"
+                name="CVV"
                 onChange={(e) => setCvv(e.target.value)}
               />
             </div>

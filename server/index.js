@@ -23,6 +23,7 @@ const {
   getOneDogInfo,
   getDogInfo,
   editDogInfo,
+  submitPayment,
 } = require("./handlers");
 
 express()
@@ -77,6 +78,8 @@ express()
   .get("/getDogInformation", getDogInfo)
 
   .put("/editDogInformation/:_id", editDogInfo)
+
+  .post("/submitPayment", submitPayment)
 
   //Catch
 

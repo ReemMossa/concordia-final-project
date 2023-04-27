@@ -548,6 +548,70 @@ const editDogInfo = async (req, res) => {
   }
 };
 
+const submitPayment = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+
+  try {
+    await client.connect();
+    const db = client.db("finalproject");
+
+    const {
+      userId,
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      shippingAddress,
+      cardNumber,
+      expirationDate,
+      cvv,
+      total,
+    } = req.body;
+
+    if (
+      !userId ||
+      !firstName ||
+      !lastName ||
+      !email ||
+      !phoneNumber ||
+      !shippingAddress
+    ) {
+      return res.status(400).json({
+        status: 400,
+        data: req.body,
+        message: "Information is missing.",
+      });
+    }
+
+    const order = {
+      _id: uuidv4(),
+      userId,
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      shippingAddress,
+      cardNumber,
+      expirationDate,
+      cvv,
+      dateOrdered: new Date(),
+      total,
+    };
+
+    const result = await db.collection("orders").insertOne(order);
+
+    res.status(200).json({
+      status: 200,
+      data: order,
+      message: "Order successfully added to your page",
+    });
+  } catch (error) {
+    res.status(500).json({ status: 500, message: error.message });
+  } finally {
+    client.close();
+  }
+};
+
 module.exports = {
   getClients,
   getUser,
@@ -565,6 +629,7 @@ module.exports = {
   getOneDogInfo,
   getDogInfo,
   editDogInfo,
+  submitPayment,
 };
 
 // ingredients.values().flatten().join(", ")
