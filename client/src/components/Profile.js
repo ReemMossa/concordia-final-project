@@ -10,6 +10,7 @@ const Profile = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [dogName, setDogName] = useState("");
+  const [type, setType] = useState("");
   const [address, setAddress] = useState({
     street: "",
     city: "",
@@ -25,12 +26,14 @@ const Profile = () => {
       fetch(`/getUser/${currentUser.email}`)
         .then((res) => res.json())
         .then((data) => {
-          const { firstName, lastName, dogName, address, email } = data.data;
+          const { firstName, lastName, dogName, address, email, type } =
+            data.data;
           setFirstName(firstName);
           setLastName(lastName);
           setDogName(dogName);
           setAddress(address);
           setEmail(email);
+          setType(type);
 
           setStatus("idle");
           setCurrentUser({
@@ -40,6 +43,7 @@ const Profile = () => {
             dogName,
             address,
             email,
+            type,
           });
         })
         .catch((error) => {
@@ -66,9 +70,18 @@ const Profile = () => {
       }),
     })
       .then((res) => res.json())
+      //make sure is 200
       .then((resData) => {
-        setCurrentUser(resData); // update currentUser state with the new values
+        console.log("reem says what is resData", resData);
         setEditMode(false);
+      })
+      .then(() => {
+        fetch(`/getUser/${email}`)
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("reem says this wot work", data);
+            setCurrentUser(data.data); // update currentUser state with the new values
+          });
       });
   };
 

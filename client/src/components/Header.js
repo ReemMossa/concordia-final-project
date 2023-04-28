@@ -34,21 +34,18 @@ const Header = () => {
               </Link>
             </LoginButtonStyled>
 
-            {currentUser.type === "seller" && path.includes("homepage") ? (
+            {path.includes("homepage") ? (
               <Button disabled>Dashboard</Button>
-            ) : !path.includes("homepage") ? (
-              currentUser.type === "client" ? (
-                <Button>
-                  <Link to="/homepageclient">Dashboard</Link>
-                </Button>
-              ) : (
-                <Button>
-                  <Link to="/homepageseller">Dashboard</Link>
-                </Button>
-              )
+            ) : currentUser.type === "client" ? (
+              <Button>
+                <Link to="/homepageclient">Dashboard</Link>
+              </Button>
             ) : (
-              <Button>Dashboard</Button>
+              <Button>
+                <Link to="/homepageseller">Dashboard</Link>
+              </Button>
             )}
+
             <Link to="/profile">My profile</Link>
           </Div>
         ) : (

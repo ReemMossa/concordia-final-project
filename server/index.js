@@ -24,6 +24,7 @@ const {
   getDogInfo,
   editDogInfo,
   submitPayment,
+  getOrder,
 } = require("./handlers");
 
 express()
@@ -80,6 +81,9 @@ express()
   .put("/editDogInformation/:_id", editDogInfo)
 
   .post("/submitPayment", submitPayment)
+
+  // GET order confirmation after a customer has placed an order (Used in OrderConfirmation.js)
+  .get("/order/:_id", getOrder)
 
   //Catch
 

@@ -1,6 +1,7 @@
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
+import { useParams } from "react-router-dom";
 
 const PaymentDetails = () => {
   const address = {
@@ -11,7 +12,7 @@ const PaymentDetails = () => {
     postalCode: "",
   };
 
-  const { currentUser } = useContext(UserContext);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -21,6 +22,21 @@ const PaymentDetails = () => {
   const [expirationDate, setExpirationDate] = useState("");
   const [cvv, setCvv] = useState("");
   const navigate = useNavigate();
+  const { itemId } = useParams();
+  const [item, setItem] = useState(null);
+
+  useEffect(() => {
+    fetch(`/getOneItemOnly/${itemId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setItem(data.data);
+        console.log("data", data.data);
+        console.log("itemId", itemId);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [itemId]);
 
   const handleBuy = (e) => {
     e.preventDefault();
@@ -32,16 +48,18 @@ const PaymentDetails = () => {
       email,
       phoneNumber,
       shippingAddress,
+      cardNumber,
+      expirationDate,
+      cvv,
     };
 
-    // Make a POST request to the backend API endpoint to save the cart information to the database
     fetch("/submitPayment", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      // send cart session ID to backend
+
       body: JSON.stringify(data),
     }).then((res) => {
       if (res.status > 500) {
@@ -50,8 +68,11 @@ const PaymentDetails = () => {
         res
           .json()
           .then((resData) => {
-            if (resData.status === 201) {
+            console.log(resData);
+            if (resData.status === 200) {
               window.alert(resData.message);
+
+              navigate(`/order/${resData.data._id}`);
             } else {
               window.alert(resData.message);
             }
@@ -65,171 +86,172 @@ const PaymentDetails = () => {
   if (!currentUser) {
     return navigate("/");
   }
-
   return (
     <div>
       <h1>Payment Details </h1>
-      <div>
-        <form onSubmit={handleBuy}>
-          <div>
-            {" "}
-            <h2>Your information</h2>
-          </div>
-
-          <div>
+      {item && (
+        <div>
+          <form onSubmit={handleBuy}>
             <div>
-              <label>Name on Card:</label>
-
-              <input
-                type="text"
-                title="firstName"
-                placeholder="First Name"
-                name="firstName"
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-              <input
-                type="lastName"
-                title="lastName"
-                placeholder="Last Name"
-                name="lastName"
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </div>
-            <div>
-              <label>Email Address:</label>
-              <input
-                type="email"
-                placeholder="Email Address"
-                onChange={(e) => setEmail(e.target.value)}
-              />
+              {" "}
+              <h2>Your information</h2>
             </div>
 
             <div>
-              <label>Phone Number:</label>
-              <input
-                type="text"
-                placeholder="Phone Number"
-                onChange={(e) => setPhoneNumber(e.target.value)}
-              />
-            </div>
-          </div>
+              <div>
+                <label>Name on Card:</label>
 
-          <div>
-            {" "}
-            <h2>Shipping Address</h2>
-          </div>
-          <div>
-            <div>
-              <label>Street:</label>
-              <input
-                type="text"
-                onChange={(e) =>
-                  setShippingAddress({
-                    ...shippingAddress,
-                    street: e.target.value,
-                  })
-                }
-              />
-            </div>
+                <input
+                  type="text"
+                  title="firstName"
+                  placeholder="First Name"
+                  name="firstName"
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+                <input
+                  type="lastName"
+                  title="lastName"
+                  placeholder="Last Name"
+                  name="lastName"
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </div>
+              <div>
+                <label>Email Address:</label>
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
 
-            <div>
-              <label>City:</label>
-              <input
-                type="text"
-                onChange={(e) =>
-                  setShippingAddress({
-                    ...shippingAddress,
-                    city: e.target.value,
-                  })
-                }
-              />
+              <div>
+                <label>Phone Number:</label>
+                <input
+                  type="text"
+                  placeholder="Phone Number"
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                />
+              </div>
             </div>
 
             <div>
-              <label>Province:</label>
-              <input
-                type="text"
-                onChange={(e) =>
-                  setShippingAddress({
-                    ...shippingAddress,
-                    province: e.target.value,
-                  })
-                }
-              />
+              {" "}
+              <h2>Shipping Address</h2>
+            </div>
+            <div>
+              <div>
+                <label>Street:</label>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setShippingAddress({
+                      ...shippingAddress,
+                      street: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div>
+                <label>City:</label>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setShippingAddress({
+                      ...shippingAddress,
+                      city: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div>
+                <label>Province:</label>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setShippingAddress({
+                      ...shippingAddress,
+                      province: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div>
+                <label>Country:</label>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setShippingAddress({
+                      ...shippingAddress,
+                      country: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div>
+                <label>Postal Code:</label>
+                <input
+                  type="text"
+                  onChange={(e) =>
+                    setShippingAddress({
+                      ...shippingAddress,
+                      postalCode: e.target.value,
+                    })
+                  }
+                />
+              </div>
             </div>
 
             <div>
-              <label>Country:</label>
-              <input
-                type="text"
-                onChange={(e) =>
-                  setShippingAddress({
-                    ...shippingAddress,
-                    country: e.target.value,
-                  })
-                }
-              />
+              {" "}
+              <h2>Credit Card Information</h2>
             </div>
-
             <div>
-              <label>Postal Code:</label>
-              <input
-                type="text"
-                onChange={(e) =>
-                  setShippingAddress({
-                    ...shippingAddress,
-                    postalCode: e.target.value,
-                  })
-                }
-              />
-            </div>
-          </div>
+              <div>
+                <label>Card Number:</label>
+                <input
+                  type="number"
+                  title="Credit Card Number"
+                  placeholder="____-____-____-____"
+                  name="card"
+                  onChange={(e) => setCardNumber(e.target.value)}
+                />
+              </div>
 
-          <div>
-            {" "}
-            <h2>Credit Card Information</h2>
-          </div>
-          <div>
+              <div>
+                <label>Expiration Date:</label>
+                <input
+                  type="text"
+                  title="Expiration Date"
+                  placeholder="MM-YY"
+                  name="expiration"
+                  onChange={(e) => setExpirationDate(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <label>CVV: </label>
+                <input
+                  type="number"
+                  title="CVV"
+                  placeholder="CVV"
+                  name="CVV"
+                  onChange={(e) => setCvv(e.target.value)}
+                />
+              </div>
+            </div>
             <div>
-              <label>Card Number:</label>
-              <input
-                type="number"
-                title="Credit Card Number"
-                placeholder="____-____-____-____"
-                name="card"
-                onChange={(e) => setCardNumber(e.target.value)}
-              />
-            </div>
+              <h3>Your Payment Amount is {item[0].price} $</h3>
 
-            <div>
-              <label>Expiration Date:</label>
-              <input
-                type="number"
-                title="Expiration Date"
-                placeholder="MM-YY"
-                name="expiration"
-                onChange={(e) => setExpirationDate(e.target.value)}
-              />
+              <button type="submit">Submit Payment</button>
             </div>
-
-            <div>
-              <label>CVV: </label>
-              <input
-                type="number"
-                title="CVV"
-                placeholder="CVV"
-                name="CVV"
-                onChange={(e) => setCvv(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="confirmPayment">
-            <h3>Your Payment Amount is $</h3>
-
-            <button type="submit">Submit Payment</button>
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 };

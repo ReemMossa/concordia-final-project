@@ -95,7 +95,7 @@ const updateUser = async (req, res) => {
         .updateOne({ _id }, { $set: requestBody });
       res.status(200).json({
         status: 200,
-        data: updateUser,
+        data: requestBody,
         message: "User successfully modified",
       });
     }
@@ -612,6 +612,26 @@ const submitPayment = async (req, res) => {
   }
 };
 
+const getOrder = async (req, res) => {
+  const { _id } = req.params;
+  const client = new MongoClient(MONGO_URI, options);
+
+  try {
+    await client.connect();
+
+    const db = client.db("finalproject");
+
+    const result = await db.collection("orders").findOne({ _id });
+    result
+      ? res.status(200).json({ status: 200, data: result })
+      : res.status(404).json({ status: 404, message: "Order Not Found" });
+
+    client.close();
+  } catch (error) {
+    res.status(500).json({ status: 500, message: error.message });
+  }
+};
+
 module.exports = {
   getClients,
   getUser,
@@ -630,6 +650,7 @@ module.exports = {
   getDogInfo,
   editDogInfo,
   submitPayment,
+  getOrder,
 };
 
 // ingredients.values().flatten().join(", ")

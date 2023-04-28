@@ -10,6 +10,7 @@ const HomepageSeller = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("REEM USER", currentUser);
     if (currentUser.type !== "seller") {
       navigate("/homepageclient");
     }
@@ -27,10 +28,9 @@ const HomepageSeller = () => {
           })
           .catch((err) => window.alert(err));
       }
+      setState("idle");
     });
-
-    setState("idle");
-  }, []);
+  }, [currentUser]);
 
   if (state === "loading") {
     return <div>Loading...</div>;

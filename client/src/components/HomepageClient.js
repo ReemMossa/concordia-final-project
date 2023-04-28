@@ -36,25 +36,6 @@ const HomepageClient = () => {
     setState("idle");
   }, []);
 
-  // useEffect(() => {
-  //   if (currentUser && currentUser._id) {
-  //     fetch(`/getDogInformation/${currentUser._id}`).then((res) => {
-  //       console.log("id", currentUser);
-  //       if (res.status > 500) {
-  //         navigate("/");
-  //       } else {
-  //         res
-  //           .json()
-  //           .then((resData) => {
-  //             setDogInformation(resData.data);
-  //           })
-  //           .catch((err) => window.alert(err));
-  //       }
-  //     });
-  //   }
-  //   setState("idle");
-  // }, [currentUser, navigate]);
-
   if (state === "loading") {
     return <div>Loading..</div>;
   }
@@ -62,14 +43,6 @@ const HomepageClient = () => {
   console.log("currentUser", currentUser);
   return (
     <>
-      {/* <>
-        <h1>Welcome {currentUser.firstName}</h1>
-        <div>
-          Do you need help? Click <a href="/doginformation">here</a> to
-          personalize your experience.
-        </div>
-      </> */}
-
       <h1>Hello {currentUser.firstName}</h1>
 
       <div>

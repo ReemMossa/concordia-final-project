@@ -42,7 +42,7 @@ const DetailedFood = () => {
       .then((res) => res.json())
       .then((resData) => {
         console.log("resdata", resData);
-        navigate("/payment");
+        navigate(`/payment/${itemId}`);
       });
   };
 

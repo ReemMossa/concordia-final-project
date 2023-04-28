@@ -18,6 +18,7 @@ import EditDogInformation from "./EditDogInformation";
 import Profile from "./Profile";
 import DetailedFood from "./DetailedFood";
 import Payment from "./Payment";
+import OrderConfirmation from "./OrderConfirmation";
 
 const App = () => {
   return (
@@ -39,7 +40,8 @@ const App = () => {
           <Route path="/editdoginformation" element={<EditDogInformation />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/items/:itemId" element={<DetailedFood />} />
-          <Route path="/payment" element={<Payment />} />
+          <Route path="/payment/:itemId" element={<Payment />} />
+          <Route path="/order/:_id" element={<OrderConfirmation />} />
         </Routes>
       </BrowserRouter>
     </>
