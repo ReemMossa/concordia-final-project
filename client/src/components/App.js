@@ -12,9 +12,7 @@ import Login from "./Login";
 import HomepageClient from "./HomepageClient";
 import HomepageSeller from "./HomepageSeller";
 import SellerNewItem from "./SellerNewItem";
-import DogInformation from "./DogInformation";
 import EditSellerItem from "./EditSellerItem";
-import EditDogInformation from "./EditDogInformation";
 import Profile from "./Profile";
 import DetailedFood from "./DetailedFood";
 import Payment from "./Payment";
@@ -35,9 +33,7 @@ const App = () => {
           <Route path="/homepageclient" element={<HomepageClient />} />
           <Route path="/homepageseller" element={<HomepageSeller />} />
           <Route path="/sellernewitem" element={<SellerNewItem />} />
-          <Route path="/doginformation" element={<DogInformation />} />
           <Route path="/editselleritem" element={<EditSellerItem />} />
-          <Route path="/editdoginformation" element={<EditDogInformation />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/items/:itemId" element={<DetailedFood />} />
           <Route path="/payment/:itemId" element={<Payment />} />

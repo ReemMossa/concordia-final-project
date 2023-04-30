@@ -19,10 +19,6 @@ const {
   getItems,
   getOneItem,
   getOneItemOnly,
-  addDogInfo,
-  getOneDogInfo,
-  getDogInfo,
-  editDogInfo,
   submitPayment,
   getOrder,
 } = require("./handlers");
@@ -68,17 +64,6 @@ express()
 
   //Returns 1 specific item
   .get("/getOneItemOnly/:_id", getOneItemOnly)
-
-  //Created a dog info page
-  .post("/addDogInformation", addDogInfo)
-
-  //Returns all dog information. Used in HomepageClient.js
-  .get("/getDogInformation/:_id", getOneDogInfo)
-
-  //Returns all dog info
-  .get("/getDogInformation", getDogInfo)
-
-  .put("/editDogInformation/:_id", editDogInfo)
 
   .post("/submitPayment", submitPayment)
 

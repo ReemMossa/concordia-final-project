@@ -1,4 +1,4 @@
-import mainLogo from "./mainlogo.png";
+import doglogo1 from "./doglogo1.png";
 
 import { UserContext } from "./UserContext";
 import { useContext, useEffect, useState } from "react";
@@ -19,7 +19,7 @@ const Header = () => {
     <>
       <Div>
         <Link to="/">
-          <Img src={mainLogo} alt="doglogo" />
+          <Img src={doglogo1} alt="doglogo" />
         </Link>
         <Title>
           <StyledLinkTitle to="/"></StyledLinkTitle>
@@ -65,10 +65,10 @@ const Header = () => {
 };
 
 const Img = styled.img`
-  width: 300px;
+  width: 500px;
 `;
 const Div = styled.div`
-  border-bottom: 1px solid lightblue;
+  border-bottom: 1px solid lightgray;
   height: 5rem;
   display: flex;
 `;

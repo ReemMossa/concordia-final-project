@@ -54,7 +54,7 @@ const SignUpClient = () => {
           .then((resData) => {
             if (resData.status === 200) {
               window.alert(resData.message);
-              navigate("/");
+              navigate("/login");
             } else {
               window.alert(resData.message);
             }

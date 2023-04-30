@@ -1,10 +1,10 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 const OrderConfirmation = () => {
   const [orderConfirmation, setOrderConfirmation] = useState("");
-  const { _id } = useParams();
+  const { _id, itemId } = useParams();
+  const [item, setItem] = useState(null);
 
   useEffect(() => {
     fetch(`/order/${_id}`)
@@ -14,6 +14,7 @@ const OrderConfirmation = () => {
         console.log(resData.data);
       });
   }, []);
+
   return (
     <div>
       <div>
@@ -27,7 +28,7 @@ const OrderConfirmation = () => {
         </div>
 
         <p>Order number: {orderConfirmation._id} </p>
-        <p>Order total: $ {orderConfirmation.total}</p>
+        <p>Order total: $ {orderConfirmation.totalPrice}</p>
       </div>
     </div>
   );

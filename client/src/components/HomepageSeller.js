@@ -44,38 +44,41 @@ const HomepageSeller = () => {
       <Button>
         <StyledLink to="/editselleritem">Edit exisiting food</StyledLink>
       </Button>
-      <h1>Welcome {currentUser.dogName}</h1>
+      <h1>Welcome {currentUser.firstName}</h1>
 
       <div>
-        {homepageSeller &&
-          homepageSeller.length > 0 &&
-          homepageSeller.map((item) => {
-            if (item.status !== "pending") {
-              return (
-                <>
-                  <h2>Here is what you have still for sale:</h2>
+        {homepageSeller && homepageSeller.length > 0 && (
+          <>
+            <div>
+              <h2>Here are your pending items:</h2>
+
+              {homepageSeller
+                .filter((item) => item.status === "pending")
+                .map((item) => (
                   <div key={item._id}>
                     Dish Name:
                     <Link to={`/items/${item._id}`}>{item.dishName}</Link>
                     Price: {item.price}
                     <Img src={item.imageUrl}></Img>
                   </div>
-                </>
-              );
-            } else {
-              return (
-                <>
-                  <h2>Here are your pending items:</h2>
+                ))}
+            </div>
+            <div>
+              <h2>Here are your available items:</h2>
+
+              {homepageSeller
+                .filter((item) => item.status === "Available")
+                .map((item) => (
                   <div key={item._id}>
                     Dish Name:
                     <Link to={`/items/${item._id}`}>{item.dishName}</Link>
                     Price: {item.price}
                     <Img src={item.imageUrl}></Img>
                   </div>
-                </>
-              );
-            }
-          })}
+                ))}
+            </div>
+          </>
+        )}
       </div>
     </Div>
   );

@@ -24,14 +24,14 @@ const PaymentDetails = () => {
   const navigate = useNavigate();
   const { itemId } = useParams();
   const [item, setItem] = useState(null);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
     fetch(`/getOneItemOnly/${itemId}`)
       .then((res) => res.json())
       .then((data) => {
         setItem(data.data);
-        console.log("data", data.data);
-        console.log("itemId", itemId);
+        setTotalPrice(data.data[0].price);
       })
       .catch((error) => {
         console.log(error);
@@ -41,6 +41,8 @@ const PaymentDetails = () => {
   const handleBuy = (e) => {
     e.preventDefault();
 
+    console.log("item", item);
+    console.log("totalPrice", totalPrice);
     const data = {
       userId: currentUser._id,
       firstName,
@@ -51,6 +53,7 @@ const PaymentDetails = () => {
       cardNumber,
       expirationDate,
       cvv,
+      totalPrice,
     };
 
     fetch("/submitPayment", {
@@ -68,7 +71,6 @@ const PaymentDetails = () => {
         res
           .json()
           .then((resData) => {
-            console.log(resData);
             if (resData.status === 200) {
               window.alert(resData.message);
 

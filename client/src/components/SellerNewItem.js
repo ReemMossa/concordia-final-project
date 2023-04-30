@@ -22,6 +22,7 @@ const SellerNewItem = () => {
     size: "",
     price: "",
     imageUrl: "",
+    status: "available",
   });
 
   const handleInputChange = (e) => {

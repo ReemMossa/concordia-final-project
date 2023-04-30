@@ -8,7 +8,9 @@ import styled from "styled-components";
 const HomepageClient = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const [homepageClient, setHomepageClient] = useState([]);
-  const [dogInformation, setDogInformation] = useState([]);
+  const [selectedProtein, setSelectedProtein] = useState(null);
+  const [selectedKey, setSelectedKey] = useState(null);
+  const [sortBy, setSortBy] = useState("");
   const [state, setState] = useState("loading");
   const navigate = useNavigate();
 
@@ -36,6 +38,35 @@ const HomepageClient = () => {
     setState("idle");
   }, []);
 
+  const handleChange = (e) => {
+    const protein = e.target.value;
+    setSelectedProtein(protein);
+  };
+
+  let displayedMeals = homepageClient;
+
+  if (selectedProtein) {
+    displayedMeals = homepageClient.filter((meal) => {
+      return meal.ingredients.protein.includes(selectedProtein);
+    });
+    console.log("homepageClient", homepageClient);
+    console.log("selectedprotein", selectedProtein);
+    console.log("displayedMeals", displayedMeals);
+  }
+
+  const handleSort = (e) => {
+    const sortOption = e.target.value;
+    setSortBy(sortOption);
+  };
+
+  let sortedClient = homepageClient;
+
+  if (sortBy === "price") {
+    sortedClient = homepageClient.sort((a, b) => a.price - b.price);
+  } else if (sortBy === "priceDesc") {
+    sortedClient = homepageClient.sort((a, b) => b.price - a.price);
+  }
+
   if (state === "loading") {
     return <div>Loading..</div>;
   }
@@ -46,13 +77,52 @@ const HomepageClient = () => {
       <h1>Hello {currentUser.firstName}</h1>
 
       <div>
-        {currentUser.dogName}'s age: {dogInformation.dogAge} old
+        <label>
+          Filter by main ingredient:
+          <select value={selectedProtein} onChange={handleChange}>
+            <option value="">Select a protein...</option>
+            <option value="Chicken">Chicken</option>
+            <option value="Beef">Beef</option>
+            <option value="Turkey">Turkey</option>
+            <option value="Pork">Pork</option>
+            <option value="Lamb">Lamb</option>
+            <option value="Fish">Fish</option>
+            <option value="Veggie">Veggie</option>
+          </select>
+        </label>
       </div>
+
       <div>
-        {currentUser.dogName}'s weight: {dogInformation.dogWeight} lbs
+        <label>
+          Sort by:
+          <select value={sortBy} onChange={handleSort}>
+            <option value="">Select an option...</option>
+            <option value="price">Price (low to high)</option>
+            <option value="priceDesc">Price (high to low)</option>
+          </select>
+        </label>
       </div>
 
       <h2>All available meals:</h2>
+      <p>Please click on the item to purchase</p>
+      <div>
+        {displayedMeals.length > 0 &&
+          displayedMeals.map((item) => {
+            return (
+              <>
+                <div>
+                  Dish Name:{" "}
+                  <Link to={`/items/${item._id}`}>{item.dishName}</Link>
+                  Description: {item.description}
+                  Price: {item.price}
+                  <Img src={item.imageUrl}></Img>
+                </div>
+              </>
+            );
+          })}
+      </div>
+
+      {/* <h2>All available meals:</h2>
       <p>Please click on the item to purchase</p>
       <div>
         {homepageClient.length > 0 &&
@@ -69,7 +139,7 @@ const HomepageClient = () => {
               </>
             );
           })}
-      </div>
+      </div> */}
     </>
   );
 };

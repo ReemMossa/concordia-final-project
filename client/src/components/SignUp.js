@@ -9,13 +9,13 @@ const SignUp = () => {
   const [buttonText, setButtonText] = useState("Create Account");
 
   const handleClientClick = () => {
-    setClientBackgroundColor("lightblue");
+    setClientBackgroundColor("#66EAA3");
     setSellerBackgroundColor("white");
     setButtonText("Join as a Client");
   };
 
   const handleSellerClick = () => {
-    setSellerBackgroundColor("lightblue");
+    setSellerBackgroundColor("#66EAA3");
     setClientBackgroundColor("white");
     setButtonText("Join as a Doggy Chef");
   };
@@ -39,13 +39,13 @@ const SignUp = () => {
       </Div>
 
       <ButtonDiv>
-        {clientBackgroundColor === "lightblue" ? (
+        {clientBackgroundColor === "#66EAA3" ? (
           <Link to="/signupclient">
             <Button
               disabled={buttonText === "Create Account"}
               style={{
                 backgroundColor:
-                  buttonText === "Create Account" ? "lightblue" : "",
+                  buttonText === "Create Account" ? "#66EAA3" : "",
               }}
             >
               {buttonText}
@@ -57,7 +57,7 @@ const SignUp = () => {
               disabled={buttonText === "Create Account"}
               style={{
                 backgroundColor:
-                  buttonText === "Create Account" ? "lightblue" : "",
+                  buttonText === "Create Account" ? "#66EAA3" : "",
               }}
             >
               {buttonText}

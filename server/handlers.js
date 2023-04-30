@@ -267,6 +267,7 @@ const addItem = async (req, res) => {
       size,
       imageUrl,
       ingredients,
+      status,
     } = req.body;
 
     const checkedIngredients = {
@@ -287,6 +288,7 @@ const addItem = async (req, res) => {
       size,
       imageUrl,
       ingredients: updatedIngredients,
+      status,
     };
 
     const result = await db.collection("selleritems").insertOne(item);
@@ -436,118 +438,6 @@ const getOneItemOnly = async (req, res) => {
   }
 };
 
-const addDogInfo = async (req, res) => {
-  const client = new MongoClient(MONGO_URI, options);
-  const _id = uuidv4();
-  try {
-    await client.connect();
-    const db = client.db("finalproject");
-    const { _id, dogWeight, dogAge, ingredients } = req.body;
-
-    const checkedIngredients = {
-      protein: ingredients.protein,
-      organs: ingredients.organs,
-      nutsAndSeeds: ingredients.nutsAndSeeds,
-      other: ingredients.other,
-    };
-
-    const updatedIngredients = { ...ingredients, ...checkedIngredients };
-
-    const item = {
-      _id,
-      dogWeight,
-      dogAge,
-      ingredients: updatedIngredients,
-    };
-
-    const result = await db.collection("doginfo").insertOne(item);
-    res.status(200).json({
-      status: 200,
-      data: item,
-      message: "Info successfully added to your page",
-    });
-  } catch (error) {
-    res.status(500).json({ status: 500, message: error.message });
-  } finally {
-    client.close();
-  }
-};
-
-const getOneDogInfo = async (req, res) => {
-  const client = new MongoClient(MONGO_URI, options);
-  const { _id } = req.params;
-  try {
-    await client.connect();
-    const db = client.db("finalproject");
-    const result = await db.collection("doginfo").findOne({ _id });
-    result
-      ? res.status(200).json({ status: 200, data: result })
-      : res
-          .status(404)
-          .json({ status: 404, message: "Dog information not found" });
-    console.log("result", result);
-    client.close();
-  } catch (error) {
-    res.status(500).json({ status: 500, message: error.message });
-  }
-};
-
-const getDogInfo = async (req, res) => {
-  const client = new MongoClient(MONGO_URI, options);
-
-  try {
-    await client.connect();
-    const db = client.db("finalproject");
-    const result = await db.collection("doginfo").find().toArray();
-
-    if (result) {
-      return res.status(200).json({ status: 200, data: result });
-    }
-  } catch (error) {
-    return res
-      .status(404)
-      .json({ status: 404, success: false, message: error });
-  } finally {
-    client.close();
-  }
-};
-
-// updates a specified dog info
-const editDogInfo = async (req, res) => {
-  const client = new MongoClient(MONGO_URI, options);
-  const { _id } = req.body;
-
-  try {
-    await client.connect();
-    const db = client.db("finalproject");
-
-    const result = await db.collection("doginfo").findOne({ _id });
-
-    if (!result) {
-      return res.status(404).json({
-        status: 404,
-        data: req.body,
-        message: "Sorry, we can't seem to find this item.",
-      });
-    }
-
-    if (result) {
-      const updateOldItem = await db
-        .collection("doginfo")
-        .updateOne({ _id }, { $set: req.body });
-      res.status(200).json({
-        status: 200,
-        data: updateOldItem,
-        message: "Item successfully modified",
-      });
-    }
-
-    client.close();
-  } catch (error) {
-    res.status(500).json({ status: 500, message: error.message });
-  }
-};
-
 const submitPayment = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
 
@@ -565,7 +455,7 @@ const submitPayment = async (req, res) => {
       cardNumber,
       expirationDate,
       cvv,
-      total,
+      totalPrice,
     } = req.body;
 
     if (
@@ -595,7 +485,7 @@ const submitPayment = async (req, res) => {
       expirationDate,
       cvv,
       dateOrdered: new Date(),
-      total,
+      totalPrice,
     };
 
     const result = await db.collection("orders").insertOne(order);
@@ -645,10 +535,7 @@ module.exports = {
   getItems,
   getOneItem,
   getOneItemOnly,
-  addDogInfo,
-  getOneDogInfo,
-  getDogInfo,
-  editDogInfo,
+
   submitPayment,
   getOrder,
 };
