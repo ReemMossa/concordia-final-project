@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import styled from "styled-components";
 
@@ -8,23 +8,21 @@ const EditSellerItem = () => {
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [formData, setFormData] = useState({});
+  const navigate = useNavigate();
 
   console.log("currentuser", currentUser);
 
   useEffect(() => {
     fetch(`/getOneItem/${currentUser._id}`)
-      .then((resData) => {
-        console.log("resData", resData.status);
-        if (resData.status !== 200) {
-          console.log("resData", resData);
-          return resData.message;
+      .then((res) => {
+        if (res.status > 500) {
+          navigate("/errorPage");
         }
-        return resData.json(); // parse the response body as JSON
+        return res.json();
       })
       .then((resData) => {
         if (!resData.data) {
-          // check if data is present
-          throw new Error("Data not found");
+          navigate("/errorPage");
         }
 
         const filteredItems = resData.data.filter(
@@ -33,7 +31,7 @@ const EditSellerItem = () => {
         setItems(filteredItems);
       })
       .catch((error) => {
-        console.log("catch error", error);
+        navigate("/errorPage");
         setItems([]);
       });
   }, []);
@@ -56,7 +54,6 @@ const EditSellerItem = () => {
     })
       .then((res) => res.json())
       .then((resData) => {
-        console.log("resdata", resData);
         if (items > 0) {
           const updatedItems = items.map((item) =>
             item._id === selectedItem._id ? resData.data : item

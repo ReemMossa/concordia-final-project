@@ -1,112 +1,72 @@
-import doglogo1 from "./doglogo1.png";
-
+import logo from "./logo.png";
 import { UserContext } from "./UserContext";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
-import { useLocation, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import UserIcon from "./UserIcon";
 
 const Header = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
-  const location = useLocation();
-  const path = location.pathname;
-
-  const handleSignOut = () => {
-    window.localStorage.clear();
-    setCurrentUser(null);
-  };
+  const navigate = useNavigate();
 
   return (
-    <>
-      <Div>
-        <Link to="/">
-          <Img src={doglogo1} alt="doglogo" />
-        </Link>
-        <Title>
-          <StyledLinkTitle to="/"></StyledLinkTitle>
-        </Title>
+    <Wrapper>
+      <Link to="/">
+        <Img src={logo} alt="doglogo" />
+      </Link>
 
-        {currentUser ? (
-          <Div>
-            <Welcome> Welcome {currentUser.firstName}!</Welcome>
-            <LoginButtonStyled>
-              <Link to="/" onClick={handleSignOut}>
-                Sign Out
-              </Link>
-            </LoginButtonStyled>
+      {currentUser ? (
+        <UserIcon
+          initials={`${currentUser.firstName[0].toUpperCase()}${currentUser.lastName[0].toUpperCase()}`}
+          navigate={navigate}
+        />
+      ) : (
+        <>
+          <ButtonLogIn>
+            <StyledLink to="/login">Log In</StyledLink>
+          </ButtonLogIn>
 
-            {path.includes("homepage") ? (
-              <Button disabled>Dashboard</Button>
-            ) : currentUser.type === "client" ? (
-              <Button>
-                <Link to="/homepageclient">Dashboard</Link>
-              </Button>
-            ) : (
-              <Button>
-                <Link to="/homepageseller">Dashboard</Link>
-              </Button>
-            )}
-
-            <Link to="/profile">My profile</Link>
-          </Div>
-        ) : (
-          <>
-            <LoginButtonStyled>
-              <Link to="/login">Log In</Link>
-            </LoginButtonStyled>
-
-            <Button>
-              <StyledLinkSignUp to="/signup">Sign up</StyledLinkSignUp>
-            </Button>
-          </>
-        )}
-      </Div>
-    </>
+          <ButtonSignUp>
+            <StyledLink to="/signup">Sign up</StyledLink>
+          </ButtonSignUp>
+        </>
+      )}
+    </Wrapper>
   );
 };
 
 const Img = styled.img`
   width: 500px;
 `;
-const Div = styled.div`
-  border-bottom: 1px solid lightgray;
-  height: 5rem;
+
+const Wrapper = styled.header`
   display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: black;
 `;
 
-const StyledLinkTitle = styled(Link)`
-  text-decoration: none;
-  color: blue;
-`;
-
-const Title = styled.div`
-  font-size: 25px;
-  font-weight: bolder;
-
-  width: 10rem;
-  margin-top: 1.5rem;
-  margin-left: 1.5rem;
-`;
-
-const Welcome = styled.div`
-  display: flex;
-  justify-content: right;
-`;
-
-const LoginButtonStyled = styled.div`
-  padding-bottom: 2rem;
-  margin-left: 90rem;
-  margin-top: 2rem;
-`;
-
-const Button = styled.button`
-  background-color: blue;
+const ButtonLogIn = styled.button`
+  background-color: #23953c;
+  color: white;
   font-size: 15px;
-  padding: 0.2rem 1.5rem;
-  margin: 1.1rem 0rem 1.1rem 1rem;
-  border-radius: 30px;
+  padding: 20px 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: auto;
 `;
 
-const StyledLinkSignUp = styled(Link)`
+const ButtonSignUp = styled.button`
+  background-color: #23953c;
+  color: white;
+  font-size: 15px;
+  padding: 20px 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 1rem;
+`;
+
+const StyledLink = styled(Link)`
   text-decoration: none;
   color: white;
 `;

@@ -17,6 +17,7 @@ import Profile from "./Profile";
 import DetailedFood from "./DetailedFood";
 import Payment from "./Payment";
 import OrderConfirmation from "./OrderConfirmation";
+import ErrorPage from "./Error";
 
 const App = () => {
   return (
@@ -38,6 +39,7 @@ const App = () => {
           <Route path="/items/:itemId" element={<DetailedFood />} />
           <Route path="/payment/:itemId" element={<Payment />} />
           <Route path="/order/:_id" element={<OrderConfirmation />} />
+          <Route path="/errorpage" element={<ErrorPage />} />
         </Routes>
       </BrowserRouter>
     </>

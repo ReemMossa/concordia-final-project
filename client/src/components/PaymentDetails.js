@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import { useParams } from "react-router-dom";
+import styled from "styled-components";
 
 const PaymentDetails = () => {
   const address = {
@@ -90,10 +91,10 @@ const PaymentDetails = () => {
   }
   return (
     <div>
-      <h1>Payment Details </h1>
+      <Title>Payment Details </Title>
       {item && (
-        <div>
-          <form onSubmit={handleBuy}>
+        <FormDiv>
+          <Form onSubmit={handleBuy}>
             <div>
               {" "}
               <h2>Your information</h2>
@@ -249,13 +250,51 @@ const PaymentDetails = () => {
             <div>
               <h3>Your Payment Amount is {item[0].price} $</h3>
 
-              <button type="submit">Submit Payment</button>
+              <Button type="submit">Submit Payment</Button>
             </div>
-          </form>
-        </div>
+          </Form>
+        </FormDiv>
       )}
     </div>
   );
 };
+
+const Title = styled.p`
+  text-align: center;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 30px;
+  color: #23953c;
+  margin-top: 2rem;
+`;
+
+const FormDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+`;
+
+const Form = styled.form`
+  margin: auto;
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+`;
+
+const Button = styled.button`
+  background-color: #23953c;
+  color: white;
+  font-size: 15px;
+  padding: 15px 8px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  margin-top: 2rem;
+  cursor: pointer;
+`;
 
 export default PaymentDetails;

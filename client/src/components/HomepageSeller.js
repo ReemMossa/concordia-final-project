@@ -11,10 +11,10 @@ const HomepageSeller = () => {
 
   useEffect(() => {
     console.log("REEM USER", currentUser);
-    if (currentUser.type !== "seller") {
+    if (currentUser && currentUser.type !== "seller") {
       navigate("/homepageclient");
     }
-  }, [currentUser]);
+  }, [currentUser, navigate]);
 
   useEffect(() => {
     fetch(`/getOneItem/${currentUser._id}`).then((res) => {
@@ -44,42 +44,49 @@ const HomepageSeller = () => {
       <Button>
         <StyledLink to="/editselleritem">Edit exisiting food</StyledLink>
       </Button>
-      <h1>Welcome {currentUser.firstName}</h1>
 
-      <div>
+      <ItemGrid>
         {homepageSeller && homepageSeller.length > 0 && (
           <>
             <div>
-              <h2>Here are your pending items:</h2>
+              <h2>Your pending items</h2>
 
               {homepageSeller
                 .filter((item) => item.status === "pending")
                 .map((item) => (
-                  <div key={item._id}>
+                  <Item key={item._id}>
                     Dish Name:
-                    <Link to={`/items/${item._id}`}>{item.dishName}</Link>
+                    <StyledLink to={`/items/${item._id}`}>
+                      {item.dishName}
+                    </StyledLink>
                     Price: {item.price}
-                    <Img src={item.imageUrl}></Img>
-                  </div>
+                    <StyledLink to={`/items/${item._id}`}>
+                      <Img src={item.imageUrl}></Img>
+                    </StyledLink>
+                  </Item>
                 ))}
             </div>
             <div>
-              <h2>Here are your available items:</h2>
+              <h2>Your available items</h2>
 
               {homepageSeller
-                .filter((item) => item.status === "Available")
+                .filter((item) => item.status === "available")
                 .map((item) => (
-                  <div key={item._id}>
+                  <Item key={item._id}>
                     Dish Name:
-                    <Link to={`/items/${item._id}`}>{item.dishName}</Link>
+                    <StyledLink to={`/items/${item._id}`}>
+                      {item.dishName}
+                    </StyledLink>
                     Price: {item.price}
-                    <Img src={item.imageUrl}></Img>
-                  </div>
+                    <StyledLink to={`/items/${item._id}`}>
+                      <Img src={item.imageUrl}></Img>
+                    </StyledLink>
+                  </Item>
                 ))}
             </div>
           </>
         )}
-      </div>
+      </ItemGrid>
     </Div>
   );
 };
@@ -90,20 +97,39 @@ const Div = styled.div`
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  color: white;
 `;
 
 const Button = styled.button`
-  background-color: blue;
+  background-color: #23953c;
   font-size: 15px;
-  padding: 1rem 1.5rem;
+  padding: 1rem 0rem;
   border-radius: 30px;
   color: white;
   float: right;
-  margin-right: 9rem;
+  margin-right: 3rem;
+  margin-top: 2rem;
 `;
 
 const Img = styled.img`
-  width: 150px;
+  width: 100px;
+  border-radius: 50%;
 `;
+
+const ItemGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1rem;
+  margin-left: 20rem;
+  margin-right: 20rem;
+`;
+
+const Item = styled.div`
+  display: flex;
+  flex-direction: column;
+  border: 1px solid lightgray;
+  margin-left: 10rem;
+  margin-right: 10rem;
+  margin-top: 3rem;
+`;
+
 export default HomepageSeller;
