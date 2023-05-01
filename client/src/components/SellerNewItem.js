@@ -42,7 +42,8 @@ const SellerNewItem = () => {
     }
   };
 
-  const uploadImage = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const formDataImage = new FormData();
     formDataImage.append("file", imageSelected);
     formDataImage.append("upload_preset", "lyxwlobx");
@@ -54,41 +55,35 @@ const SellerNewItem = () => {
       .then((response) => response.json())
       .then((data) => {
         const imageUrl = data.secure_url;
-        setFormData({ ...formData, imageUrl: imageUrl });
+
+        fetch("/addSellerItem", {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({ ...formData, imageUrl: imageUrl }),
+        }).then((res) => {
+          if (res.status > 500) {
+            navigate("/");
+          } else {
+            res
+              .json()
+              .then((resData) => {
+                if (resData.status === 200) {
+                  window.alert(resData.message);
+                  navigate("/homepageSeller");
+                } else {
+                  window.alert(resData.message);
+                }
+              })
+              .catch((err) => window.alert(err));
+          }
+        });
       })
       .catch((error) => {
         console.error("Error uploading image to Cloudinary", error);
       });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("FORMDATA", formData);
-
-    fetch("/addSellerItem", {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify(formData),
-    }).then((res) => {
-      if (res.status > 500) {
-        navigate("/");
-      } else {
-        res
-          .json()
-          .then((resData) => {
-            if (resData.status === 200) {
-              window.alert(resData.message);
-              navigate("/homepageSeller");
-            } else {
-              window.alert(resData.message);
-            }
-          })
-          .catch((err) => window.alert(err));
-      }
-    });
   };
 
   const checkboxProteinOnChange = (e) => {
@@ -499,13 +494,17 @@ const SellerNewItem = () => {
           />
           <input
             type="file"
-            onChange={(e) => setImageSelected(e.target.files[0])}
+            onChange={(e) => {
+              const image = e.target.files[0];
+              setImageSelected(image);
+              setFormData({
+                ...formData,
+                imageUrl: URL.createObjectURL(image),
+              });
+            }}
             required
           />
-          <ButtonImage type="button" onClick={uploadImage}>
-            Upload Image
-          </ButtonImage>
-          <Image cloudName="dhn6kqmnu" publicId={formData.imageUrl} />
+          <img src={formData.imageUrl} />
         </FormDiv>
 
         <ButtonContainer>

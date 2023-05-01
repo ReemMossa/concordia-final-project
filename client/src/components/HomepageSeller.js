@@ -10,7 +10,6 @@ const HomepageSeller = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("REEM USER", currentUser);
     if (currentUser && currentUser.type !== "seller") {
       navigate("/homepageclient");
     }
@@ -35,7 +34,7 @@ const HomepageSeller = () => {
   if (state === "loading") {
     return <div>Loading...</div>;
   }
-  console.log("homepageseller", homepageSeller);
+
   return (
     <Div>
       <Button>
@@ -43,6 +42,9 @@ const HomepageSeller = () => {
       </Button>
       <Button>
         <StyledLink to="/editselleritem">Edit exisiting food</StyledLink>
+      </Button>
+      <Button>
+        <StyledLink to="/historysolditems">View your history</StyledLink>
       </Button>
 
       <ItemGrid>

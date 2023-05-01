@@ -7,10 +7,9 @@ const EditSellerItem = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [imageSelected, setImageSelected] = useState("");
   const [formData, setFormData] = useState({});
   const navigate = useNavigate();
-
-  console.log("currentuser", currentUser);
 
   useEffect(() => {
     fetch(`/getOneItem/${currentUser._id}`)
@@ -90,6 +89,18 @@ const EditSellerItem = () => {
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    const formDataImage = new FormData();
+    formDataImage.append("file", imageSelected);
+    formDataImage.append("upload_preset", "lyxwlobx");
+
+    fetch("https://api.cloudinary.com/v1_1/dhn6kqmnu/image/upload", {
+      method: "POST",
+      body: formDataImage,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const imageUrl = data.secure_url;
+      });
   };
 
   const checkboxProteinOnChange = (e) => {
@@ -197,7 +208,7 @@ const EditSellerItem = () => {
       }
     });
   };
-
+  console.log("image", formData.imageUrl);
   return (
     <>
       <Wrapper>
@@ -488,13 +499,38 @@ const EditSellerItem = () => {
                   <label htmlFor="size-27-30cups">27-30cups</label>
                 </label>
                 <label>
-                  Image URL:
-                  <input
-                    type="text"
-                    name="imageUrl"
-                    value={<img src={formData.imageUrl || ""} />}
-                    onChange={handleInputChange}
-                  />
+                  Image:
+                  {formData.imageUrl ? (
+                    <>
+                      <StyledImage src={formData.imageUrl} />
+                      <input
+                        type="file"
+                        name="imageUrl"
+                        onChange={(e) => {
+                          const image = e.target.files[0];
+                          setImageSelected(image);
+                          setFormData({
+                            ...formData,
+                            imageUrl: URL.createObjectURL(image),
+                          });
+                        }}
+                      />
+                    </>
+                  ) : (
+                    <input
+                      type="file"
+                      name="imageUrl"
+                      onChange={(e) => {
+                        const image = e.target.files[0];
+                        setImageSelected(image);
+                        setFormData({
+                          ...formData,
+                          imageUrl: URL.createObjectURL(image),
+                        });
+                      }}
+                      required
+                    />
+                  )}
                 </label>
               </FormDiv>
               <button type="submit">Submit</button>
@@ -550,6 +586,11 @@ const Input = styled.input`
   border-radius: 5px;
   padding: 15px;
   margin-top: 30px;
+`;
+
+const StyledImage = styled.img`
+  width: 200px;
+  height: 200px;
 `;
 
 const StyledLink = styled(Link)`

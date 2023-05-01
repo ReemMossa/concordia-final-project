@@ -10,6 +10,7 @@ const DetailedFood = () => {
   const [item, setItem] = useState(null);
   const [formData, setFormData] = useState({});
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     fetch(`/getOneItemOnly/${itemId}`).then((res) => {
@@ -26,12 +27,16 @@ const DetailedFood = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    navigate(`/payment/${itemId}`);
+  };
 
-    const updatedFormData = {
-      ...formData,
-      status: "pending",
-    };
+  const updatedFormData = {
+    ...formData,
+    status: "sold",
+  };
 
+  const handleComplete = (e) => {
+    e.preventDefault();
     fetch(`/editSellerItem/${itemId}`, {
       method: "PUT",
       headers: {
@@ -41,11 +46,15 @@ const DetailedFood = () => {
     })
       .then((res) => res.json())
       .then((resData) => {
-        console.log("resdata", resData);
-        navigate(`/payment/${itemId}`);
-      });
+        if (resData.status === 200) {
+          navigate(`/homepageseller`);
+          console.log(resData);
+        } else {
+          setErrorMessage(resData.message);
+        }
+      })
+      .catch((err) => window.alert(err));
   };
-
   return (
     <>
       <Title>Food details</Title>
@@ -63,8 +72,10 @@ const DetailedFood = () => {
           <Text>
             <Img src={item[0].imageUrl}></Img>
           </Text>
-          {currentUser.type === "client" && (
+          {currentUser.type === "client" ? (
             <Button onClick={handleSubmit}>Buy Now</Button>
+          ) : (
+            <Button onClick={handleComplete}>Order Complete</Button>
           )}
         </Div>
       )}

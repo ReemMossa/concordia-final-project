@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import { useParams } from "react-router-dom";
@@ -21,11 +21,15 @@ const PaymentDetails = () => {
   const [shippingAddress, setShippingAddress] = useState(address);
   const [cardNumber, setCardNumber] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
+  const [isValid, setIsValid] = useState(null);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [cvv, setCvv] = useState("");
   const navigate = useNavigate();
   const { itemId } = useParams();
   const [item, setItem] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
     fetch(`/getOneItemOnly/${itemId}`)
@@ -39,11 +43,57 @@ const PaymentDetails = () => {
       });
   }, [itemId]);
 
+  const handleCardNumberChange = (event) => {
+    const { value } = event.target;
+    const newValue = value
+      .replace(/\D/g, "") // Remove non-numeric characters
+      .slice(0, 16); // Limit to 16 digits
+
+    // Add dashes after the first and second groups of 4 digits
+    const formattedValue = newValue
+      .replace(/^(\d{4})(\d{1,4})/, "$1-$2")
+      .replace(/^(\d{4})-(\d{4})(\d{1,4})/, "$1-$2-$3")
+      .replace(/^(\d{4})-(\d{4})-(\d{4})(\d{1,4})/, "$1-$2-$3-$4");
+
+    setCardNumber(formattedValue);
+  };
+
+  const handleExpiryDateChange = (event) => {
+    let inputValue = event.target.value;
+    // Add dash after 2 digits
+    if (inputValue.length === 2 && expirationDate.length === 1) {
+      inputValue = inputValue + "-";
+    }
+    setExpirationDate(inputValue);
+    setShowErrorMessage(false);
+  };
+
+  useEffect(() => {
+    if (expirationDate === "") {
+      setIsValid(null);
+      setShowErrorMessage(false);
+      return;
+    }
+    const timer = setTimeout(() => {
+      setIsValid(validateExpiryDate(expirationDate));
+      setShowErrorMessage(true);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [expirationDate]);
+
+  const validateExpiryDate = (date) => {
+    if (!/^\d{2}-\d{2}$/.test(date)) {
+      return false;
+    }
+    const today = new Date();
+    const [expiryMonth, expiryYear] = date.split("-");
+    const expirationDate = new Date(`20${expiryYear}`, expiryMonth, 0); // the "0" in the day parameter sets the date to the last day of the previous month
+    return expirationDate > today;
+  };
+
   const handleBuy = (e) => {
     e.preventDefault();
 
-    console.log("item", item);
-    console.log("totalPrice", totalPrice);
     const data = {
       userId: currentUser._id,
       firstName,
@@ -57,6 +107,11 @@ const PaymentDetails = () => {
       totalPrice,
     };
 
+    const updatedFormData = {
+      ...formData,
+      status: "pending",
+    };
+
     fetch("/submitPayment", {
       method: "POST",
       headers: {
@@ -67,17 +122,24 @@ const PaymentDetails = () => {
       body: JSON.stringify(data),
     }).then((res) => {
       if (res.status > 500) {
-        navigate("/");
+        navigate("/errorpage");
       } else {
         res
           .json()
           .then((resData) => {
             if (resData.status === 200) {
-              window.alert(resData.message);
-
               navigate(`/order/${resData.data._id}`);
+              fetch(`/editSellerItem/${itemId}`, {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updatedFormData),
+              })
+                .then((res) => res.json())
+                .then((resData) => {});
             } else {
-              window.alert(resData.message);
+              setErrorMessage(resData.message);
             }
           })
           .catch((err) => window.alert(err));
@@ -89,11 +151,13 @@ const PaymentDetails = () => {
   if (!currentUser) {
     return navigate("/");
   }
+
   return (
     <div>
       <Title>Payment Details </Title>
       {item && (
         <FormDiv>
+          {errorMessage && <ErrorMissingInfo>{errorMessage}</ErrorMissingInfo>}
           <Form onSubmit={handleBuy}>
             <div>
               {" "}
@@ -102,7 +166,7 @@ const PaymentDetails = () => {
 
             <div>
               <div>
-                <label>Name on Card:</label>
+                <label>Name on Card* </label>
 
                 <input
                   type="text"
@@ -120,7 +184,7 @@ const PaymentDetails = () => {
                 />
               </div>
               <div>
-                <label>Email Address:</label>
+                <label>Email Address* </label>
                 <input
                   type="email"
                   placeholder="Email Address"
@@ -129,7 +193,7 @@ const PaymentDetails = () => {
               </div>
 
               <div>
-                <label>Phone Number:</label>
+                <label>Phone Number* </label>
                 <input
                   type="text"
                   placeholder="Phone Number"
@@ -144,7 +208,7 @@ const PaymentDetails = () => {
             </div>
             <div>
               <div>
-                <label>Street:</label>
+                <label>Street* </label>
                 <input
                   type="text"
                   onChange={(e) =>
@@ -157,7 +221,7 @@ const PaymentDetails = () => {
               </div>
 
               <div>
-                <label>City:</label>
+                <label>City* </label>
                 <input
                   type="text"
                   onChange={(e) =>
@@ -170,7 +234,7 @@ const PaymentDetails = () => {
               </div>
 
               <div>
-                <label>Province:</label>
+                <label>Province* </label>
                 <input
                   type="text"
                   onChange={(e) =>
@@ -183,7 +247,7 @@ const PaymentDetails = () => {
               </div>
 
               <div>
-                <label>Country:</label>
+                <label>Country* </label>
                 <input
                   type="text"
                   onChange={(e) =>
@@ -196,7 +260,7 @@ const PaymentDetails = () => {
               </div>
 
               <div>
-                <label>Postal Code:</label>
+                <label>Postal Code* </label>
                 <input
                   type="text"
                   onChange={(e) =>
@@ -215,40 +279,53 @@ const PaymentDetails = () => {
             </div>
             <div>
               <div>
-                <label>Card Number:</label>
-                <input
-                  type="number"
-                  title="Credit Card Number"
-                  placeholder="____-____-____-____"
-                  name="card"
-                  onChange={(e) => setCardNumber(e.target.value)}
-                />
+                <label>
+                  Card number*
+                  <input
+                    type="text"
+                    title="Credit Card Number"
+                    placeholder="____-____-____-____"
+                    name="card"
+                    maxLength={19}
+                    value={cardNumber}
+                    onChange={handleCardNumberChange}
+                  />
+                </label>
               </div>
 
               <div>
-                <label>Expiration Date:</label>
+                <label>
+                  Expiration Date*
+                  <input
+                    type="text"
+                    maxLength="5"
+                    placeholder="MM-YY"
+                    value={expirationDate}
+                    onChange={handleExpiryDateChange}
+                  />
+                </label>
+                {showErrorMessage && !isValid && (
+                  <span style={{ color: "red" }}>Invalid expiry date</span>
+                )}
+                {isValid && (
+                  <span style={{ color: "green" }}>Valid expiry date</span>
+                )}
+              </div>
+
+              <div>
+                <label>CVV* </label>
                 <input
                   type="text"
-                  title="Expiration Date"
-                  placeholder="MM-YY"
-                  name="expiration"
-                  onChange={(e) => setExpirationDate(e.target.value)}
-                />
-              </div>
-
-              <div>
-                <label>CVV: </label>
-                <input
-                  type="number"
                   title="CVV"
                   placeholder="CVV"
                   name="CVV"
+                  maxLength={"3"}
                   onChange={(e) => setCvv(e.target.value)}
                 />
               </div>
             </div>
             <div>
-              <h3>Your Payment Amount is {item[0].price} $</h3>
+              <h3>Total payment amount is {item[0].price} $</h3>
 
               <Button type="submit">Submit Payment</Button>
             </div>
@@ -295,6 +372,18 @@ const Button = styled.button`
   align-content: center;
   margin-top: 2rem;
   cursor: pointer;
+`;
+
+const ErrorMissingInfo = styled.p`
+  color: red;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 20px;
+`;
+
+const Error = styled.p`
+  color: red;
+  font-size: 18px;
 `;
 
 export default PaymentDetails;

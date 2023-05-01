@@ -9,6 +9,7 @@ const Login = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const [data, setData] = useState(false);
   const [userEmail, setUserEmail] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -32,11 +33,12 @@ const Login = () => {
     })
       .then((res) => {
         if (res.status > 500) {
-          Navigate("/");
+          Navigate("/errorpage");
         } else {
           res.json().then((resData) => {
             if (resData.status !== 200) {
-              window.alert(resData.message);
+              console.log(resData);
+              setErrorMessage(resData.message);
             } else {
               setMatchedClient(resData.data);
               setUserEmail(formData.email);
@@ -54,14 +56,16 @@ const Login = () => {
           });
         }
       })
-      .catch((err) => window.alert(err));
+      .catch((err) => console.log(err));
   };
 
   return (
     <Wrapper>
-      <H1>Log In</H1>
+      <H1>Log In To Barkin' Good Food</H1>
       <Form onSubmit={handleSubmit}>
         <FormDiv>
+          {errorMessage && <Error>{errorMessage}</Error>}
+
           <Input
             type="email"
             id="email"
@@ -94,11 +98,10 @@ const Login = () => {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid black;
-  border-radius: 1rem;
-  margin-left: 40rem;
-  margin-right: 40rem;
-  margin-top: 5rem;
+  border: 2px solid #23953c;
+  border-radius: 10px;
+  margin: 5% auto;
+  max-width: 800px;
 `;
 
 const Form = styled.form`
@@ -123,9 +126,10 @@ const H1 = styled.h1`
 
 const Input = styled.input`
   margin: 0px 20px;
-  width: 20rem;
+  width: 300px;
+  border: 3px solid #23953c;
   border-radius: 5px;
-  padding: 15px;
+  padding: 10px;
   margin-top: 30px;
 `;
 
@@ -136,13 +140,20 @@ const ButtonContainer = styled.div`
 
 const Button = styled.button`
   margin-top: 2rem;
-  background-color: blue;
+  background-color: #23953c;
   color: white;
-  padding: 15px;
-  width: 10rem;
+  font-size: 20px;
+  padding: 10px;
+  width: 120px;
   border: none;
   border-radius: 20px;
   cursor: pointer;
+`;
+
+const Error = styled.p`
+  color: red;
+  font-size: 18px;
+  text-align: center;
 `;
 
 export default Login;

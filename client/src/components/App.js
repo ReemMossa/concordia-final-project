@@ -18,6 +18,7 @@ import DetailedFood from "./DetailedFood";
 import Payment from "./Payment";
 import OrderConfirmation from "./OrderConfirmation";
 import ErrorPage from "./Error";
+import SoldItems from "./SoldItems";
 
 const App = () => {
   return (
@@ -40,6 +41,7 @@ const App = () => {
           <Route path="/payment/:itemId" element={<Payment />} />
           <Route path="/order/:_id" element={<OrderConfirmation />} />
           <Route path="/errorpage" element={<ErrorPage />} />
+          <Route path="historysolditems" element={<SoldItems />} />
         </Routes>
       </BrowserRouter>
     </>

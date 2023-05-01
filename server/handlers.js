@@ -65,6 +65,14 @@ const updateUser = async (req, res) => {
   const { _id } = req.params;
   const { firstName, lastName, address, dogName, email, password } = req.body;
 
+  if (!firstName || !lastName | !address || !dogName || !email || !password) {
+    return res.status(404).json({
+      status: 404,
+      data: req.body,
+      message: "Missing information. Please fill out all fields.",
+    });
+  }
+
   //encrypt password
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -247,7 +255,7 @@ const getOneClient = async (req, res) => {
     } else {
       return res.status(404).json({
         status: 404,
-        message: "Wrong password",
+        message: "Oops! Incorrect username or password.",
       });
     }
   }
@@ -309,7 +317,11 @@ const addItem = async (req, res) => {
 const editItem = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   const { _id } = req.params;
-  const updatedItem = { ...req.body, status: "pending" };
+  const { status, ...rest } = req.body;
+  const updatedItem = {
+    ...rest,
+    status: status === "sold" ? "sold" : "pending",
+  };
 
   try {
     await client.connect();
@@ -345,7 +357,7 @@ const editItem = async (req, res) => {
 const deleteItem = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   const { _id } = req.params;
-  console.log("id", _id);
+
   try {
     await client.connect();
     const db = client.db("finalproject");
@@ -464,12 +476,17 @@ const submitPayment = async (req, res) => {
       !lastName ||
       !email ||
       !phoneNumber ||
-      !shippingAddress
+      !shippingAddress ||
+      !cardNumber ||
+      cardNumber.length !== 19 ||
+      !cvv || // make sure cvv is not empty
+      cvv.length !== 3 // make sure cvv has exactly 3 digits
     ) {
       return res.status(400).json({
         status: 400,
         data: req.body,
-        message: "Information is missing.",
+        message:
+          "Missing information or invalid credit card information. Please fill out all required fields.",
       });
     }
 

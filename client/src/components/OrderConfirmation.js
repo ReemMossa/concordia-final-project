@@ -11,7 +11,7 @@ const OrderConfirmation = () => {
       .then((res) => res.json())
       .then((resData) => {
         setOrderConfirmation(resData.data);
-        console.log(resData.data);
+        console.log(_id);
       });
   }, []);
 

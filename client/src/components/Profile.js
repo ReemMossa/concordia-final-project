@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 const Profile = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
+  const [errorMessage, setErrorMessage] = useState("");
   const [status, setStatus] = useState("loading");
   const [editMode, setEditMode] = useState(false);
   const [firstName, setFirstName] = useState("");
@@ -70,18 +71,20 @@ const Profile = () => {
       }),
     })
       .then((res) => res.json())
+
       //make sure is 200
       .then((resData) => {
-        console.log("reem says what is resData", resData);
-        setEditMode(false);
-      })
-      .then(() => {
-        fetch(`/getUser/${email}`)
-          .then((res) => res.json())
-          .then((data) => {
-            console.log("reem says this wot work", data);
-            setCurrentUser(data.data); // update currentUser state with the new values
-          });
+        if (resData.status === 404) {
+          setErrorMessage(resData.message);
+        } else {
+          fetch(`/getUser/${email}`)
+            .then((res) => res.json())
+            .then((data) => {
+              setCurrentUser(data.data); // update currentUser state with the new values
+              setEditMode(false);
+              setErrorMessage("");
+            });
+        }
       });
   };
 
@@ -89,6 +92,7 @@ const Profile = () => {
     return (
       <>
         {status === "loading" && <p>Loading...</p>}
+        {errorMessage && <p>{errorMessage}</p>}
         {status === "error" && <p>Error loading profile data</p>}
         {status === "idle" && (
           <form onSubmit={handleFormSubmit}>

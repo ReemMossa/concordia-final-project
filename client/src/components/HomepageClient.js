@@ -22,7 +22,7 @@ const HomepageClient = () => {
     fetch("/getItems").then(
       (res) => {
         if (res.status > 500) {
-          navigate("/");
+          navigate("/errorpage");
         } else {
           res
             .json()
@@ -101,24 +101,29 @@ const HomepageClient = () => {
       </DivFilter>
 
       <Text>Please click on the dish for more information</Text>
-      <ItemGrid>
-        {displayedMeals.length > 0 &&
-          displayedMeals.map((item) => {
-            return (
-              <Item>
-                Dish Name:{" "}
-                <StyledLink to={`/items/${item._id}`}>
-                  {item.dishName}
-                </StyledLink>
-                Description: {item.description}
-                Price: {item.price}
-                <StyledLink to={`/items/${item._id}`}>
-                  <Img src={item.imageUrl}></Img>
-                </StyledLink>
-              </Item>
-            );
-          })}
-      </ItemGrid>
+
+      {homepageClient.length > 0 && (
+        <DivGrid>
+          <ItemGrid>
+            {homepageClient
+              .filter((item) => item.status === "available")
+              .map((item) => (
+                <Item key={item._id}>
+                  <div>
+                    <StyledLink to={`/items/${item._id}`}>
+                      {item.dishName}
+                    </StyledLink>
+                    <div>{item.description}</div>
+                    <div>{item.price}</div>
+                  </div>
+                  <StyledLink to={`/items/${item._id}`}>
+                    <Img src={item.imageUrl} />
+                  </StyledLink>
+                </Item>
+              ))}
+          </ItemGrid>
+        </DivGrid>
+      )}
     </>
   );
 };
@@ -146,24 +151,35 @@ const Text = styled.p`
   text-align: center;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   font-size: 20px;
-  color: #23953c;
+`;
+
+const DivGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ItemGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 1rem;
-  margin-left: 20rem;
-  margin-right: 20rem;
+  grid-template-columns: repeat(3, 1fr);
 `;
 
 const Item = styled.div`
   display: flex;
   flex-direction: column;
   border: 1px solid lightgray;
-  margin-left: 10rem;
-  margin-right: 10rem;
+  padding: 50px;
+  margin-right: 50px;
+  margin-left: 50px;
   margin-top: 3rem;
+  height: 250px;
+  width: 200px;
+  text-align: center;
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
 `;
 
 const StyledLink = styled(Link)`
@@ -172,7 +188,10 @@ const StyledLink = styled(Link)`
 
 const Img = styled.img`
   width: 150px;
-  display: flex;
+`;
+
+const NoShow = styled.div`
+  display: none;
 `;
 
 export default HomepageClient;
