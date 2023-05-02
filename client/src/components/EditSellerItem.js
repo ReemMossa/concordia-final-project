@@ -14,22 +14,20 @@ const EditSellerItem = () => {
   useEffect(() => {
     fetch(`/getOneItem/${currentUser._id}`)
       .then((res) => {
-        if (res.status === 404) {
-          return [];
-        } else if (res.status > 500) {
+        if (res.status > 500) {
           navigate("/errorPage");
         }
         return res.json();
       })
       .then((resData) => {
         if (!resData.data) {
-          setItems([]);
-        } else {
-          const filteredItems = resData.data.filter(
-            (item) => item.status !== "pending"
-          );
-          setItems(filteredItems);
+          navigate("/errorPage");
         }
+
+        const filteredItems = resData.data.filter(
+          (item) => item.status !== "pending"
+        );
+        setItems(filteredItems);
       })
       .catch((error) => {
         navigate("/errorPage");
@@ -210,7 +208,7 @@ const EditSellerItem = () => {
       }
     });
   };
-
+  console.log("image", formData.imageUrl);
   return (
     <>
       <Wrapper>
@@ -219,9 +217,7 @@ const EditSellerItem = () => {
           <label>
             <select value={selectedItem?.dishName} onChange={handleChange}>
               <option value="">Select an item to modify...</option>
-              {items.length === 0 && (
-                <option value="">No items to modify</option>
-              )}
+              {console.log("items", items)}
               {items.map((item) => (
                 <option key={item._id} value={item.dishName}>
                   {item.dishName}
@@ -504,26 +500,11 @@ const EditSellerItem = () => {
                 </label>
                 <label>
                   Image:
-                  {formData.imageUrl ? (
-                    <>
-                      <StyledImage src={formData.imageUrl} />
-                      <input
-                        type="file"
-                        name="imageUrl"
-                        onChange={(e) => {
-                          const image = e.target.files[0];
-                          setImageSelected(image);
-                          setFormData({
-                            ...formData,
-                            imageUrl: URL.createObjectURL(image),
-                          });
-                        }}
-                      />
-                    </>
-                  ) : (
+                  {!formData.imageUrl ? (
                     <input
                       type="file"
                       name="imageUrl"
+                      value={formData.imageUrl || ""}
                       onChange={(e) => {
                         const image = e.target.files[0];
                         setImageSelected(image);
@@ -534,6 +515,8 @@ const EditSellerItem = () => {
                       }}
                       required
                     />
+                  ) : (
+                    <StyledImage src={formData.imageUrl} />
                   )}
                 </label>
               </FormDiv>

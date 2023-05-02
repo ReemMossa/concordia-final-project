@@ -38,11 +38,14 @@ const HomepageSeller = () => {
   return (
     <>
       <Div>
+        {homepageSeller && (
+          <Button>
+            <StyledLink to="/editselleritem">Edit exisiting food</StyledLink>
+          </Button>
+        )}
+
         <Button>
           <StyledLink to="/sellernewitem">Upload new food</StyledLink>
-        </Button>
-        <Button>
-          <StyledLink to="/editselleritem">Edit exisiting food</StyledLink>
         </Button>
         <Button>
           <StyledLink to="/historysolditems">View your history</StyledLink>
