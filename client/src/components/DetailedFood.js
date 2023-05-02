@@ -57,42 +57,48 @@ const DetailedFood = () => {
   };
   return (
     <>
-      <Title>Food details</Title>
       {item && (
-        <Div>
-          <Text>Dish Name: {item[0].dishName}</Text>
-          <Text>Description: {item[0].description}</Text>
-          <Text>Price: {item[0].price} $</Text>
-          <Text>Size: {item[0].size}</Text>
-          <Text>Ingredients:</Text>
-          <Text>Protein: {item[0].ingredients.protein}</Text>
-          <Text>Organs: {item[0].ingredients.organs}</Text>
-          <Text>Nuts & Seeds: {item[0].ingredients.nutsAndSeeds}</Text>
-          <Text>Other: {item[0].ingredients.other}</Text>
-          <Text>
-            <Img src={item[0].imageUrl}></Img>
-          </Text>
-          {currentUser.type === "client" ? (
+        <>
+          <Div>
+            <Name>{item[0].dishName}</Name>
+            <Text>{item[0].description}</Text>
+            <Text>{item[0].price} $</Text>
+            <Text>Size: </Text>
+            <Text> {item[0].size}</Text>
+            <Text>Main Ingredients</Text>
+            <div>{item[0].ingredients.protein}</div>
+            <div>{item[0].ingredients.organs}</div>
+            <div>{item[0].ingredients.nutsAndSeeds}</div>
+            <div>{item[0].ingredients.other}</div>
+          </Div>
+          <Img src={item[0].imageUrl}></Img>
+          {currentUser.type === "client" && (
             <Button onClick={handleSubmit}>Buy Now</Button>
-          ) : (
+          )}
+          {currentUser.type === "seller" && item[0].status === "pending" && (
             <Button onClick={handleComplete}>Order Complete</Button>
           )}
-        </Div>
+        </>
       )}
     </>
   );
 };
 
 const Img = styled.img`
-  width: 150px;
+  width: 500px;
+  margin-top: 20rem;
+  margin-left: 10rem;
+  position: absolute;
+  top: 0;
 `;
 
-const Title = styled.p`
+const Name = styled.p`
   text-align: center;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-  font-size: 30px;
+  font-size: 40px;
   color: #23953c;
   margin-top: 2rem;
+  margin-bottom: 4rem;
 `;
 
 const Div = styled.div`
@@ -112,11 +118,10 @@ const Button = styled.button`
   background-color: #23953c;
   color: white;
   font-size: 15px;
-  padding: 20px 8px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-top: 2rem;
+  padding: 10px 10px;
+  display: flex;
   cursor: pointer;
+  margin: 5rem auto;
 `;
 
 export default DetailedFood;

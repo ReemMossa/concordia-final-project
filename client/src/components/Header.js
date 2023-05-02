@@ -16,10 +16,13 @@ const Header = () => {
       </Link>
 
       {currentUser ? (
-        <UserIcon
-          initials={`${currentUser.firstName[0].toUpperCase()}${currentUser.lastName[0].toUpperCase()}`}
-          navigate={navigate}
-        />
+        <>
+          <UserIcon
+            initials={`${currentUser.firstName[0].toUpperCase()}${currentUser.lastName[0].toUpperCase()}`}
+            navigate={navigate}
+          />
+          <Div>You are logged on as a {currentUser.type}</Div>
+        </>
       ) : (
         <>
           <ButtonLogIn>
@@ -69,6 +72,12 @@ const ButtonSignUp = styled.button`
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: white;
+`;
+
+const Div = styled.div`
+  color: white;
+  margin-left: auto;
+  margin-right: 90px;
 `;
 
 export default Header;

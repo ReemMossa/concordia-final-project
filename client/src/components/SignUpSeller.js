@@ -134,7 +134,6 @@ const SignUpSeller = () => {
             placeholder="Your furry friend's name"
             value={formData.dogName}
             onChange={handleInputChange}
-            required
           />
           <Input
             type="email"
@@ -168,7 +167,7 @@ const SignUpSeller = () => {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid black;
+  border: 1px solid lightgray;
   border-radius: 1rem;
   margin-left: 40rem;
   margin-right: 40rem;
@@ -193,6 +192,7 @@ const FormDiv = styled.div`
 
 const H1 = styled.h1`
   text-align: center;
+  color: #23953c;
 `;
 
 const NameDiv = styled.div`
@@ -220,12 +220,11 @@ const NameInput = styled.input`
 
 const ButtonContainer = styled.div`
   text-align: center;
-  margin-bottom: 0.5rem;
 `;
 
 const Button = styled.button`
   margin-top: 2rem;
-  background-color: blue;
+  background-color: #23953c;
   color: white;
   padding: 15px;
   width: 20rem;

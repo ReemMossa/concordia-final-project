@@ -1,12 +1,27 @@
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { useContext, useState } from "react";
 import { UserContext } from "./UserContext";
 
 const UserIcon = ({ initials, navigate }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const ref = useRef();
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const location = useLocation();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [ref]);
 
   const handleProfileClick = () => {
     navigate("/profile");
@@ -32,7 +47,9 @@ const UserIcon = ({ initials, navigate }) => {
 
   return (
     <>
-      <Circle onClick={() => setDropdownOpen(!dropdownOpen)}>{initials}</Circle>
+      <Circle ref={ref} onClick={() => setDropdownOpen(!dropdownOpen)}>
+        {initials}
+      </Circle>
       {dropdownOpen && (
         <Dropdown>
           <DropdownItem onClick={handleProfileClick}>My Profile</DropdownItem>
@@ -45,37 +62,46 @@ const UserIcon = ({ initials, navigate }) => {
 };
 
 const Circle = styled.div`
-  display: inline-block;
-  margin-left: auto;
   width: 40px;
   height: 40px;
   border-radius: 50%;
   background-color: #23953c;
   color: white;
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 20px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 40px;
+  right: 40px;
   cursor: pointer;
+  &:hover {
+    background-color: #177b27;
+  }
 `;
 
 const Dropdown = styled.div`
   position: absolute;
-  top: 123px;
+  top: 85px;
   right: 0;
-  background-color: #23953c;
+
+  background-color: black;
   border: 1px solid black;
   border-radius: 5px;
-  padding: 10px;
+  padding-top: 20px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-bottom: 20px;
 `;
 
 const DropdownItem = styled.div`
-  margin-top: 5px;
+  font-size: 25px;
+  line-height: 60px;
   color: white;
   cursor: pointer;
   &:hover {
     text-decoration: underline;
   }
 `;
+
 export default UserIcon;

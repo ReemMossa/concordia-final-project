@@ -35,11 +35,10 @@ const SoldItems = () => {
   }
 
   return (
-    <div>
-      <ItemGrid>
-        {homepageSeller && homepageSeller.length > 0 && (
-          <div>
-            <h2>Your sold items</h2>
+    <>
+      {homepageSeller && homepageSeller.length > 0 && (
+        <DivGrid>
+          <ItemGrid>
             {homepageSeller
               .filter((item) => item.status === "sold")
               .map((item) => (
@@ -52,12 +51,13 @@ const SoldItems = () => {
                   <StyledLink to={`/items/${item._id}`}>
                     <Img src={item.imageUrl} alt="" />
                   </StyledLink>
+                  <StatusSold>SOLD</StatusSold>
                 </Item>
               ))}
-          </div>
-        )}
-      </ItemGrid>
-    </div>
+          </ItemGrid>
+        </DivGrid>
+      )}
+    </>
   );
 };
 
@@ -70,21 +70,39 @@ const Img = styled.img`
   border-radius: 50%;
 `;
 
+const DivGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 6rem;
+`;
+
 const ItemGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 1rem;
-  margin-left: 20rem;
-  margin-right: 20rem;
+  grid-template-columns: repeat(3, 1fr);
 `;
 
 const Item = styled.div`
   display: flex;
   flex-direction: column;
   border: 1px solid lightgray;
-  margin-left: 10rem;
-  margin-right: 10rem;
-  margin-top: 3rem;
+  padding: 50px;
+  margin-right: 50px;
+  margin-left: 50px;
+  margin-top: 2rem;
+  height: 175px;
+  width: 200px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+`;
+const StatusSold = styled.div`
+  position: absolute;
+  bottom: 0;
+  color: red;
 `;
 
 export default SoldItems;

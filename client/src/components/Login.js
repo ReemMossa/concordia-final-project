@@ -98,7 +98,7 @@ const Login = () => {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  border: 2px solid #23953c;
+  border: 2px solid lightgray;
   border-radius: 10px;
   margin: 5% auto;
   max-width: 800px;
@@ -122,6 +122,7 @@ const FormDiv = styled.div`
 
 const H1 = styled.h1`
   text-align: center;
+  color: #23953c;
 `;
 
 const Input = styled.input`

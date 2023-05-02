@@ -113,8 +113,8 @@ const HomepageClient = () => {
                     <StyledLink to={`/items/${item._id}`}>
                       {item.dishName}
                     </StyledLink>
-                    <div>{item.description}</div>
-                    <div>{item.price}</div>
+                    <div> {item.description}</div>
+                    <div> {item.price}$</div>
                   </div>
                   <StyledLink to={`/items/${item._id}`}>
                     <Img src={item.imageUrl} />
@@ -150,7 +150,8 @@ const Options = styled.p`
 const Text = styled.p`
   text-align: center;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-  font-size: 20px;
+  font-size: 30px;
+  color: #23953c;
 `;
 
 const DivGrid = styled.div`
@@ -188,10 +189,7 @@ const StyledLink = styled(Link)`
 
 const Img = styled.img`
   width: 150px;
-`;
-
-const NoShow = styled.div`
-  display: none;
+  margin-top: 2rem;
 `;
 
 export default HomepageClient;

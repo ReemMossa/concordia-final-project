@@ -36,60 +36,65 @@ const HomepageSeller = () => {
   }
 
   return (
-    <Div>
-      <Button>
-        <StyledLink to="/sellernewitem">Upload new food</StyledLink>
-      </Button>
-      <Button>
-        <StyledLink to="/editselleritem">Edit exisiting food</StyledLink>
-      </Button>
-      <Button>
-        <StyledLink to="/historysolditems">View your history</StyledLink>
-      </Button>
-
-      <ItemGrid>
-        {homepageSeller && homepageSeller.length > 0 && (
-          <>
-            <div>
-              <h2>Your pending items</h2>
-
-              {homepageSeller
-                .filter((item) => item.status === "pending")
-                .map((item) => (
-                  <Item key={item._id}>
-                    Dish Name:
-                    <StyledLink to={`/items/${item._id}`}>
-                      {item.dishName}
-                    </StyledLink>
-                    Price: {item.price}
-                    <StyledLink to={`/items/${item._id}`}>
-                      <Img src={item.imageUrl}></Img>
-                    </StyledLink>
-                  </Item>
-                ))}
-            </div>
-            <div>
-              <h2>Your available items</h2>
-
+    <>
+      <Div>
+        <Button>
+          <StyledLink to="/sellernewitem">Upload new food</StyledLink>
+        </Button>
+        <Button>
+          <StyledLink to="/editselleritem">Edit exisiting food</StyledLink>
+        </Button>
+        <Button>
+          <StyledLink to="/historysolditems">View your history</StyledLink>
+        </Button>
+      </Div>
+      {homepageSeller && homepageSeller.length > 0 && (
+        <>
+          <DivGrid>
+            <ItemGrid>
               {homepageSeller
                 .filter((item) => item.status === "available")
                 .map((item) => (
                   <Item key={item._id}>
-                    Dish Name:
+                    <div>
+                      <StyledLink to={`/items/${item._id}`}>
+                        {item.dishName}
+                      </StyledLink>
+                      <div> {item.description}</div>
+                      <div> {item.price}$</div>
+                    </div>
                     <StyledLink to={`/items/${item._id}`}>
-                      {item.dishName}
+                      <Img src={item.imageUrl} />
                     </StyledLink>
-                    Price: {item.price}
-                    <StyledLink to={`/items/${item._id}`}>
-                      <Img src={item.imageUrl}></Img>
-                    </StyledLink>
+                    <StatusAvailable>AVAILABLE</StatusAvailable>
                   </Item>
                 ))}
-            </div>
-          </>
-        )}
-      </ItemGrid>
-    </Div>
+            </ItemGrid>
+          </DivGrid>
+          <DivGrid>
+            <ItemGrid>
+              {homepageSeller
+                .filter((item) => item.status === "pending")
+                .map((item) => (
+                  <Item key={item._id}>
+                    <div>
+                      <StyledLink to={`/items/${item._id}`}>
+                        {item.dishName}
+                      </StyledLink>
+                      <div> {item.description}</div>
+                      <div> {item.price}$</div>
+                    </div>
+                    <StyledLink to={`/items/${item._id}`}>
+                      <Img src={item.imageUrl} />
+                    </StyledLink>
+                    <StatusPending>PENDING</StatusPending>
+                  </Item>
+                ))}
+            </ItemGrid>
+          </DivGrid>
+        </>
+      )}
+    </>
   );
 };
 
@@ -99,13 +104,14 @@ const Div = styled.div`
 
 const StyledLink = styled(Link)`
   text-decoration: none;
+  color: white;
 `;
 
 const Button = styled.button`
   background-color: #23953c;
   font-size: 15px;
-  padding: 1rem 0rem;
-  border-radius: 30px;
+  padding: 1rem 1rem;
+
   color: white;
   float: right;
   margin-right: 3rem;
@@ -117,21 +123,45 @@ const Img = styled.img`
   border-radius: 50%;
 `;
 
+const DivGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 6rem;
+`;
+
 const ItemGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 1rem;
-  margin-left: 20rem;
-  margin-right: 20rem;
+  grid-template-columns: repeat(3, 1fr);
 `;
 
 const Item = styled.div`
   display: flex;
   flex-direction: column;
   border: 1px solid lightgray;
-  margin-left: 10rem;
-  margin-right: 10rem;
-  margin-top: 3rem;
+  padding: 50px;
+  margin-right: 50px;
+  margin-left: 50px;
+  margin-top: 2rem;
+  height: 175px;
+  width: 200px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 `;
 
+const StatusAvailable = styled.div`
+  position: absolute;
+  bottom: 0;
+  color: #66eaa3;
+`;
+
+const StatusPending = styled.div`
+  position: absolute;
+  bottom: 0;
+  color: orange;
+`;
 export default HomepageSeller;

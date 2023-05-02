@@ -2,63 +2,101 @@ import React from "react";
 import food from "./bowlwithfood.jpg";
 import meatAndVeggies from "./meat-and-veggies.webp";
 import goldenretriever from "./golden.webp";
+import dogpaw from "./dogpaw.jpg";
 import styled from "styled-components";
+import { Link, useNavigate } from "react-router-dom";
 
 const Homepage = () => {
   return (
     <>
-      <H1>DIY Homemade Dog Food</H1>
-
+      <Div>
+        <img src={dogpaw}></img>
+        <Textdiv>
+          <Text>FRESH</Text>
+          <Text>DELICIOUS</Text>
+          <Text>HEALTHY</Text>
+        </Textdiv>
+        <FoodImg src={meatAndVeggies} alt="dogfood" />
+      </Div>
       <P>
-        {" "}
-        Welcome to our online marketplace for healthy homemade dog food and
-        treats! Our website is a platform where dog owners and enthusiasts can
-        come together to connect with sellers who are passionate about creating
-        wholesome and nutritious meals and snacks for our furry friends. At our
-        website, we believe that dogs deserve the best quality food, just like
-        we do. That's why we provide a marketplace where you can find sellers
-        who use only the highest quality, all-natural ingredients to create
-        healthy, homemade dog food and treats. Our sellers are passionate about
-        their craft and are committed to ensuring that every meal or treat they
-        make is delicious, nutritious, and safe for your furry companion to
-        enjoy. Our platform is designed to make it easy for both sellers and
-        clients to use. Sellers can upload their food and treats, set their
-        prices, and manage their orders all from one convenient location.
-        Clients can browse through the listings, filter through ingredients, and
-        place orders with just a few clicks. We are proud to offer a wide range
-        of homemade dog food and treats from a diverse group of sellers. Our
-        platform allows you to discover new sellers and try out different
-        recipes, giving you and your dog the opportunity to explore new flavors
-        and textures. We are committed to supporting small businesses and
-        helping dog owners provide their pets with the best quality food
-        possible. Thank you for choosing Barkin' Good Food, and we look forward
-        to connecting you with some amazing sellers and delicious homemade dog
-        food and treats!
+        Barkin' Good Food is a platform that connects buyers and sellers of
+        homemade dog food, offering a wide range of options to suit different
+        dietary needs, preferences, and budgets. Whether you're looking for
+        grain-free, raw, organic, or specialized diets, you can browse through
+        our listings and find the perfect match for your dog. And if you're a
+        seller, you can showcase your culinary skills and reach a wider audience
+        of dog lovers who appreciate the value of homemade food. So, let's get
+        started and make some tails wag with delicious and healthy homemade dog
+        food!
       </P>
-
-      <Img src={goldenretriever} alt="dog" />
-      <Img src={meatAndVeggies} alt="dogfood" />
+      <SignUp>
+        <StyledLink to="/signup">Sign up</StyledLink> as a seller or a buyer to
+        get started, or log in!
+      </SignUp>
+      {/* <Imagediv>
+        <Img src={goldenretriever} alt="dog" />
+      </Imagediv> */}
     </>
   );
 };
 
-const H1 = styled.h1`
-  text-align: center;
+const Div = styled.div`
+  display: flex;
+  margin-top: 5rem;
+  margin-left: 3rem;
 `;
 
+const Textdiv = styled.div`
+  margin-top: 10rem;
+`;
+
+const Text = styled.div`
+  color: #23953c;
+  font-size: 70px;
+  font-weight: bolder;
+`;
 const P = styled.p`
   font-size: 25px;
   font-style: italic;
   text-align: center;
   padding-right: 20rem;
   padding-left: 20rem;
-  line-height: 35px;
+  line-height: 45px;
+  margin-top: 5rem;
 `;
 
+const SignUp = styled.p`
+  font-size: 25px;
+  font-style: italic;
+  text-align: center;
+  padding-right: 20rem;
+  padding-left: 20rem;
+  line-height: 45px;
+  margin-top: 5rem;
+  font-weight: bolder;
+  font-size: 30px;
+`;
+
+const Imagediv = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const FoodImg = styled.img`
+  border-radius: 50%;
+  height: 25rem;
+  width: 30rem;
+  margin-left: 20rem;
+`;
+
+const StyledLink = styled(Link)`
+  color: black;
+`;
 const Img = styled.img`
   height: 35rem;
-  width: 50rem;
-  padding: 5rem;
+  width: 30rem;
+
+  border-radius: 50%;
 `;
 
 export default Homepage;
