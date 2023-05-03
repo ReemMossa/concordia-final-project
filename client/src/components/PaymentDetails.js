@@ -153,64 +153,51 @@ const PaymentDetails = () => {
   }
 
   return (
-    <div>
-      <Title>Payment Details </Title>
+    <Wrapper>
       {item && (
-        <FormDiv>
+        <>
           {errorMessage && <ErrorMissingInfo>{errorMessage}</ErrorMissingInfo>}
           <Form onSubmit={handleBuy}>
-            <div>
-              {" "}
-              <h2>Your information</h2>
-            </div>
+            <FormDiv>
+              <Title>Your information</Title>
 
-            <div>
-              <div>
-                <label>Name on Card* </label>
-
-                <input
+              <NameDiv>
+                <NameInput
                   type="text"
                   title="firstName"
                   placeholder="First Name"
                   name="firstName"
                   onChange={(e) => setFirstName(e.target.value)}
                 />
-                <input
+                <NameInput
                   type="lastName"
                   title="lastName"
                   placeholder="Last Name"
                   name="lastName"
                   onChange={(e) => setLastName(e.target.value)}
                 />
-              </div>
-              <div>
-                <label>Email Address* </label>
-                <input
+              </NameDiv>
+
+              <NameDiv>
+                <NameInput
                   type="email"
                   placeholder="Email Address"
                   onChange={(e) => setEmail(e.target.value)}
                 />
-              </div>
 
-              <div>
-                <label>Phone Number* </label>
-                <input
+                <NameInput
                   type="text"
                   placeholder="Phone Number"
                   onChange={(e) => setPhoneNumber(e.target.value)}
                 />
-              </div>
-            </div>
+              </NameDiv>
 
-            <div>
-              {" "}
-              <h2>Shipping Address</h2>
-            </div>
-            <div>
-              <div>
-                <label>Street* </label>
-                <input
+              <Title>Billing address</Title>
+
+              <NameDiv>
+                <Input
                   type="text"
+                  placeholder="Street"
                   onChange={(e) =>
                     setShippingAddress({
                       ...shippingAddress,
@@ -218,12 +205,10 @@ const PaymentDetails = () => {
                     })
                   }
                 />
-              </div>
 
-              <div>
-                <label>City* </label>
-                <input
+                <Input
                   type="text"
+                  placeholder="City"
                   onChange={(e) =>
                     setShippingAddress({
                       ...shippingAddress,
@@ -231,12 +216,12 @@ const PaymentDetails = () => {
                     })
                   }
                 />
-              </div>
+              </NameDiv>
 
-              <div>
-                <label>Province* </label>
-                <input
+              <NameDiv>
+                <Input
                   type="text"
+                  placeholder="Province"
                   onChange={(e) =>
                     setShippingAddress({
                       ...shippingAddress,
@@ -244,25 +229,10 @@ const PaymentDetails = () => {
                     })
                   }
                 />
-              </div>
 
-              <div>
-                <label>Country* </label>
-                <input
+                <Input
                   type="text"
-                  onChange={(e) =>
-                    setShippingAddress({
-                      ...shippingAddress,
-                      country: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div>
-                <label>Postal Code* </label>
-                <input
-                  type="text"
+                  placeholder="Postal Code"
                   onChange={(e) =>
                     setShippingAddress({
                       ...shippingAddress,
@@ -270,51 +240,52 @@ const PaymentDetails = () => {
                     })
                   }
                 />
-              </div>
-            </div>
+              </NameDiv>
 
-            <div>
-              {" "}
-              <h2>Credit Card Information</h2>
-            </div>
-            <div>
-              <div>
-                <label>
-                  Card number*
-                  <input
-                    type="text"
-                    title="Credit Card Number"
-                    placeholder="____-____-____-____"
-                    name="card"
-                    maxLength={19}
-                    value={cardNumber}
-                    onChange={handleCardNumberChange}
-                  />
-                </label>
-              </div>
+              <Input
+                type="text"
+                placeholder="Country"
+                onChange={(e) =>
+                  setShippingAddress({
+                    ...shippingAddress,
+                    country: e.target.value,
+                  })
+                }
+              />
 
-              <div>
-                <label>
-                  Expiration Date*
-                  <input
-                    type="text"
-                    maxLength="5"
-                    placeholder="MM-YY"
-                    value={expirationDate}
-                    onChange={handleExpiryDateChange}
-                  />
-                </label>
-                {showErrorMessage && !isValid && (
-                  <span style={{ color: "red" }}>Invalid expiry date</span>
-                )}
-                {isValid && (
-                  <span style={{ color: "green" }}>Valid expiry date</span>
-                )}
-              </div>
+              <Title>Credit Card Information</Title>
+              <NameDiv>
+                <Input
+                  type="text"
+                  title="Credit Card Number"
+                  placeholder="_______-_______-_______-_______"
+                  name="card"
+                  maxLength={19}
+                  value={cardNumber}
+                  onChange={handleCardNumberChange}
+                />
 
-              <div>
-                <label>CVV* </label>
-                <input
+                <Input
+                  type="text"
+                  maxLength="5"
+                  placeholder="Expiry date: MM-YY"
+                  value={expirationDate}
+                  onChange={handleExpiryDateChange}
+                />
+              </NameDiv>
+
+              {showErrorMessage && !isValid && (
+                <ExpiryDate style={{ color: "red" }}>
+                  Invalid expiry date
+                </ExpiryDate>
+              )}
+              {isValid && (
+                <ExpiryDate style={{ color: "green" }}>
+                  Valid expiry date
+                </ExpiryDate>
+              )}
+              <NameDiv>
+                <Input
                   type="text"
                   title="CVV"
                   placeholder="CVV"
@@ -322,26 +293,37 @@ const PaymentDetails = () => {
                   maxLength={"3"}
                   onChange={(e) => setCvv(e.target.value)}
                 />
-              </div>
-            </div>
-            <div>
-              <h3>Total payment amount is {item[0].price} $</h3>
+              </NameDiv>
 
+              <TotalPayment>
+                <h3>Total payment amount is {item[0].price} $</h3>
+              </TotalPayment>
+            </FormDiv>
+            <ButtonContainer>
               <Button type="submit">Submit Payment</Button>
-            </div>
+            </ButtonContainer>
           </Form>
-        </FormDiv>
+        </>
       )}
-    </div>
+    </Wrapper>
   );
 };
 
-const Title = styled.p`
-  text-align: center;
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-  font-size: 30px;
-  color: #23953c;
-  margin-top: 2rem;
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem;
+  margin-left: 40rem;
+  margin-right: 40rem;
+`;
+
+const Form = styled.form`
+  margin: 0.5rem auto;
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
 `;
 
 const FormDiv = styled.div`
@@ -351,26 +333,54 @@ const FormDiv = styled.div`
   align-content: center;
 `;
 
-const Form = styled.form`
-  margin: auto;
-  padding-bottom: 2rem;
+const Title = styled.h1`
+  text-align: center;
+  color: #23953c;
+  font-size: 20px;
+`;
+
+const NameDiv = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  input {
+    width: 20rem;
+    margin: 10px 20px;
+  }
+`;
+
+const Input = styled.input`
+  margin: 0px 20px;
+  width: 45rem;
+  border-radius: 5px;
+  padding: 15px;
+  margin-top: 10px;
+  text-align: center;
+`;
+
+const NameInput = styled.input`
+  border-radius: 5px;
+  padding: 15px;
+  width: 20rem;
+  margin: 0px 20px;
+  text-align: center;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
   justify-content: center;
-  align-content: center;
 `;
 
 const Button = styled.button`
   background-color: #23953c;
   color: white;
   font-size: 15px;
-  padding: 15px 8px;
-
+  width: 150px;
+  padding: 15px;
+  text-align: center;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-content: center;
-  margin-top: 2rem;
+
   cursor: pointer;
 `;
 
@@ -381,9 +391,15 @@ const ErrorMissingInfo = styled.p`
   margin-top: 20px;
 `;
 
-const Error = styled.p`
-  color: red;
-  font-size: 18px;
+const ExpiryDate = styled.span`
+  text-align: right;
+  margin-right: 2rem;
 `;
 
+const TotalPayment = styled.div`
+  text-align: center;
+  color: #23953c;
+  font-size: 25px;
+  font-weight: bolder;
+`;
 export default PaymentDetails;

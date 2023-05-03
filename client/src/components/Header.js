@@ -67,6 +67,7 @@ const ButtonSignUp = styled.button`
   border-radius: 50%;
   display: inline-block;
   margin-left: 1rem;
+  margin-right: 3rem;
 `;
 
 const StyledLink = styled(Link)`

@@ -1,10 +1,8 @@
 import React from "react";
-import food from "./bowlwithfood.jpg";
 import meatAndVeggies from "./meat-and-veggies.webp";
-import goldenretriever from "./golden.webp";
 import dogpaw from "./dogpaw.jpg";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Homepage = () => {
   return (
@@ -33,9 +31,6 @@ const Homepage = () => {
         <StyledLink to="/signup">Sign up</StyledLink> as a seller or a buyer to
         get started, or log in!
       </SignUp>
-      {/* <Imagediv>
-        <Img src={goldenretriever} alt="dog" />
-      </Imagediv> */}
     </>
   );
 };

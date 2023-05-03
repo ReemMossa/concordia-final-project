@@ -7,12 +7,13 @@ const PORT = 8000;
 
 //import handlers here
 const {
-  getClients,
+  getUsers,
   getUser,
   updateUser,
   addUser,
   addSeller,
   getOneClient,
+  getSellerInfo,
   addItem,
   editItem,
   deleteItem,
@@ -30,7 +31,7 @@ express()
 
   //endpoints
 
-  .get("/getclients", getClients)
+  .get("/getclients", getUsers)
 
   // Adds a new user when they register (Used in SignUpClient.js)
   .post("/registrationClient", addUser)
@@ -40,6 +41,9 @@ express()
 
   // Returns the client who is trying to login (Used in Login.js)
   .post("/getOneClient", getOneClient)
+
+  //Returns the seller of a particular item
+  .get("/getSellerInfo/:_id", getSellerInfo)
 
   // Returns a single registered user by using their email (Used in UserContext.js)
   .get("/getUser/:email", getUser)

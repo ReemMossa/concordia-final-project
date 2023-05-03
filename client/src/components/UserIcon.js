@@ -97,7 +97,7 @@ const Dropdown = styled.div`
 const DropdownItem = styled.div`
   font-size: 25px;
   line-height: 60px;
-  color: white;
+  color: #23953c;
   cursor: pointer;
   &:hover {
     text-decoration: underline;

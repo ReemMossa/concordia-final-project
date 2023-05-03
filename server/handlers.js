@@ -12,7 +12,7 @@ const options = {
   useUnifiedTopology: true,
 };
 
-const getClients = async (req, res) => {
+const getUsers = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
 
   try {
@@ -258,6 +258,31 @@ const getOneClient = async (req, res) => {
         message: "Oops! Incorrect username or password.",
       });
     }
+  }
+};
+
+const getSellerInfo = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const { userId } = req.params;
+
+  await client.connect();
+  const db = client.db("finalproject");
+  const sellerItem = db.collection("users");
+  try {
+    const result = await sellerItem.findOne({ userId });
+    if (result) {
+      return res.status(200).json({
+        status: 200,
+        message: "Here is the seller's information",
+        data: result,
+      });
+    }
+  } catch (error) {
+    return res
+      .status(404)
+      .json({ status: 404, success: false, message: error });
+  } finally {
+    client.close();
   }
 };
 
@@ -540,12 +565,13 @@ const getOrder = async (req, res) => {
 };
 
 module.exports = {
-  getClients,
+  getUsers,
   getUser,
   updateUser,
   addUser,
   addSeller,
   getOneClient,
+  getSellerInfo,
   addItem,
   editItem,
   deleteItem,

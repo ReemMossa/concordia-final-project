@@ -72,10 +72,10 @@ const HomepageClient = () => {
   return (
     <>
       <DivFilter>
-        <Filter>
+        <Sort>
           <label>
-            <Options>Filter by main ingredient:</Options>
-            <select value={selectedProtein} onChange={handleChange}>
+            <Options>Main ingredient</Options>
+            <Select value={selectedProtein} onChange={handleChange}>
               <option value="">Select a protein...</option>
               <option value="Chicken">Chicken</option>
               <option value="Beef">Beef</option>
@@ -84,18 +84,18 @@ const HomepageClient = () => {
               <option value="Lamb">Lamb</option>
               <option value="Fish">Fish</option>
               <option value="Veggie">Veggie</option>
-            </select>
+            </Select>
           </label>
-        </Filter>
+        </Sort>
 
         <Sort>
           <label>
-            <Options>Sort by:</Options>
-            <select value={sortBy} onChange={handleSort}>
+            <Options>Sort</Options>
+            <Select value={sortBy} onChange={handleSort}>
               <option value="">Select an option...</option>
               <option value="price">Price (low to high)</option>
               <option value="priceDesc">Price (high to low)</option>
-            </select>
+            </Select>
           </label>
         </Sort>
       </DivFilter>
@@ -133,7 +133,11 @@ const DivFilter = styled.div`
   justify-content: right;
 `;
 
-const Filter = styled.div``;
+const Select = styled.select`
+  background-color: lightgreen;
+  padding: 5px;
+  margin-top: 5px;
+`;
 
 const Sort = styled.div`
   margin-left: 2rem;
@@ -145,13 +149,15 @@ const Options = styled.p`
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   font-size: 20px;
   color: #23953c;
+  text-align: left;
 `;
 
 const Text = styled.p`
-  text-align: center;
+  text-align: left;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   font-size: 30px;
   color: #23953c;
+  margin-left: 1rem;
 `;
 
 const DivGrid = styled.div`
