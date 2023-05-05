@@ -40,15 +40,21 @@ const HomepageSeller = () => {
       <Div>
         {homepageSeller && (
           <Button>
-            <StyledLink to="/editselleritem">Edit exisiting food</StyledLink>
+            <StyledLinkButton to="/editselleritem">
+              Edit exisiting food
+            </StyledLinkButton>
           </Button>
         )}
 
         <Button>
-          <StyledLink to="/sellernewitem">Upload new food</StyledLink>
+          <StyledLinkButton to="/sellernewitem">
+            Upload new food
+          </StyledLinkButton>
         </Button>
         <Button>
-          <StyledLink to="/historysolditems">View your history</StyledLink>
+          <StyledLinkButton to="/historysolditems">
+            View your history
+          </StyledLinkButton>
         </Button>
       </Div>
       {homepageSeller && homepageSeller.length > 0 && (
@@ -61,10 +67,10 @@ const HomepageSeller = () => {
                   <Item key={item._id}>
                     <div>
                       <StyledLink to={`/items/${item._id}`}>
-                        {item.dishName}
+                        <DishName>{item.dishName}</DishName>
                       </StyledLink>
-                      <div> {item.description}</div>
-                      <div> {item.price}$</div>
+                      <Description> {item.description}</Description>
+                      <Price> {item.price}$</Price>
                     </div>
                     <StyledLink to={`/items/${item._id}`}>
                       <Img src={item.imageUrl} />
@@ -107,6 +113,10 @@ const Div = styled.div`
 
 const StyledLink = styled(Link)`
   text-decoration: none;
+`;
+
+const StyledLinkButton = styled(Link)`
+  text-decoration: none;
   color: white;
 `;
 
@@ -122,8 +132,9 @@ const Button = styled.button`
 `;
 
 const Img = styled.img`
-  width: 100px;
-  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  margin-top: 2rem;
 `;
 
 const DivGrid = styled.div`
@@ -156,15 +167,32 @@ const Item = styled.div`
   position: relative;
 `;
 
+const DishName = styled.div`
+  color: #23953c;
+  font-size: 20px;
+  font-weight: bolder;
+`;
+
+const Description = styled.div`
+  color: #23953c;
+`;
+
+const Price = styled.div`
+  color: #23953c;
+  font-weight: bold;
+`;
+
 const StatusAvailable = styled.div`
   position: absolute;
   bottom: 0;
   color: #66eaa3;
+  font-weight: bolder;
 `;
 
 const StatusPending = styled.div`
   position: absolute;
   bottom: 0;
   color: orange;
+  font-weight: bolder;
 `;
 export default HomepageSeller;

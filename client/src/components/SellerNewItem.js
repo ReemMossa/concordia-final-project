@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
-import { Image } from "cloudinary-react";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 
 const SellerNewItem = () => {
@@ -214,14 +213,14 @@ const SellerNewItem = () => {
 
   return (
     <Wrapper>
-      <H1>Upload your dish!</H1>
+      <H1>Please fill out this form to upload your dish</H1>
       <Form onSubmit={handleSubmit}>
         <FormDiv>
           <Input
             type="text"
             id="dishName"
             name="dishName"
-            placeholder="Name of your dish"
+            placeholder="Name of your dish *"
             value={formData.dishName}
             onChange={handleInputChange}
             required
@@ -230,269 +229,286 @@ const SellerNewItem = () => {
             type="text"
             id="description"
             name="description"
-            placeholder="Please write a detailed description of your item"
+            placeholder="Please write a detailed description of your dish *"
             value={formData.description}
             onChange={handleInputChange}
             required
           />
-          <p>Ingredients:</p>
-          Protein:
-          <label>
-            <input
-              type="checkbox"
-              name="protein"
-              value="Chicken"
-              checked={formData.ingredients.protein.includes("Chicken")}
-              onChange={checkboxProteinOnChange}
-            />
-            Chicken
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="protein"
-              value="Beef"
-              checked={formData.ingredients.protein.includes("Beef")}
-              onChange={checkboxProteinOnChange}
-            />
-            Beef
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="protein"
-              value="Turkey"
-              checked={formData.ingredients.protein.includes("Turkey")}
-              onChange={checkboxProteinOnChange}
-            />
-            Turkey
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="protein"
-              value="Pork"
-              checked={formData.ingredients.protein.includes("Pork")}
-              onChange={checkboxProteinOnChange}
-            />
-            Pork
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="protein"
-              value="Lamb"
-              checked={formData.ingredients.protein.includes("Lamb")}
-              onChange={checkboxProteinOnChange}
-            />
-            Lamb
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="protein"
-              value="Fish"
-              checked={formData.ingredients.protein.includes("Fish")}
-              onChange={checkboxProteinOnChange}
-            />
-            Fish
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="protein"
-              value="Veggie"
-              checked={formData.ingredients.protein.includes("Veggie")}
-              onChange={checkboxProteinOnChange}
-            />
-            Veggie
-          </label>
-          Organs:
-          <label>
-            <input
-              type="checkbox"
-              name="organs"
-              value="Liver"
-              checked={formData.ingredients.organs.includes("Liver")}
-              onChange={checkboxOrgansOnChange}
-            />
-            Liver
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="organs"
-              value="Kidney"
-              checked={formData.ingredients.organs.includes("Kidney")}
-              onChange={checkboxOrgansOnChange}
-            />
-            Kidney
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="organs"
-              value="Spleen"
-              checked={formData.ingredients.organs.includes("Spleen")}
-              onChange={checkboxOrgansOnChange}
-            />
-            Spleen
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="organs"
-              value="Heart"
-              checked={formData.ingredients.organs.includes("Heart")}
-              onChange={checkboxOrgansOnChange}
-            />
-            Heart
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="organs"
-              value="Pancreas"
-              checked={formData.ingredients.organs.includes("Pancreas")}
-              onChange={checkboxOrgansOnChange}
-            />
-            Pancreas
-          </label>
-          Nuts & Seeds:
-          <label>
-            <input
-              type="checkbox"
-              name="nutsAndSeeds"
-              value="Chia"
-              checked={formData.ingredients.nutsAndSeeds.includes("Chia")}
-              onChange={checkboxNutsAndSeedsOnChange}
-            />
-            Chia
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="nutsAndSeeds"
-              value="Sunflower"
-              checked={formData.ingredients.nutsAndSeeds.includes("Sunflower")}
-              onChange={checkboxNutsAndSeedsOnChange}
-            />
-            Sunflower
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="nutsAndSeeds"
-              value="HempSeeds"
-              checked={formData.ingredients.nutsAndSeeds.includes("HempSeeds")}
-              onChange={checkboxNutsAndSeedsOnChange}
-            />
-            Hemp seeds
-          </label>
-          Other:
-          <label>
-            <input
-              type="checkbox"
-              name="other"
-              value="Eggs"
-              checked={formData.ingredients.other.includes("Eggs")}
-              onChange={checkboxOtherOnChange}
-            />
-            Eggs
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="other"
-              value="Bones"
-              checked={formData.ingredients.other.includes("Bones")}
-              onChange={checkboxOtherOnChange}
-            />
-            Raw Bones
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="other"
-              value="Fruits"
-              checked={formData.ingredients.other.includes("Fruits")}
-              onChange={checkboxOtherOnChange}
-            />
-            Fruits
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="other"
-              value="Vegetables"
-              checked={formData.ingredients.other.includes("Vegetables")}
-              onChange={checkboxOtherOnChange}
-            />
-            Vegetables
-          </label>
-          Meal portion size:
-          <label>
-            <input
-              type="radio"
-              name="size"
-              value="5-8cups"
-              checked={formData.size.includes("5-8cups")}
-              onChange={checkboxSizeOnChange}
-            />
-            5-8 cups
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="size"
-              value="9-16cups"
-              checked={formData.size.includes("9-16cups")}
-              onChange={checkboxSizeOnChange}
-            />
-            9-16 cups
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="size"
-              value="17-22cups"
-              checked={formData.size.includes("17-22cups")}
-              onChange={checkboxSizeOnChange}
-            />
-            17-22 cups
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="size"
-              value="23-26cups"
-              checked={formData.size.includes("23-26cups")}
-              onChange={checkboxSizeOnChange}
-            />
-            23-26 cups
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="size"
-              value="27-30cups"
-              checked={formData.size.includes("27-30cups")}
-              onChange={checkboxSizeOnChange}
-            />
-            27-30 cups
-          </label>
-          Price:
-          <Input
+          <Span>
+            <Ingredients>Main ingredients used</Ingredients>
+            <Select>(*Please select all that apply)</Select>
+          </Span>
+          <Type>Protein</Type>
+          <Checkbox>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="protein"
+                value="Chicken"
+                checked={formData.ingredients.protein.includes("Chicken")}
+                onChange={checkboxProteinOnChange}
+              />
+              Chicken
+            </Label>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="protein"
+                value="Beef"
+                checked={formData.ingredients.protein.includes("Beef")}
+                onChange={checkboxProteinOnChange}
+              />
+              Beef
+            </Label>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="protein"
+                value="Turkey"
+                checked={formData.ingredients.protein.includes("Turkey")}
+                onChange={checkboxProteinOnChange}
+              />
+              Turkey
+            </Label>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="protein"
+                value="Pork"
+                checked={formData.ingredients.protein.includes("Pork")}
+                onChange={checkboxProteinOnChange}
+              />
+              Pork
+            </Label>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="protein"
+                value="Lamb"
+                checked={formData.ingredients.protein.includes("Lamb")}
+                onChange={checkboxProteinOnChange}
+              />
+              Lamb
+            </Label>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="protein"
+                value="Fish"
+                checked={formData.ingredients.protein.includes("Fish")}
+                onChange={checkboxProteinOnChange}
+              />
+              Fish
+            </Label>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="protein"
+                value="Veggie"
+                checked={formData.ingredients.protein.includes("Veggie")}
+                onChange={checkboxProteinOnChange}
+              />
+              Veggie
+            </Label>
+          </Checkbox>
+          <Type>Organs</Type>
+          <Checkbox>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="organs"
+                value="Liver"
+                checked={formData.ingredients.organs.includes("Liver")}
+                onChange={checkboxOrgansOnChange}
+              />
+              Liver
+            </Label>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="organs"
+                value="Kidney"
+                checked={formData.ingredients.organs.includes("Kidney")}
+                onChange={checkboxOrgansOnChange}
+              />
+              Kidney
+            </Label>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="organs"
+                value="Spleen"
+                checked={formData.ingredients.organs.includes("Spleen")}
+                onChange={checkboxOrgansOnChange}
+              />
+              Spleen
+            </Label>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="organs"
+                value="Heart"
+                checked={formData.ingredients.organs.includes("Heart")}
+                onChange={checkboxOrgansOnChange}
+              />
+              Heart
+            </Label>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="organs"
+                value="Pancreas"
+                checked={formData.ingredients.organs.includes("Pancreas")}
+                onChange={checkboxOrgansOnChange}
+              />
+              Pancreas
+            </Label>
+          </Checkbox>
+          <Type>Nuts & Seeds</Type>
+          <Checkbox>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="nutsAndSeeds"
+                value="Chia"
+                checked={formData.ingredients.nutsAndSeeds.includes("Chia")}
+                onChange={checkboxNutsAndSeedsOnChange}
+              />
+              Chia
+            </Label>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="nutsAndSeeds"
+                value="Sunflower"
+                checked={formData.ingredients.nutsAndSeeds.includes(
+                  "Sunflower"
+                )}
+                onChange={checkboxNutsAndSeedsOnChange}
+              />
+              Sunflower
+            </Label>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="nutsAndSeeds"
+                value="HempSeeds"
+                checked={formData.ingredients.nutsAndSeeds.includes(
+                  "HempSeeds"
+                )}
+                onChange={checkboxNutsAndSeedsOnChange}
+              />
+              Hemp seeds
+            </Label>
+          </Checkbox>
+          <Type>Other</Type>
+          <Checkbox>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="other"
+                value="Eggs"
+                checked={formData.ingredients.other.includes("Eggs")}
+                onChange={checkboxOtherOnChange}
+              />
+              Eggs
+            </Label>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="other"
+                value="Bones"
+                checked={formData.ingredients.other.includes("Bones")}
+                onChange={checkboxOtherOnChange}
+              />
+              Raw Bones
+            </Label>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="other"
+                value="Fruits"
+                checked={formData.ingredients.other.includes("Fruits")}
+                onChange={checkboxOtherOnChange}
+              />
+              Fruits
+            </Label>
+            <Label>
+              <InputCheckbox
+                type="checkbox"
+                name="other"
+                value="Vegetables"
+                checked={formData.ingredients.other.includes("Vegetables")}
+                onChange={checkboxOtherOnChange}
+              />
+              Vegetables
+            </Label>
+          </Checkbox>
+          <Type>Meal portion size</Type>
+          <Checkbox>
+            <Label>
+              <InputCheckbox
+                type="radio"
+                name="size"
+                value="5-8cups"
+                checked={formData.size.includes("5-8cups")}
+                onChange={checkboxSizeOnChange}
+              />
+              5-8 cups
+            </Label>
+            <Label>
+              <InputCheckbox
+                type="radio"
+                name="size"
+                value="9-16cups"
+                checked={formData.size.includes("9-16cups")}
+                onChange={checkboxSizeOnChange}
+              />
+              9-16 cups
+            </Label>
+            <Label>
+              <InputCheckbox
+                type="radio"
+                name="size"
+                value="17-22cups"
+                checked={formData.size.includes("17-22cups")}
+                onChange={checkboxSizeOnChange}
+              />
+              17-22 cups
+            </Label>
+            <Label>
+              <inpuInputCheckboxt
+                type="radio"
+                name="size"
+                value="23-26cups"
+                checked={formData.size.includes("23-26cups")}
+                onChange={checkboxSizeOnChange}
+              />
+              23-26 cups
+            </Label>
+            <Label>
+              <InputCheckbox
+                type="radio"
+                name="size"
+                value="27-30cups"
+                checked={formData.size.includes("27-30cups")}
+                onChange={checkboxSizeOnChange}
+              />
+              27-30 cups
+            </Label>
+          </Checkbox>
+          <InputPrice
             type="number"
             id="price"
             name="price"
-            placeholder="Price of dish - CAD$"
+            placeholder="Price of dish - CAD$ *"
             value={formData.price}
             onChange={handleInputChange}
             step="any"
             required
           />
-          <input
+          <Type>Upload an image of your dish *</Type>
+          <InputImage
             type="file"
             onChange={(e) => {
               const image = e.target.files[0];
@@ -518,15 +534,15 @@ const SellerNewItem = () => {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid black;
+  border: 1px solid lightgray;
   border-radius: 1rem;
   margin-left: 40rem;
   margin-right: 40rem;
-  margin-top: 5rem;
+  margin-top: 1rem;
 `;
 
 const Form = styled.form`
-  margin: 1rem auto;
+  margin: 2px auto;
   padding-bottom: 2rem;
   display: flex;
   flex-direction: column;
@@ -543,6 +559,28 @@ const FormDiv = styled.div`
 
 const H1 = styled.h1`
   text-align: center;
+  color: #23953c;
+  font-style: italic;
+`;
+
+const Span = styled.span`
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+`;
+
+const Ingredients = styled.span`
+  font-size: 20px;
+  color: #23953c;
+  font-weight: bolder;
+  margin-right: 10px;
+`;
+
+const Select = styled.span`
+  font-size: 13px;
+  color: #23953c;
+  font-weight: bolder;
+  font-style: italic;
 `;
 
 const Input = styled.input`
@@ -550,33 +588,57 @@ const Input = styled.input`
   width: 45rem;
   border-radius: 5px;
   padding: 15px;
-  margin-top: 30px;
+  margin-bottom: 15px;
+  text-align: center;
+`;
+
+const InputPrice = styled.input`
+  margin: 20px 20px;
+  width: 22.5rem;
+  border-radius: 5px;
+  padding: 15px;
+  text-align: center;
+`;
+
+const Checkbox = styled.div`
+  display: inline-block;
+`;
+
+const InputCheckbox = styled.input`
+  display: inline-block;
+  margin-left: 20px;
+`;
+
+const Type = styled.p`
+  margin-bottom: 5px;
+  color: #23953c;
+  font-weight: bolder;
+  margin-left: 20px;
+`;
+
+const Label = styled.label`
+  display: inline-block;
+  margin-right: 30px;
+  margin-bottom: 20px;
+`;
+
+const InputImage = styled.input`
+  margin-left: 20px;
 `;
 
 const ButtonContainer = styled.div`
-  text-align: center;
+  display: flex;
+  justify-content: center;
   margin-bottom: 0.5rem;
 `;
 
 const Button = styled.button`
-  margin-top: 2rem;
-  background-color: blue;
+  background-color: #23953c;
+  font-size: 15px;
+  padding: 1rem 1rem;
   color: white;
-  padding: 15px;
-  width: 20rem;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-`;
-
-const ButtonImage = styled.button`
-  margin-top: 2rem;
-  background-color: black;
-  color: white;
-  padding: 5px;
-  width: 10rem;
-  border: none;
-  cursor: pointer;
+  float: right;
+  margin-top: 20px;
 `;
 
 export default SellerNewItem;

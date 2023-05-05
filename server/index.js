@@ -16,6 +16,7 @@ const {
   getSellerInfo,
   addItem,
   editItem,
+  editSellerItem,
   deleteItem,
   getItems,
   getOneItem,
@@ -56,6 +57,9 @@ express()
 
   //update seller item
   .put("/editSellerItem/:_id", editItem)
+
+  //update seller item only on seller side
+  .put("/editSellerItemNoStatus/:_id", editSellerItem)
 
   //delete seller item
   .delete("/deleteSellerItem/:_id", deleteItem)

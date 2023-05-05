@@ -111,10 +111,10 @@ const HomepageClient = () => {
                 <Item key={item._id}>
                   <div>
                     <StyledLink to={`/items/${item._id}`}>
-                      {item.dishName}
+                      <DishName>{item.dishName}</DishName>
                     </StyledLink>
-                    <div> {item.description}</div>
-                    <div> {item.price}$</div>
+                    <Description> {item.description}</Description>
+                    <Price>{item.price}$</Price>
                   </div>
                   <StyledLink to={`/items/${item._id}`}>
                     <Img src={item.imageUrl} />
@@ -134,9 +134,11 @@ const DivFilter = styled.div`
 `;
 
 const Select = styled.select`
-  background-color: lightgreen;
+  background-color: black;
   padding: 5px;
   margin-top: 5px;
+  color: #23953c;
+  font-size: 20px;
 `;
 
 const Sort = styled.div`
@@ -184,7 +186,6 @@ const Item = styled.div`
   width: 200px;
   text-align: center;
   display: flex;
-
   justify-content: center;
   align-items: center;
 `;
@@ -193,8 +194,24 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 
+const DishName = styled.div`
+  color: #23953c;
+  font-size: 20px;
+  font-weight: bolder;
+`;
+
+const Description = styled.div`
+  color: #23953c;
+`;
+
+const Price = styled.div`
+  color: #23953c;
+  font-weight: bold;
+`;
+
 const Img = styled.img`
   width: 150px;
+  height: 150px;
   margin-top: 2rem;
 `;
 

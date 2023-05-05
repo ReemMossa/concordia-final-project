@@ -19,6 +19,7 @@ import Payment from "./Payment";
 import OrderConfirmation from "./OrderConfirmation";
 import ErrorPage from "./Error";
 import SoldItems from "./SoldItems";
+import OrderComplete from "./OrderComplete";
 
 const App = () => {
   return (
@@ -41,7 +42,8 @@ const App = () => {
           <Route path="/payment/:itemId" element={<Payment />} />
           <Route path="/order/:_id" element={<OrderConfirmation />} />
           <Route path="/errorpage" element={<ErrorPage />} />
-          <Route path="historysolditems" element={<SoldItems />} />
+          <Route path="/historysolditems" element={<SoldItems />} />
+          <Route path="/ordercomplete" element={<OrderComplete />} />
         </Routes>
       </BrowserRouter>
     </>

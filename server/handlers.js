@@ -378,6 +378,43 @@ const editItem = async (req, res) => {
   }
 };
 
+//This is used only when the seller is editing his own item in EditSellerItem.js
+const editSellerItem = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const { _id } = req.params;
+  const { status, ...rest } = req.body;
+  const updatedItem = rest;
+
+  try {
+    await client.connect();
+    const db = client.db("finalproject");
+    const result = await db.collection("selleritems").findOne({ _id });
+
+    if (!result) {
+      return res.status(404).json({
+        status: 404,
+        data: req.body,
+        message: "Sorry, we can't seem to find this item.",
+      });
+    }
+
+    if (result) {
+      const updateOldItem = await db
+        .collection("selleritems")
+        .updateOne({ _id }, { $set: updatedItem });
+      res.status(200).json({
+        status: 200,
+        data: updateOldItem,
+        message: "Item successfully modified",
+      });
+    }
+
+    client.close();
+  } catch (error) {
+    res.status(500).json({ status: 500, message: error.message });
+  }
+};
+
 // deletes a specified item
 const deleteItem = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
@@ -574,6 +611,7 @@ module.exports = {
   getSellerInfo,
   addItem,
   editItem,
+  editSellerItem,
   deleteItem,
   getItems,
   getOneItem,

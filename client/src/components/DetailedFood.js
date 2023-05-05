@@ -56,7 +56,7 @@ const DetailedFood = () => {
       .then((res) => res.json())
       .then((resData) => {
         if (resData.status === 200) {
-          navigate(`/homepageseller`);
+          navigate(`/ordercomplete`);
           console.log(resData);
         } else {
           setErrorMessage(resData.message);
@@ -76,10 +76,10 @@ const DetailedFood = () => {
             <Info> {item[0].size}</Info>
 
             <Text>Main Ingredients</Text>
-            <Info>{item[0].ingredients.protein}</Info>
-            <Info>{item[0].ingredients.organs}</Info>
-            <Info>{item[0].ingredients.nutsAndSeeds}</Info>
-            <Info>{item[0].ingredients.other}</Info>
+            <Info>Protein: {item[0].ingredients.protein}</Info>
+            <Info>Organs: {item[0].ingredients.organs}</Info>
+            <Info>Nuts & Seeds: {item[0].ingredients.nutsAndSeeds}</Info>
+            <Info>Other: {item[0].ingredients.other}</Info>
           </Div>
           <Img src={item[0].imageUrl}></Img>
           {currentUser.type === "client" && seller && (
@@ -94,13 +94,20 @@ const DetailedFood = () => {
           )}
           {currentUser.type === "seller" && item[0].status === "pending" && (
             <>
-              <Button onClick={handleComplete}>Order Complete</Button>
+              <Button onClick={handleComplete}>Order was picked up</Button>
               <Note>
                 {" "}
-                ***Please only click Order Complete once the client has picked
-                up their food! This will change the status of the item from
-                pending to sold!***
+                ***Please only click the button once the client has picked up
+                their food! This will change the status of the item from pending
+                to sold!***
               </Note>
+            </>
+          )}
+          {currentUser.type === "seller" && item[0].status === "available" && (
+            <>
+              <StyledLink to="/homepageseller">
+                <Button>Return to Dashboard</Button>
+              </StyledLink>
             </>
           )}
         </>
@@ -161,6 +168,9 @@ const Note = styled.p`
   text-align: center;
   font-style: italic;
   font-size: 20px;
+  margin-left: 46rem;
+  margin-right: 46rem;
+  margin-top: 5rem;
 `;
 
 const SellerInfo = styled.p`
@@ -168,6 +178,10 @@ const SellerInfo = styled.p`
   font-style: italic;
   font-size: 15px;
   margin-top: 30px;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
 `;
 
 export default DetailedFood;
