@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
+import saddog from "./saddog.jpg";
 
 const SoldItems = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
@@ -57,6 +58,14 @@ const SoldItems = () => {
           </ItemGrid>
         </DivGrid>
       )}
+      {!homepageSeller.some((item) => item.status === "sold") && (
+        <>
+          <NoItems>
+            <NoSold>You have not sold any items yet!</NoSold>
+            <DogImg src={saddog}></DogImg>
+          </NoItems>
+        </>
+      )}
     </>
   );
 };
@@ -103,6 +112,26 @@ const StatusSold = styled.div`
   position: absolute;
   bottom: 0;
   color: red;
+`;
+
+const NoItems = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;
+const NoSold = styled.h1`
+  font-size: 40px;
+  margin-left: 10px;
+  text-align: center;
+  margin-top: -5rem;
+  color: #23953c;
+`;
+
+const DogImg = styled.img`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default SoldItems;

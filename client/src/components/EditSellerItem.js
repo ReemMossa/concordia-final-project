@@ -214,7 +214,7 @@ const EditSellerItem = () => {
   return (
     <>
       <ButtonHomepage>
-        <StyledLink to="/homepageseller">Return to your homepage</StyledLink>
+        <StyledLink to="/homepageseller">Return to Dashboard</StyledLink>
       </ButtonHomepage>
       <Dropdown>
         <div>Please pick one of your AVAILABLE items that you want to edit</div>
@@ -530,27 +530,8 @@ const EditSellerItem = () => {
                   value={formData.price || ""}
                   onChange={handleInputChange}
                 />
-                <label>
-                  <Type>Upload an image of your dish *</Type>
-                  {!formData.imageUrl ? (
-                    <InputImage
-                      type="file"
-                      name="imageUrl"
-                      value={formData.imageUrl || ""}
-                      onChange={(e) => {
-                        const image = e.target.files[0];
-                        setImageSelected(image);
-                        setFormData({
-                          ...formData,
-                          imageUrl: URL.createObjectURL(image),
-                        });
-                      }}
-                      required
-                    />
-                  ) : (
-                    <StyledImage src={formData.imageUrl} />
-                  )}
-                </label>
+
+                <StyledImage src={formData.imageUrl} />
               </FormDiv>
               <ButtonContainer>
                 <Button type="submit">Submit Edited Item</Button>
@@ -614,7 +595,7 @@ const H1 = styled.h1`
 
 const StyledImage = styled.img`
   width: 200px;
-  height: 200px;
+  margin-left: 20px;
 `;
 
 const StyledLink = styled(Link)`

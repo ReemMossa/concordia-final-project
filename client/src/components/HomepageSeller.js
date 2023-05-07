@@ -88,10 +88,10 @@ const HomepageSeller = () => {
                   <Item key={item._id}>
                     <div>
                       <StyledLink to={`/items/${item._id}`}>
-                        {item.dishName}
+                        <DishName>{item.dishName}</DishName>
                       </StyledLink>
-                      <div> {item.description}</div>
-                      <div> {item.price}$</div>
+                      <Description> {item.description}</Description>
+                      <Price> {item.price}$</Price>
                     </div>
                     <StyledLink to={`/items/${item._id}`}>
                       <Img src={item.imageUrl} />
@@ -124,7 +124,6 @@ const Button = styled.button`
   background-color: #23953c;
   font-size: 15px;
   padding: 1rem 1rem;
-
   color: white;
   float: right;
   margin-right: 3rem;
@@ -132,7 +131,7 @@ const Button = styled.button`
 `;
 
 const Img = styled.img`
-  width: 150px;
+  width: 200px;
   height: 150px;
   margin-top: 2rem;
 `;
@@ -154,32 +153,35 @@ const Item = styled.div`
   display: flex;
   flex-direction: column;
   border: 1px solid lightgray;
-  padding: 50px;
   margin-right: 50px;
   margin-left: 50px;
-  margin-top: 2rem;
-  height: 175px;
-  width: 200px;
+  margin-top: 1rem;
+  height: 400px;
+  width: 400px;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
+  padding: 10px;
 `;
 
 const DishName = styled.div`
   color: #23953c;
   font-size: 20px;
   font-weight: bolder;
+  margin-bottom: 10px;
 `;
 
 const Description = styled.div`
   color: #23953c;
+  margin-bottom: 10px;
 `;
 
 const Price = styled.div`
   color: #23953c;
   font-weight: bold;
+  font-size: 30px;
 `;
 
 const StatusAvailable = styled.div`

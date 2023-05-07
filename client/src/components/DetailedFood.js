@@ -70,7 +70,7 @@ const DetailedFood = () => {
         <>
           <Div>
             <Name>{item[0].dishName}</Name>
-            <Text>{item[0].description}</Text>
+            <Description>{item[0].description}</Description>
             <Text>{item[0].price} $</Text>
             <Text>Size: </Text>
             <Info> {item[0].size}</Info>
@@ -117,8 +117,8 @@ const DetailedFood = () => {
 };
 
 const Img = styled.img`
-  width: 500px;
-  margin-top: 10rem;
+  width: 400px;
+  margin-top: 25rem;
   margin-left: 10rem;
   position: absolute;
   top: 0;
@@ -132,6 +132,13 @@ const Name = styled.p`
   margin-top: 2rem;
   margin-bottom: 4rem;
   text-decoration: underline;
+`;
+
+const Description = styled.div`
+  margin-left: 10rem;
+  margin-right: 10rem;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 20px;
 `;
 
 const Div = styled.div`

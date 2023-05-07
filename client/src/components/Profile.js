@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import styled from "styled-components";
 
 const Profile = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
+  const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [status, setStatus] = useState("loading");
   const [editMode, setEditMode] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [dogName, setDogName] = useState("");
   const [type, setType] = useState("");
   const [address, setAddress] = useState({
     street: "",
@@ -27,28 +27,23 @@ const Profile = () => {
       fetch(`/getUser/${currentUser.email}`)
         .then((res) => res.json())
         .then((data) => {
-          const { firstName, lastName, dogName, address, email, type } =
-            data.data;
+          const { firstName, lastName, address, email, type } = data.data;
           setFirstName(firstName);
           setLastName(lastName);
-          setDogName(dogName);
           setAddress(address);
           setEmail(email);
           setType(type);
-
           setStatus("idle");
           setCurrentUser({
             _id: currentUser._id,
             firstName,
             lastName,
-            dogName,
             address,
             email,
             type,
           });
         })
         .catch((error) => {
-          console.error(error);
           setStatus("error");
         });
     }
@@ -64,7 +59,6 @@ const Profile = () => {
       body: JSON.stringify({
         firstName,
         lastName,
-        dogName,
         address,
         email,
         password: newPassword,
@@ -72,7 +66,6 @@ const Profile = () => {
     })
       .then((res) => res.json())
 
-      //make sure is 200
       .then((resData) => {
         if (resData.status === 404) {
           setErrorMessage(resData.message);
@@ -80,9 +73,11 @@ const Profile = () => {
           fetch(`/getUser/${email}`)
             .then((res) => res.json())
             .then((data) => {
-              setCurrentUser(data.data); // update currentUser state with the new values
+              setCurrentUser(data.data);
               setEditMode(false);
               setErrorMessage("");
+
+              navigate("/profile");
             });
         }
       });
@@ -90,155 +85,247 @@ const Profile = () => {
 
   if (currentUser) {
     return (
-      <>
+      <Wrapper>
         {status === "loading" && <p>Loading...</p>}
         {errorMessage && <p>{errorMessage}</p>}
         {status === "error" && <p>Error loading profile data</p>}
         {status === "idle" && (
-          <form onSubmit={handleFormSubmit}>
-            <div>
-              Name:{" "}
-              {editMode ? (
-                <>
-                  <input
-                    type="text"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    required
-                  />
-                  <input
-                    type="text"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    required
-                  />
-                </>
-              ) : (
-                <>
-                  {firstName} {lastName}
-                </>
-              )}
-            </div>
-            <div>
-              Dog name:{" "}
-              {editMode ? (
-                <>
-                  <input
-                    type="text"
-                    value={dogName}
-                    onChange={(e) => setDogName(e.target.value)}
-                    required
-                  />
-                </>
-              ) : (
-                <>{dogName}</>
-              )}
-            </div>
-            <div>Address:</div>
-            <div>
-              Street:{" "}
-              {editMode ? (
-                <input
-                  type="text"
-                  value={address.street}
-                  onChange={(e) =>
-                    setAddress({ ...address, street: e.target.value })
-                  }
-                  required
-                />
-              ) : (
-                <>{address.street}</>
-              )}
-            </div>
-
-            <div>
-              City:{" "}
-              {editMode ? (
-                <input
-                  type="text"
-                  value={address.city}
-                  onChange={(e) =>
-                    setAddress({ ...address, city: e.target.value })
-                  }
-                  required
-                />
-              ) : (
-                <>{address.city}</>
-              )}
-            </div>
-            <div>
-              Province:{" "}
-              {editMode ? (
-                <input
-                  type="text"
-                  value={address.province}
-                  onChange={(e) =>
-                    setAddress({ ...address, province: e.target.value })
-                  }
-                  required
-                />
-              ) : (
-                <>{address.province}</>
-              )}
-            </div>
-            <div>
-              Country:{" "}
-              {editMode ? (
-                <input
-                  type="text"
-                  value={address.country}
-                  onChange={(e) =>
-                    setAddress({ ...address, country: e.target.value })
-                  }
-                  required
-                />
-              ) : (
-                <>{address.country}</>
-              )}
-            </div>
-            <div>
-              Email:{" "}
-              {editMode ? (
-                <input
-                  type="text"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              ) : (
-                <>{email}</>
-              )}
-            </div>
-
-            <div>
-              Password:{" "}
-              {editMode ? (
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  required
-                />
-              ) : (
-                "****"
-              )}
-            </div>
-
-            {editMode ? (
+          <Form onSubmit={handleFormSubmit}>
+            <FormDiv>
               <div>
-                <button type="button" onClick={handleFormSubmit}>
-                  Save Changes
-                </button>
-                <button onClick={() => setEditMode(false)}>Cancel</button>
+                {editMode ? (
+                  <NameDiv>
+                    <NameInput
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      required
+                    />
+                    <NameInput
+                      type="text"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      required
+                    />
+                  </NameDiv>
+                ) : (
+                  <>
+                    <Text> Name: </Text>
+                    {firstName} {lastName}
+                  </>
+                )}
               </div>
-            ) : (
-              <button onClick={() => setEditMode(true)}>Edit Profile</button>
-            )}
-          </form>
+              <div>
+                {editMode ? (
+                  <Input
+                    type="text"
+                    value={address.street}
+                    onChange={(e) =>
+                      setAddress({ ...address, street: e.target.value })
+                    }
+                    required
+                  />
+                ) : (
+                  <MainProfile>
+                    <Address>Address </Address>
+                    <Text> Street: </Text>
+                    {address.street}
+                  </MainProfile>
+                )}
+              </div>
+
+              <div>
+                {editMode ? (
+                  <Input
+                    type="text"
+                    value={address.city}
+                    onChange={(e) =>
+                      setAddress({ ...address, city: e.target.value })
+                    }
+                    required
+                  />
+                ) : (
+                  <MainProfile>
+                    <Text>City: </Text>
+                    {address.city}
+                  </MainProfile>
+                )}
+              </div>
+              <div>
+                {editMode ? (
+                  <Input
+                    type="text"
+                    value={address.province}
+                    onChange={(e) =>
+                      setAddress({ ...address, province: e.target.value })
+                    }
+                    required
+                  />
+                ) : (
+                  <MainProfile>
+                    <Text>Province: </Text>
+                    {address.province}
+                  </MainProfile>
+                )}
+              </div>
+              <div>
+                {editMode ? (
+                  <Input
+                    type="text"
+                    value={address.country}
+                    onChange={(e) =>
+                      setAddress({ ...address, country: e.target.value })
+                    }
+                    required
+                  />
+                ) : (
+                  <MainProfile>
+                    <Text>Country: </Text>
+                    {address.country}
+                  </MainProfile>
+                )}
+              </div>
+              <div>
+                {editMode ? (
+                  <Input
+                    type="text"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                ) : (
+                  <MainProfile>
+                    <Text>Email: </Text>
+                    {email}
+                  </MainProfile>
+                )}
+              </div>
+
+              <div>
+                {editMode ? (
+                  <Input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="Enter New Password ***"
+                    required
+                  />
+                ) : (
+                  <MainProfile>
+                    <Text>Password </Text>
+                    ****
+                  </MainProfile>
+                )}
+              </div>
+
+              {editMode ? (
+                <ButtonContainer>
+                  <Button type="button" onClick={handleFormSubmit}>
+                    Save Changes
+                  </Button>
+                  <Button onClick={() => setEditMode(false)}>Cancel</Button>
+                </ButtonContainer>
+              ) : (
+                <ButtonEditProfile onClick={() => setEditMode(true)}>
+                  Edit Profile
+                </ButtonEditProfile>
+              )}
+            </FormDiv>
+          </Form>
         )}
-      </>
+      </Wrapper>
     );
   }
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  border: 1px solid lightgray;
+  border-radius: 1rem;
+  margin-left: 40rem;
+  margin-right: 40rem;
+  margin-top: 5rem;
+`;
+
+const Form = styled.form`
+  margin: 1rem auto;
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+`;
+
+const FormDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+`;
+
+const NameDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  input {
+    width: 20rem;
+    margin: 0px 20px;
+  }
+`;
+
+const NameInput = styled.input`
+  border-radius: 5px;
+  padding: 15px;
+  width: 10rem;
+  text-align: center;
+`;
+
+const Input = styled.input`
+  margin: 0px 20px;
+  width: 45rem;
+  border-radius: 5px;
+  padding: 15px;
+  margin-top: 30px;
+`;
+
+const Address = styled.div`
+  color: #23953c;
+  font-weight: bolder;
+`;
+
+const MainProfile = styled.div`
+  line-height: 30px;
+`;
+
+const Text = styled.span`
+  color: #23953c;
+`;
+
+const ButtonEditProfile = styled.button`
+  margin-top: 2rem;
+  background-color: #23953c;
+  color: white;
+  padding: 15px;
+  width: 10rem;
+  border: none;
+  cursor: pointer;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const Button = styled.button`
+  margin-top: 2rem;
+  background-color: #23953c;
+  color: white;
+  padding: 15px;
+  width: 10rem;
+  border: none;
+  cursor: pointer;
+  margin-right: 20px;
+  margin-left: 20px;
+`;
 
 export default Profile;

@@ -63,9 +63,9 @@ const getUser = async (req, res) => {
 const updateUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   const { _id } = req.params;
-  const { firstName, lastName, address, dogName, email, password } = req.body;
+  const { firstName, lastName, address, email, password } = req.body;
 
-  if (!firstName || !lastName | !address || !dogName || !email || !password) {
+  if (!firstName || !lastName | !address || !email || !password) {
     return res.status(404).json({
       status: 404,
       data: req.body,
@@ -80,7 +80,6 @@ const updateUser = async (req, res) => {
     firstName,
     lastName,
     address,
-    dogName,
     email,
     password: hashedPassword,
   };
@@ -124,8 +123,7 @@ const addUser = async (req, res) => {
 
     const _id = uuidv4();
 
-    const { firstName, lastName, address, dogName, email, password, type } =
-      req.body;
+    const { firstName, lastName, address, email, password, type } = req.body;
 
     //encrypt password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -138,7 +136,6 @@ const addUser = async (req, res) => {
       firstName,
       lastName,
       address,
-      dogName,
       email,
       password: hashedPassword,
       type: userType,
@@ -181,8 +178,7 @@ const addSeller = async (req, res) => {
 
     const _id = uuidv4();
 
-    const { firstName, lastName, address, dogName, email, password, type } =
-      req.body;
+    const { firstName, lastName, address, email, password, type } = req.body;
 
     //encrypt password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -195,7 +191,6 @@ const addSeller = async (req, res) => {
       firstName,
       lastName,
       address,
-      dogName,
       email,
       password: hashedPassword,
       type: userType,

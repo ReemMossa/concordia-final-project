@@ -38,19 +38,6 @@ const HomepageClient = () => {
     setState("idle");
   }, []);
 
-  const handleChange = (e) => {
-    const protein = e.target.value;
-    setSelectedProtein(protein);
-  };
-
-  let displayedMeals = homepageClient;
-
-  if (selectedProtein) {
-    displayedMeals = homepageClient.filter((meal) => {
-      return meal.ingredients.protein.includes(selectedProtein);
-    });
-  }
-
   const handleSort = (e) => {
     const sortOption = e.target.value;
     setSortBy(sortOption);
@@ -68,26 +55,9 @@ const HomepageClient = () => {
     return <div>Loading..</div>;
   }
 
-  console.log("currentUser", currentUser);
   return (
     <>
       <DivFilter>
-        <Sort>
-          <label>
-            <Options>Main ingredient</Options>
-            <Select value={selectedProtein} onChange={handleChange}>
-              <option value="">Select a protein...</option>
-              <option value="Chicken">Chicken</option>
-              <option value="Beef">Beef</option>
-              <option value="Turkey">Turkey</option>
-              <option value="Pork">Pork</option>
-              <option value="Lamb">Lamb</option>
-              <option value="Fish">Fish</option>
-              <option value="Veggie">Veggie</option>
-            </Select>
-          </label>
-        </Sort>
-
         <Sort>
           <label>
             <Options>Sort</Options>
@@ -134,7 +104,7 @@ const DivFilter = styled.div`
 `;
 
 const Select = styled.select`
-  background-color: black;
+  background-color: white;
   padding: 5px;
   margin-top: 5px;
   color: #23953c;
@@ -157,9 +127,10 @@ const Options = styled.p`
 const Text = styled.p`
   text-align: left;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-  font-size: 30px;
-  color: #23953c;
+  font-size: 25px;
   margin-left: 1rem;
+  text-align: center;
+  margin-bottom: 10px;
 `;
 
 const DivGrid = styled.div`
@@ -178,16 +149,17 @@ const Item = styled.div`
   display: flex;
   flex-direction: column;
   border: 1px solid lightgray;
-  padding: 50px;
   margin-right: 50px;
   margin-left: 50px;
-  margin-top: 3rem;
-  height: 250px;
-  width: 200px;
+  margin-top: 2rem;
+  height: 400px;
+  width: 400px;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  padding: 10px;
 `;
 
 const StyledLink = styled(Link)`
@@ -198,19 +170,22 @@ const DishName = styled.div`
   color: #23953c;
   font-size: 20px;
   font-weight: bolder;
+  margin-bottom: 10px;
 `;
 
 const Description = styled.div`
   color: #23953c;
+  margin-bottom: 10px;
 `;
 
 const Price = styled.div`
   color: #23953c;
   font-weight: bold;
+  font-size: 30px;
 `;
 
 const Img = styled.img`
-  width: 150px;
+  width: 200px;
   height: 150px;
   margin-top: 2rem;
 `;

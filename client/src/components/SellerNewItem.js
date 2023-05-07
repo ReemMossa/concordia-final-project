@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
 
 const SellerNewItem = () => {
@@ -70,10 +70,9 @@ const SellerNewItem = () => {
               .json()
               .then((resData) => {
                 if (resData.status === 200) {
-                  window.alert(resData.message);
                   navigate("/homepageSeller");
                 } else {
-                  window.alert(resData.message);
+                  navigate("/errorpage");
                 }
               })
               .catch((err) => window.alert(err));
@@ -520,7 +519,7 @@ const SellerNewItem = () => {
             }}
             required
           />
-          <img src={formData.imageUrl} />
+          <Img src={formData.imageUrl} />
         </FormDiv>
 
         <ButtonContainer>
@@ -560,7 +559,6 @@ const FormDiv = styled.div`
 const H1 = styled.h1`
   text-align: center;
   color: #23953c;
-  font-style: italic;
 `;
 
 const Span = styled.span`
@@ -626,6 +624,12 @@ const InputImage = styled.input`
   margin-left: 20px;
 `;
 
+const Img = styled.img`
+  width: 200px;
+  margin-top: 20px;
+  margin-left: 20px;
+`;
+
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -639,6 +643,7 @@ const Button = styled.button`
   color: white;
   float: right;
   margin-top: 20px;
+  cursor: pointer;
 `;
 
 export default SellerNewItem;

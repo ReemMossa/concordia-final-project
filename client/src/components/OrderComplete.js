@@ -44,5 +44,6 @@ const Button = styled.button`
   color: white;
   float: right;
   margin-top: 30px;
+  cursor: pointer;
 `;
 export default OrderComplete;

@@ -27,10 +27,7 @@ const Homepage = () => {
         started and make some tails wag with delicious and healthy homemade dog
         food!
       </P>
-      <SignUp>
-        <StyledLink to="/signup">Sign up</StyledLink> as a seller or a buyer to
-        get started, or log in!
-      </SignUp>
+      <SignUp>Sign up as a seller or a buyer to get started, or log in!</SignUp>
     </>
   );
 };
@@ -87,6 +84,7 @@ const FoodImg = styled.img`
 const StyledLink = styled(Link)`
   color: black;
 `;
+
 const Img = styled.img`
   height: 35rem;
   width: 30rem;

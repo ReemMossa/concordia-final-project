@@ -14,7 +14,6 @@ const SignUpSeller = () => {
       province: "",
       country: "",
     },
-    dogName: "",
     email: "",
     password: "",
   });
@@ -53,10 +52,9 @@ const SignUpSeller = () => {
           .json()
           .then((resData) => {
             if (resData.status === 200) {
-              window.alert(resData.message);
               navigate("/login");
             } else {
-              window.alert(resData.message);
+              navigate("/errorpage");
             }
           })
           .catch((err) => window.alert(err));
@@ -73,7 +71,7 @@ const SignUpSeller = () => {
               type="text"
               id="firstName"
               name="firstName"
-              placeholder="First name"
+              placeholder="First name *"
               value={formData.firstName}
               onChange={handleInputChange}
               required
@@ -83,7 +81,7 @@ const SignUpSeller = () => {
               type="text"
               id="lastName"
               name="lastName"
-              placeholder="Last name"
+              placeholder="Last name *"
               value={formData.lastName}
               onChange={handleInputChange}
               required
@@ -94,7 +92,7 @@ const SignUpSeller = () => {
             type="text"
             id="street"
             name="street"
-            placeholder="Street"
+            placeholder="Street *"
             value={formData.address.street}
             onChange={handleAddressChange}
             required
@@ -103,7 +101,7 @@ const SignUpSeller = () => {
             type="text"
             id="city"
             name="city"
-            placeholder="City"
+            placeholder="City *"
             value={formData.address.city}
             onChange={handleAddressChange}
             required
@@ -113,7 +111,7 @@ const SignUpSeller = () => {
             type="text"
             id="province"
             name="province"
-            placeholder="Province"
+            placeholder="Province *"
             value={formData.address.province}
             onChange={handleAddressChange}
             required
@@ -122,24 +120,16 @@ const SignUpSeller = () => {
             type="text"
             id="country"
             name="country"
-            placeholder="Country"
+            placeholder="Country *"
             value={formData.address.country}
             onChange={handleAddressChange}
             required
           />
           <Input
-            type="text"
-            id="dogName"
-            name="dogName"
-            placeholder="Your furry friend's name"
-            value={formData.dogName}
-            onChange={handleInputChange}
-          />
-          <Input
             type="email"
             id="email"
             name="email"
-            placeholder="Email"
+            placeholder="Email *"
             value={formData.email}
             onChange={handleInputChange}
             required
@@ -149,7 +139,7 @@ const SignUpSeller = () => {
             type="password"
             id="password"
             name="password"
-            placeholder="Password"
+            placeholder="Password *"
             value={formData.password}
             onChange={handleInputChange}
             required
@@ -229,7 +219,7 @@ const Button = styled.button`
   padding: 15px;
   width: 20rem;
   border: none;
-  border-radius: 20px;
   cursor: pointer;
 `;
+
 export default SignUpSeller;
