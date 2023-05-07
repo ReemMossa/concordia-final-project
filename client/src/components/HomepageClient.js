@@ -82,7 +82,7 @@ const HomepageClient = () => {
                     <StyledLink to={`/items/${item._id}`}>
                       <DishName>{item.dishName}</DishName>
                     </StyledLink>
-                    <Description> {item.description}</Description>
+
                     <Price>{item.price}$</Price>
                   </div>
                   <StyledLink to={`/items/${item._id}`}>
@@ -151,8 +151,8 @@ const Item = styled.div`
   margin-right: 50px;
   margin-left: 50px;
   margin-top: 2rem;
-  height: 400px;
-  width: 400px;
+  height: 300px;
+  width: 300px;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -169,11 +169,6 @@ const DishName = styled.div`
   color: #23953c;
   font-size: 20px;
   font-weight: bolder;
-  margin-bottom: 10px;
-`;
-
-const Description = styled.div`
-  color: #23953c;
   margin-bottom: 10px;
 `;
 
