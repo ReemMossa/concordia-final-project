@@ -108,6 +108,7 @@ const Item = styled.div`
   align-items: center;
   position: relative;
 `;
+
 const StatusSold = styled.div`
   position: absolute;
   bottom: 0;
@@ -120,6 +121,7 @@ const NoItems = styled.div`
   align-items: center;
   flex-direction: column;
 `;
+
 const NoSold = styled.h1`
   font-size: 40px;
   margin-left: 10px;

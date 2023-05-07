@@ -1,10 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Homepage from "./Homepage";
-
 import Header from "./Header";
-
 import GlobalStyles from "../GlobalStyles";
-
 import SignUp from "./SignUp";
 import SignUpClient from "./SignUpClient";
 import SignUpSeller from "./SignUpSeller";

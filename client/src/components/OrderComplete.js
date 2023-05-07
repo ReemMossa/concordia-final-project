@@ -46,4 +46,5 @@ const Button = styled.button`
   margin-top: 30px;
   cursor: pointer;
 `;
+
 export default OrderComplete;
