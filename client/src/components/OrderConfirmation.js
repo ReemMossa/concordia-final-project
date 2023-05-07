@@ -44,24 +44,9 @@ const OrderConfirmation = () => {
             </Div>
             <DivSeller>
               <InfoSeller>
-                Here is the seller's information, please pick up your dish as
-                soon as possible{" "}
+                The food is ready for PICKUP. The seller's information has been
+                sent to your e-mail.
               </InfoSeller>
-
-              <div>
-                <Info>Name: </Info>
-                {seller.firstName}
-              </div>
-              <span>
-                <Info>Address: </Info>
-              </span>
-              <p>
-                {seller.address.street} {seller.address.city}
-              </p>
-
-              <p>
-                {seller.address.province}, {seller.address.country}
-              </p>
             </DivSeller>
           </Content>
           <ImageContainer>
@@ -110,8 +95,8 @@ const Info = styled.span`
 `;
 
 const InfoSeller = styled.span`
-  font-size: 25px;
-  color: #23953c;
+  font-size: 20px;
+
   font-weight: bolder;
 `;
 

@@ -39,21 +39,23 @@ const HomepageSeller = () => {
     <>
       <Div>
         {homepageSeller && (
-          <Button>
-            <StyledLinkButton to="/editselleritem">
-              Edit exisiting food
-            </StyledLinkButton>
-          </Button>
+          <>
+            <Button>
+              <StyledLinkButton to="/editselleritem">
+                Edit exisiting food
+              </StyledLinkButton>
+            </Button>
+            <Button>
+              <StyledLinkButton to="/historysolditems">
+                View your history
+              </StyledLinkButton>
+            </Button>
+          </>
         )}
 
         <Button>
           <StyledLinkButton to="/sellernewitem">
             Upload new food
-          </StyledLinkButton>
-        </Button>
-        <Button>
-          <StyledLinkButton to="/historysolditems">
-            View your history
           </StyledLinkButton>
         </Button>
       </Div>

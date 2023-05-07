@@ -81,11 +81,6 @@ const DetailedFood = () => {
           <Img src={item[0].imageUrl}></Img>
           {currentUser.type === "client" && seller && (
             <>
-              <SellerInfo>
-                *This dish is prepared by {seller.firstName} who lives in{" "}
-                {seller.address.province}
-              </SellerInfo>
-
               <Button onClick={handleSubmit}>Buy Now</Button>
             </>
           )}
