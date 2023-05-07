@@ -128,6 +128,7 @@ const Button = styled.button`
   float: right;
   margin-right: 3rem;
   margin-top: 2rem;
+  cursor: pointer;
 `;
 
 const Img = styled.img`
@@ -197,4 +198,5 @@ const StatusPending = styled.div`
   color: orange;
   font-weight: bolder;
 `;
+
 export default HomepageSeller;

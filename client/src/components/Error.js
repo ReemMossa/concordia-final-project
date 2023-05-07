@@ -5,9 +5,8 @@ const ErrorPage = () => {
     <ErrorContainer>
       <h1>An unknown error has occurred.</h1>
       <Paragraph>
-        Please try refreshing the page. If the error persists, please{" "}
-        <a href="/contactus">contact us</a> and we will respond to your issue as
-        soon as we are available.
+        Please try refreshing the page. If the error persists, please contact us
+        and we will respond to your issue as soon as we are available.
       </Paragraph>
     </ErrorContainer>
   );

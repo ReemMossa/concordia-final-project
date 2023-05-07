@@ -76,7 +76,6 @@ const Profile = () => {
               setCurrentUser(data.data);
               setEditMode(false);
               setErrorMessage("");
-
               navigate("/profile");
             });
         }

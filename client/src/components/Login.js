@@ -7,7 +7,6 @@ import styled from "styled-components";
 const Login = () => {
   const Navigate = useNavigate();
   const { currentUser, setCurrentUser } = useContext(UserContext);
-  const [data, setData] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState({
@@ -37,7 +36,6 @@ const Login = () => {
         } else {
           res.json().then((resData) => {
             if (resData.status !== 200) {
-              console.log(resData);
               setErrorMessage(resData.message);
             } else {
               setMatchedClient(resData.data);
@@ -147,7 +145,6 @@ const Button = styled.button`
   padding: 10px;
   width: 120px;
   border: none;
-  border-radius: 20px;
   cursor: pointer;
 `;
 

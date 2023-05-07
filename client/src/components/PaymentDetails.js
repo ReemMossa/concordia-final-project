@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -380,7 +380,6 @@ const Button = styled.button`
   display: flex;
   justify-content: center;
   align-content: center;
-
   cursor: pointer;
 `;
 
@@ -402,4 +401,5 @@ const TotalPayment = styled.div`
   font-size: 25px;
   font-weight: bolder;
 `;
+
 export default PaymentDetails;

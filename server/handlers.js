@@ -423,8 +423,6 @@ const deleteItem = async (req, res) => {
       .collection("selleritems")
       .findOneAndDelete({ _id });
 
-    console.log("findolditem", findOldItem);
-
     if (findOldItem.value === null) {
       res.status(404).json({
         status: 404,
@@ -481,7 +479,6 @@ const getOneItem = async (req, res) => {
       : res
           .status(404)
           .json({ status: 404, message: "Seller items not found" });
-    console.log("result", result);
   } catch (error) {
     res.status(500).json({ status: 500, message: error.message });
   } finally {
@@ -499,7 +496,6 @@ const getOneItemOnly = async (req, res) => {
     result.length > 0
       ? res.status(200).json({ status: 200, data: result })
       : res.status(404).json({ status: 404, message: "Item not found" });
-    console.log("result", result);
   } catch (error) {
     res.status(500).json({ status: 500, message: error.message });
   } finally {

@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 
 const DetailedFood = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
-  const { itemId, _id } = useParams();
+  const { itemId } = useParams();
   const [item, setItem] = useState(null);
   const [formData, setFormData] = useState({});
   const [seller, setSeller] = useState(null);
@@ -21,7 +21,6 @@ const DetailedFood = () => {
         res
           .json()
           .then((resData) => setItem(resData.data))
-
           .catch((err) => window.alert(err));
       }
     });
@@ -30,7 +29,6 @@ const DetailedFood = () => {
       .then((res) => res.json())
       .then((resData) => {
         setSeller(resData.data);
-        console.log("2", resData);
       });
   }, [itemId]);
 
@@ -57,7 +55,6 @@ const DetailedFood = () => {
       .then((resData) => {
         if (resData.status === 200) {
           navigate(`/ordercomplete`);
-          console.log(resData);
         } else {
           setErrorMessage(resData.message);
         }

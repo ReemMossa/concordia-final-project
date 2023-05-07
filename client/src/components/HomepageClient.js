@@ -7,7 +7,6 @@ import styled from "styled-components";
 const HomepageClient = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const [homepageClient, setHomepageClient] = useState([]);
-  const [selectedProtein, setSelectedProtein] = useState(null);
   const [sortBy, setSortBy] = useState("");
   const [state, setState] = useState("loading");
   const navigate = useNavigate();

@@ -84,7 +84,6 @@ const Dropdown = styled.div`
   position: absolute;
   top: 85px;
   right: 0;
-
   background-color: black;
   border: 1px solid black;
   border-radius: 5px;

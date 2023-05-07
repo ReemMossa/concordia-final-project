@@ -43,7 +43,10 @@ const OrderConfirmation = () => {
               </span>
             </Div>
             <DivSeller>
-              <InfoSeller>Here is the seller's information: </InfoSeller>
+              <InfoSeller>
+                Here is the seller's information, please pick up your dish as
+                soon as possible{" "}
+              </InfoSeller>
 
               <div>
                 <Info>Name: </Info>

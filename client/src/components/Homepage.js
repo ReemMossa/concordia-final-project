@@ -2,7 +2,6 @@ import React from "react";
 import meatAndVeggies from "./meat-and-veggies.webp";
 import dogpaw from "./dogpaw.jpg";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
 const Homepage = () => {
   return (
@@ -69,27 +68,11 @@ const SignUp = styled.p`
   font-size: 30px;
 `;
 
-const Imagediv = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
 const FoodImg = styled.img`
   border-radius: 50%;
   height: 25rem;
   width: 30rem;
   margin-left: 20rem;
-`;
-
-const StyledLink = styled(Link)`
-  color: black;
-`;
-
-const Img = styled.img`
-  height: 35rem;
-  width: 30rem;
-
-  border-radius: 50%;
 `;
 
 export default Homepage;

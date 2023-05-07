@@ -224,7 +224,6 @@ const EditSellerItem = () => {
         <Dropdown>
           <select value={selectedItem?.dishName} onChange={handleChange}>
             <option value="">Select an item to modify...</option>
-            {console.log("items", items)}
             {items
               .filter((item) => item.status === "available")
               .map((item) => (
@@ -660,10 +659,6 @@ const Label = styled.label`
   display: inline-block;
   margin-right: 30px;
   margin-bottom: 20px;
-`;
-
-const InputImage = styled.input`
-  margin-left: 20px;
 `;
 
 const ButtonContainer = styled.div`

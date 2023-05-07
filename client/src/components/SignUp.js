@@ -134,7 +134,6 @@ const Button = styled.button`
   background-color: #23953c;
   color: white;
   font-size: 20px;
-  border-radius: 30px;
   margin-top: 2rem;
   cursor: pointer;
 `;
@@ -144,4 +143,5 @@ const TextDiv = styled.div`
   margin-top: 2rem;
   margin-bottom: 2rem;
 `;
+
 export default SignUp;

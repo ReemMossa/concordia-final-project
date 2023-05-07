@@ -8,7 +8,6 @@ const Payment = () => {
 
   const navigate = useNavigate();
 
-  //   User must be signed in to see payment page
   if (!currentUser) {
     return navigate("/");
   }
